@@ -11,10 +11,7 @@ class InfiniteScrollAmp {
   // eslint-disable-next-line class-methods-use-this
   getFilteredCollItems(coll, storyId) {
     return coll.items.filter(
-      ({ type, story }) =>
-        type === "story" &&
-        story["story-content-id"] !== storyId &&
-        story.access !== "subscription"
+      ({ type, story }) => type === "story" && story["story-content-id"] !== storyId && story.access !== "subscription"
     );
   }
 
@@ -38,9 +35,7 @@ class InfiniteScrollAmp {
   getImagePath(item) {
     const cdnImage = this.publisherConfig["cdn-image"];
     const s3Key = item.story["hero-image-s3-key"];
-    const hostWithProtocol = /^https:\/\//.test(cdnImage)
-      ? cdnImage
-      : `https://${cdnImage}`;
+    const hostWithProtocol = /^https:\/\//.test(cdnImage) ? cdnImage : `https://${cdnImage}`;
     return `${hostWithProtocol}/${s3Key}?format=webp&w=250`;
   }
 
@@ -49,10 +44,8 @@ class InfiniteScrollAmp {
     if (!storyId) return new Error(`Query param "story-id" missing`);
     const apmInstance = handleSpanInstance({ isStart: true, title: "infinite scroll - get collection response" });
     const collection = await this.client.getCollectionBySlug(this.collSlug);
-    if (!collection)
-      return new Error(
-        `Infinite scroll collection ${this.collSlug} returned falsy value`
-      );
+    if (!collection || collection.error)
+      return new Error(`Infinite scroll collection ${this.collSlug} returned falsy value`);
     const filteredItems = this.getFilteredCollItems(collection, storyId);
     const slicedItems = filteredItems.slice(itemsTaken);
     const formattedData = this.formatData({ itemsArr: slicedItems });
@@ -61,12 +54,10 @@ class InfiniteScrollAmp {
   }
 
   async getInitialInlineConfig({ itemsToTake, storyId }) {
-    if (!itemsToTake || !storyId)
-      return new Error("Required params for getInitialInlineConfig missing");
+    if (!itemsToTake || !storyId) return new Error("Required params for getInitialInlineConfig missing");
     const apmInstance = handleSpanInstance({ isStart: true, title: "getInitialInlineConfig" });
     const collection = await this.client.getCollectionBySlug(this.collSlug);
-    if (!collection || (collection.items && !collection.items.length))
-      return null;
+    if (!collection || (collection.items && !collection.items.length) || collection.error) return null;
     const filteredItems = this.getFilteredCollItems(collection, storyId);
     const slicedItems = filteredItems.slice(0, itemsToTake);
     const formattedData = this.formatData({
