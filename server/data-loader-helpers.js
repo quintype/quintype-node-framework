@@ -14,12 +14,7 @@ exports.catalogDataLoader = function catalogDataLoader(client, config) {
   });
 };
 
-exports.homeCollectionOrStories = function homeCollectionOrStories(
-  client,
-  depth = 1,
-  getStoryLimits,
-  params = {}
-) {
+exports.homeCollectionOrStories = function homeCollectionOrStories(client, depth = 1, getStoryLimits, params = {}) {
   return Collection.getCollectionBySlug(
     client,
     "home",

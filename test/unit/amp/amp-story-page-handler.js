@@ -149,8 +149,7 @@ describe("ampStoryPageHandler unit tests", function () {
     await ampStoryPageHandler(dummyReq, dummyRes, dummyNext, {
       client: getClientStub({
         getCollectionBySlug: (slug) => {
-          if (slug === "dummy-related-collection")
-            return Promise.resolve(dummyRelatedStoriesCollection);
+          if (slug === "dummy-related-collection") return Promise.resolve(dummyRelatedStoriesCollection);
           throw new Error(`getCollectionBySlug not mocked for ${slug}`);
         },
       }),
@@ -164,16 +163,10 @@ describe("ampStoryPageHandler unit tests", function () {
     // passes related stories to amplib
     assert.strictEqual(
       relatedStories,
-      JSON.stringify([
-        "Elon musk sells tweet as NFT for $2 million",
-        "SpaceX Starship SN10 lands successfully",
-      ])
+      JSON.stringify(["Elon musk sells tweet as NFT for $2 million", "SpaceX Starship SN10 lands successfully"])
     );
     // removes current story from related stories
-    assert.strictEqual(
-      false,
-      /Dogecoin surges to \$10 billion/.test(relatedStories)
-    );
+    assert.strictEqual(false, /Dogecoin surges to \$10 billion/.test(relatedStories));
   });
   it("should not pass related stories to amplib if absent", async function () {
     let relatedStories;
@@ -248,7 +241,7 @@ describe("ampStoryPageHandler unit tests", function () {
     };
     const dummyAmpLib = {
       ampifyStory: (params) => {
-        additionalConfigReceivedByAmplib = JSON.stringify(params.additionalConfig)
+        additionalConfigReceivedByAmplib = JSON.stringify(params.additionalConfig);
       },
       unsupportedStoryElementsPresent: () => false,
     };
@@ -263,9 +256,58 @@ describe("ampStoryPageHandler unit tests", function () {
       ...dummyOpts,
     });
     assert.strictEqual(getAdditionalConfigCalled, true);
-    assert.strictEqual(additionalConfigReceivedByAmplib, JSON.stringify({
-      key111: 'this contains bk config by default',
-      key222: 'this is the fetched additional config'
-    }))
+    assert.strictEqual(
+      additionalConfigReceivedByAmplib,
+      JSON.stringify({
+        key111: "this contains bk config by default",
+        key222: "this is the fetched additional config",
+      })
+    );
+  });
+  it("should call seo lib with appropriate timezone if timezone info is present in publisher config, pass it on to amplib", async function () {
+    let timezone = null;
+    const dummySeo = (config, pageType) => {
+      return {
+        getMetaTags: (config, pageType, data = {}, url) => {
+          timezone = data.data.timezone;
+        },
+      };
+    };
+    const dummyAmpLib = {
+      unsupportedStoryElementsPresent: () => false,
+    };
+    await ampStoryPageHandler(dummyReq, dummyRes, dummyNext, {
+      client: getClientStub(),
+      config: dummyConfig,
+      domainSlug: null,
+      seo: dummySeo,
+      additionalConfig: { publisher: { timezone: "Asia/Kolkata" } },
+      ampLibrary: dummyAmpLib,
+      InfiniteScrollAmp: DummyInfiniteScrollAmp,
+    });
+    assert.strictEqual(timezone, "Asia/Kolkata");
+  });
+  it("should call seo lib with null timezone if timezone info is absent in publisher config", async function () {
+    let timezone = null;
+    const dummySeo = (config, pageType) => {
+      return {
+        getMetaTags: (config, pageType, data = {}, url) => {
+          timezone = data.data.timezone;
+        },
+      };
+    };
+    const dummyAmpLib = {
+      unsupportedStoryElementsPresent: () => false,
+    };
+    await ampStoryPageHandler(dummyReq, dummyRes, dummyNext, {
+      client: getClientStub(),
+      config: dummyConfig,
+      domainSlug: null,
+      seo: dummySeo,
+      additionalConfig: "something",
+      ampLibrary: dummyAmpLib,
+      InfiniteScrollAmp: DummyInfiniteScrollAmp,
+    });
+    assert.strictEqual(timezone, null);
   });
 });
