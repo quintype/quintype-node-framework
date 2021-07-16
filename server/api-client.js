@@ -10,7 +10,7 @@
  * @module api-client
  */
 // istanbul ignore file
-
+// istanbul ignore file
 const config = require("./publisher-config");
 const {
   getClientImpl,
@@ -30,9 +30,7 @@ const defaultClient = new Client(config.sketches_host);
 const cachedSecondaryClients = {};
 
 function getClient(hostname) {
-  return (
-    getClientImpl(config, cachedSecondaryClients, hostname) || defaultClient
-  );
+  return getClientImpl(config, cachedSecondaryClients, hostname) || defaultClient;
 }
 
 function initializeAllClients() {
