@@ -25,15 +25,11 @@ export function setupServiceWorkerUpdates(serviceWorkerPromise, app, store, page
       if (global.OneSignal) {
         let { config: { "theme-attributes": pageThemeAttributes = {} } = {} } = page;
         let version = pageThemeAttributes["cache-burst"];
-        app.ReregisterServiceWorker = () =>
-          registerServiceWorker({ ...opts, serviceWorkerLocation: `/OneSignalSDKUpdaterWorker.js?version=${version}` })
-            .then(() => new Promise((resolve) => setTimeout(resolve, 1)))
-            .then(() =>
-              registerServiceWorker({
-                ...opts,
-                serviceWorkerLocation: `/OneSignalSDKWorker.js?version=${version}`,
-              }).then(() => console.log("Re-registered onesignal worker"))
-            );
+        app.reRegisterServiceWorker = () =>
+          registerServiceWorker({
+            ...opts,
+            serviceWorkerLocation: `/OneSignalSDKWorker.js?version=${version}`,
+          }).then(() => console.log("Re-registered onesignal worker"));
       }
     }
 
@@ -50,14 +46,14 @@ function updateServiceWorker(app) {
 
 function reRegisterServiceWorker(app) {
   console.log(`re-register onesignal service worker due to config change`);
-  app.ReregisterServiceWorker && app.ReregisterServiceWorker();
+  app.reRegisterServiceWorker && app.reRegisterServiceWorker();
 }
 
 export function checkForServiceWorkerUpdates(app, page = {}) {
   if (page.appVersion && app.getAppVersion && app.getAppVersion() < page.appVersion) {
     console && console.log("Updating the Service Worker");
     global.OneSignal
-      ? app.ReregisterServiceWorker && app.ReregisterServiceWorker()
+      ? app.reRegisterServiceWorker && app.reRegisterServiceWorker()
       : app.updateServiceWorker && app.updateServiceWorker();
   } else if (global && global.qtVersion) {
     /* Check if the config is updated and update the service worker if true */
