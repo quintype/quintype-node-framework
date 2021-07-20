@@ -31,6 +31,7 @@ const { registerFCMTopic } = require("./handlers/fcm-registration-handler");
 const rp = require("request-promise");
 const bodyParser = require("body-parser");
 const get = require("lodash/get");
+const deburr = require("lodash/deburr");
 const { URL } = require("url");
 const prerender = require("@quintype/prerender-node");
 
@@ -313,6 +314,12 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     sMaxAge = "900",
   }
 ) {
+  //convert Latin-1(scandic) letters to plain english in url
+  app.use((req, res, next) => {
+    req.url = deburr(decodeURIComponent(req.url));
+    next();
+  });
+
   const withConfig = withConfigPartial(
     getClient,
     logError,
