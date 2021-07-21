@@ -1,6 +1,10 @@
 {
   "name": "@quintype/framework",
+<<<<<<< HEAD
   "version": "4.17.0-axios-transform.9",
+=======
+  "version": "4.16.15",
+>>>>>>> origin/master
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "scripts": {
@@ -27,8 +31,13 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.0",
+<<<<<<< HEAD
     "@quintype/backend": "^1.26.0-axios-transform.3",
     "@quintype/amp": "^2.4.8",
+=======
+    "@quintype/amp": "^2.4.10",
+    "@quintype/backend": "1.25.3",
+>>>>>>> origin/master
     "@quintype/components": "^2.31.2",
     "@quintype/prerender-node": "^3.2.24",
     "@quintype/seo": "^1.38.1",

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.16.15](https://github.com/quintype/quintype-node-framework/compare/v4.16.14...v4.16.15) (2021-07-20)
+
+### [4.16.14](https://github.com/quintype/quintype-node-framework/compare/v4.16.10...v4.16.14) (2021-07-19)
+
+
+### Features
+
+* **amp story page:** Custom timezone support ([#259](https://github.com/quintype/quintype-node-framework/issues/259)) ([db0c8e7](https://github.com/quintype/quintype-node-framework/commit/db0c8e719b308b55893a6f25b3d69be5fa8fe21c))
+
 ### [4.16.13](https://github.com/quintype/quintype-node-framework/compare/v4.16.12...v4.16.13) (2021-07-16)
 
 ### [4.16.12](https://github.com/quintype/quintype-node-framework/compare/v4.16.11...v4.16.12) (2021-07-15)

@@ -8,6 +8,10 @@
 const apm = require("elastic-apm-node");
 
 const handleSpanInstance = ({ apmInstance, isStart, title }) => {
+  if (!process.env.APM_SERVICE_NAME && !process.env.APM_SECRET_TOKEN) {
+    return;
+  }
+
   if (isStart && !apmInstance) {
     return apm.startSpan(title);
   }
