@@ -51,7 +51,7 @@ async function ampStoryPageHandler(
     if (!story) return next();
     if (ampConfig["related-collection-id"])
       relatedStoriesCollection = await client.getCollectionBySlug(ampConfig["related-collection-id"]);
-    if (relatedStoriesCollection) {
+    if (relatedStoriesCollection && relatedStoriesCollection.items) {
       const storiesToTake = get(domainSpecificOpts, ["featureConfig", "relatedStories", "storiesToTake"], 5);
       relatedStories = relatedStoriesCollection.items
         .filter((item) => item.type === "story" && item.id !== story["story-content-id"])
