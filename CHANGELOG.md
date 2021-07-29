@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.0.2](https://github.com/quintype/quintype-node-framework/compare/v5.0.1...v5.0.2) (2021-07-22)
+
+
+### Bug Fixes
+
+* **timeout:** Increase dev timeout to 50s ([a1cf9a3](https://github.com/quintype/quintype-node-framework/commit/a1cf9a3469083d02e476f339f58176d12d018bc7))
+
+### [5.0.1](https://github.com/quintype/quintype-node-framework/compare/v4.16.15...v5.0.1) (2021-07-22)
+
+### [4.16.15](https://github.com/quintype/quintype-node-framework/compare/v4.16.14...v4.16.15) (2021-07-20)
+
 ### [4.16.14](https://github.com/quintype/quintype-node-framework/compare/v4.16.10...v4.16.14) (2021-07-19)
 
 
