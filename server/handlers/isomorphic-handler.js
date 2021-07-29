@@ -3,10 +3,7 @@
 const _ = require("lodash");
 
 const urlLib = require("url");
-const {
-  matchBestRoute,
-  matchAllRoutes,
-} = require("../../isomorphic/match-best-route");
+const { matchBestRoute, matchAllRoutes } = require("../../isomorphic/match-best-route");
 const { IsomorphicComponent } = require("../../isomorphic/component");
 const { addCacheHeadersToResult } = require("./cdn-caching");
 const { NotFoundException } = require("../impl/exceptions");
@@ -29,27 +26,17 @@ function loadDataForIsomorphicRoute(
   loadErrorData,
   url,
   routes,
-  {
-    otherParams,
-    config,
-    client,
-    host,
-    logError,
-    domainSlug,
-    redirectToLowercaseSlugs,
-  }
+  { otherParams, config, client, host, logError, domainSlug, redirectToLowercaseSlugs, cookies }
 ) {
   return loadDataForEachRoute().catch((error) => {
     logError(error);
-    return loadErrorData(error, config, client, { host, domainSlug });
+    return loadErrorData(error, config, client, { host, domainSlug, cookies });
   });
 
   // Using async because this for loop reads really really well
   async function loadDataForEachRoute() {
     const redirectToLowercaseSlugsValue =
-      typeof redirectToLowercaseSlugs === "function"
-        ? redirectToLowercaseSlugs(config)
-        : redirectToLowercaseSlugs;
+      typeof redirectToLowercaseSlugs === "function" ? redirectToLowercaseSlugs(config) : redirectToLowercaseSlugs;
     for (const match of matchAllRoutes(url.pathname, routes)) {
       const params = Object.assign({}, url.query, otherParams, match.params);
       /* On story pages, if the slug contains any capital letters (latin), we want to
@@ -60,8 +47,7 @@ function loadDataForIsomorphicRoute(
         redirectToLowercaseSlugsValue &&
         match.pageType === "story-page" &&
         params.storySlug &&
-        decodeURIComponent(params.storySlug) !==
-          decodeURIComponent(params.storySlug.toLowerCase())
+        decodeURIComponent(params.storySlug) !== decodeURIComponent(params.storySlug.toLowerCase())
       ) {
         return {
           httpStatusCode: 301,
@@ -74,6 +60,7 @@ function loadDataForIsomorphicRoute(
         host,
         next: abortHandler,
         domainSlug,
+        cookies,
       });
 
       if (result && result[ABORT_HANDLER]) continue;
@@ -90,7 +77,7 @@ function loadDataForPageType(
   loadErrorData = () => Promise.resolve({ httpStatusCode: 500 }),
   pageType,
   params,
-  { config, client, logError, host, domainSlug }
+  { config, client, logError, host, domainSlug, cookies }
 ) {
   return new Promise((resolve) =>
     resolve(
@@ -98,6 +85,7 @@ function loadDataForPageType(
         host,
         next: abortHandler,
         domainSlug,
+        cookies,
       })
     )
   )
@@ -109,7 +97,7 @@ function loadDataForPageType(
     })
     .catch((error) => {
       logError(error);
-      return loadErrorData(error, config, client, { host, domainSlug });
+      return loadErrorData(error, config, client, { host, domainSlug, cookies });
     });
 }
 
@@ -136,9 +124,7 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
   }
 ) {
   const url = urlLib.parse(req.url, true);
-  const freshRevision = `${assetHelper.assetHash(
-    "app.js"
-  )}-${await maxConfigVersion(config, domainSlug)}`;
+  const freshRevision = `${assetHelper.assetHash("app.js")}-${await maxConfigVersion(config, domainSlug)}`;
 
   if (req.query.revision && req.query.revision !== freshRevision)
     return res.status(503).send("Requested Shell Is Not Current");
@@ -156,20 +142,15 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
     res.setHeader("Vary", "Accept-Encoding");
 
     if (preloadJs) {
-      res.append(
-        "Link",
-        `<${assetHelper.assetPath("app.js")}>; rel=preload; as=script;`
-      );
+      res.append("Link", `<${assetHelper.assetPath("app.js")}>; rel=preload; as=script;`);
     }
     const seoInstance = getSeoInstance(seo, config, "shell");
-    const seoTags =
-      seoInstance && seoInstance.getMetaTags(config, "shell", result, { url });
+    const seoTags = seoInstance && seoInstance.getMetaTags(config, "shell", result, { url });
 
     return renderLayout(res, {
       config,
       seoTags,
-      content:
-        '<div class="app-loading"><script type="text/javascript">window.qtLoadedFromShell = true</script></div>',
+      content: '<div class="app-loading"><script type="text/javascript">window.qtLoadedFromShell = true</script></div>',
       store: createStore((state) => state, getDefaultState(result)),
       shell: true,
     });
@@ -189,10 +170,7 @@ function createStoreFromResult(url, result, opts = {}) {
 }
 
 function chunkDataForMobile(data, fieldsCallback, pageType) {
-  const fields =
-    typeof fieldsCallback === "function"
-      ? fieldsCallback(pageType)
-      : fieldsCallback;
+  const fields = typeof fieldsCallback === "function" ? fieldsCallback(pageType) : fieldsCallback;
 
   /* return data if no fields are passed */
   if (_.isEmpty(fields)) return data;
@@ -211,9 +189,7 @@ function chunkDataForMobile(data, fieldsCallback, pageType) {
     /* If whitelisted key turn out to be an array */
     if (_.isArray(dataChildren[currEle]) && _.isArray(fields[currEle])) {
       acc[currEle] = dataChildren[currEle].reduce((xAcc, xCurrEle) => {
-        _.isObject(xCurrEle)
-          ? xAcc.push(_.pick(xCurrEle, fields[currEle]))
-          : xAcc.push(xCurrEle);
+        _.isObject(xCurrEle) ? xAcc.push(_.pick(xCurrEle, fields[currEle])) : xAcc.push(xCurrEle);
         return xAcc;
       }, []);
     } else if (
@@ -275,9 +251,7 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
         logError,
         host: req.hostname,
         domainSlug,
-      }).then((result) =>
-        Object.assign({ pageType, disableIsomorphicComponent: true }, result)
-      );
+      }).then((result) => Object.assign({ pageType, disableIsomorphicComponent: true }, result));
     }
   }
 
@@ -290,21 +264,16 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
   }
 
   function isomorphicDataLoader() {
-    return loadDataForIsomorphicRoute(
-      loadData,
-      loadErrorData,
-      url,
-      allRoutes(),
-      {
-        config,
-        client,
-        logError,
-        host: req.hostname,
-        otherParams: req.query,
-        domainSlug,
-        redirectToLowercaseSlugs,
-      }
-    ).catch((e) => {
+    return loadDataForIsomorphicRoute(loadData, loadErrorData, url, allRoutes(), {
+      config,
+      client,
+      logError,
+      host: req.hostname,
+      otherParams: req.query,
+      domainSlug,
+      redirectToLowercaseSlugs,
+      cookies: req.cookies,
+    }).catch((e) => {
       logError(e);
       return { httpStatusCode: 500, pageType: "error" };
     });
@@ -333,18 +302,10 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
         Object.assign({}, result, {
           appVersion,
           data: mobileApiEnabled
-            ? chunkDataForMobile(
-                result.data,
-                mobileConfigFields,
-                result.pageType
-              )
+            ? chunkDataForMobile(result.data, mobileConfigFields, result.pageType)
             : _.omit(result.data, ["cacheKeys"]),
-          config: mobileApiEnabled
-            ? chunkDataForMobile(result.config, mobileConfigFields, "config")
-            : result.config,
-          title: seoInstance
-            ? seoInstance.getTitle(config, result.pageType, result)
-            : result.title,
+          config: mobileApiEnabled ? chunkDataForMobile(result.config, mobileConfigFields, "config") : result.config,
+          title: seoInstance ? seoInstance.getTitle(config, result.pageType, result) : result.title,
         })
       );
     })
@@ -358,6 +319,7 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
         loadErrorData(new NotFoundException(), config, client, {
           host: req.hostname,
           domainSlug,
+          cookies: req.cookies,
         })
       )
     )
@@ -378,15 +340,7 @@ exports.notFoundHandler = function notFoundHandler(
   req,
   res,
   next,
-  {
-    config,
-    client,
-    loadErrorData,
-    renderLayout,
-    pickComponent,
-    logError,
-    domainSlug,
-  }
+  { config, client, loadErrorData, renderLayout, pickComponent, logError, domainSlug }
 ) {
   const url = urlLib.parse(req.url, true);
 
@@ -395,6 +349,7 @@ exports.notFoundHandler = function notFoundHandler(
       loadErrorData(new NotFoundException(), config, client, {
         host: req.hostname,
         domainSlug,
+        cookies: req.cookies,
       })
     )
   )
@@ -411,29 +366,21 @@ exports.notFoundHandler = function notFoundHandler(
       });
 
       res.status(statusCode);
-      res.setHeader(
-        "Cache-Control",
-        "public,max-age=15,s-maxage=60, stale-while-revalidate=150,stale-if-error=3600"
-      );
+      res.setHeader("Cache-Control", "public,max-age=15,s-maxage=60, stale-while-revalidate=150,stale-if-error=3600");
       res.setHeader("Vary", "Accept-Encoding");
       res.setHeader("Content-Type", "text/html; charset=utf-8");
-      return pickComponent
-        .preloadComponent(
-          store.getState().qt.pageType,
-          store.getState().qt.subPageType
-        )
-        .then(() =>
-          renderLayout(res, {
-            config,
-            title: result.title,
-            content: renderReduxComponent(IsomorphicComponent, store, {
-              pickComponent,
-            }),
-            store,
-            pageType: store.getState().qt.pageType,
-            subPageType: store.getState().qt.subPageType,
-          })
-        );
+      return pickComponent.preloadComponent(store.getState().qt.pageType, store.getState().qt.subPageType).then(() =>
+        renderLayout(res, {
+          config,
+          title: result.title,
+          content: renderReduxComponent(IsomorphicComponent, store, {
+            pickComponent,
+          }),
+          store,
+          pageType: store.getState().qt.pageType,
+          subPageType: store.getState().qt.subPageType,
+        })
+      );
     })
     .catch((e) => {
       logError(e);
@@ -490,14 +437,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
       return res.redirect(301, result.data.location);
     }
     const seoInstance = getSeoInstance(seo, config, result.pageType);
-    const seoTags =
-      seoInstance &&
-      seoInstance.getMetaTags(
-        config,
-        result.pageType || match.pageType,
-        result,
-        { url }
-      );
+    const seoTags = seoInstance && seoInstance.getMetaTags(config, result.pageType || match.pageType, result, { url });
     const store = createStoreFromResult(url, result, {
       disableIsomorphicComponent: statusCode != 200,
     });
@@ -522,56 +462,38 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     });
 
     if (preloadJs) {
-      res.append(
-        "Link",
-        `<${assetHelper.assetPath("app.js")}>; rel=preload; as=script;`
-      );
+      res.append("Link", `<${assetHelper.assetPath("app.js")}>; rel=preload; as=script;`);
     }
-    const oneSignalScript = oneSignalServiceWorkers
-      ? getOneSignalScript({ config, publisherConfig })
-      : null;
-    return pickComponent
-      .preloadComponent(
-        store.getState().qt.pageType,
-        store.getState().qt.subPageType
-      )
-      .then(() =>
-        renderLayout(res, {
-          config,
-          title: result.title,
-          content: renderReduxComponent(IsomorphicComponent, store, {
-            pickComponent,
-          }),
-          store,
-          seoTags,
-          pageType: store.getState().qt.pageType,
-          subPageType: store.getState().qt.subPageType,
-          oneSignalScript,
-        })
-      );
+    const oneSignalScript = oneSignalServiceWorkers ? getOneSignalScript({ config, publisherConfig }) : null;
+    return pickComponent.preloadComponent(store.getState().qt.pageType, store.getState().qt.subPageType).then(() =>
+      renderLayout(res, {
+        config,
+        title: result.title,
+        content: renderReduxComponent(IsomorphicComponent, store, {
+          pickComponent,
+        }),
+        store,
+        seoTags,
+        pageType: store.getState().qt.pageType,
+        subPageType: store.getState().qt.subPageType,
+        oneSignalScript,
+      })
+    );
   }
 
-  if (
-    typeof redirectUrls === "function" ||
-    (redirectUrls && Object.keys(redirectUrls).length > 0)
-  ) {
+  if (typeof redirectUrls === "function" || (redirectUrls && Object.keys(redirectUrls).length > 0)) {
     getRedirectUrl(req, res, next, { redirectUrls, config });
   }
   handleSpanInstance({ apmInstance });
-  return loadDataForIsomorphicRoute(
-    loadData,
-    loadErrorData,
-    url,
-    generateRoutes(config, domainSlug),
-    {
-      config,
-      client,
-      logError,
-      host: req.hostname,
-      domainSlug,
-      redirectToLowercaseSlugs,
-    }
-  )
+  return loadDataForIsomorphicRoute(loadData, loadErrorData, url, generateRoutes(config, domainSlug), {
+    config,
+    client,
+    logError,
+    host: req.hostname,
+    domainSlug,
+    redirectToLowercaseSlugs,
+    cookies: req.cookies,
+  })
     .catch((e) => {
       logError(e);
       return { httpStatusCode: 500, pageType: "error" };
@@ -645,10 +567,7 @@ exports.handleStaticRoute = function handleStaticRoute(
           url,
         });
       const store = createStoreFromResult(url, result, {
-        disableIsomorphicComponent:
-          disableIsomorphicComponent === undefined
-            ? true
-            : disableIsomorphicComponent,
+        disableIsomorphicComponent: disableIsomorphicComponent === undefined ? true : disableIsomorphicComponent,
       });
 
       res.status(statusCode);
@@ -660,9 +579,7 @@ exports.handleStaticRoute = function handleStaticRoute(
         sMaxAge,
       });
 
-      const oneSignalScript = oneSignalServiceWorkers
-        ? getOneSignalScript({ config, publisherConfig })
-        : null;
+      const oneSignalScript = oneSignalServiceWorkers ? getOneSignalScript({ config, publisherConfig }) : null;
 
       return renderLayout(
         res,
@@ -670,12 +587,7 @@ exports.handleStaticRoute = function handleStaticRoute(
           {
             config,
             title: seoInstance
-              ? seoInstance.getTitle(
-                  config,
-                  result.pageType || match.pageType,
-                  result,
-                  { url }
-                )
+              ? seoInstance.getTitle(config, result.pageType || match.pageType, result, { url })
               : result.title,
             store,
             disableAjaxNavigation: true,
