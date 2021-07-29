@@ -7,7 +7,6 @@ export function registerServiceWorker({
   mountAt = global.qtMountAt || "",
 }) {
   if (enableServiceWorker && navigator.serviceWorker) {
-    console.log("Registering Service Worker!!!", serviceWorkerLocation);
     return navigator.serviceWorker.register(`${mountAt}${serviceWorkerLocation}`);
   }
   return Promise.resolve(null);
