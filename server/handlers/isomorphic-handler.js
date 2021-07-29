@@ -134,7 +134,7 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
     loadErrorData,
     "shell",
     {},
-    { config, client, logError, host: req.hostname, domainSlug, cookies: req.cookies }
+    { config, client, logError, host: req.hostname, domainSlug }
   ).then((result) => {
     res.status(200);
     res.setHeader("Content-Type", "text/html");
