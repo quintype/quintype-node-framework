@@ -5,9 +5,14 @@ export function registerServiceWorker({
   serviceWorkerLocation = "/service-worker.js",
   navigator = global.navigator,
   mountAt = global.qtMountAt || "",
+  version = 0,
 }) {
   if (enableServiceWorker && navigator.serviceWorker) {
-    return navigator.serviceWorker.register(`${mountAt}${serviceWorkerLocation}`);
+    const location =
+      serviceWorkerLocation === "/OneSignalSDKWorker.js"
+        ? `${serviceWorkerLocation}?version=${version}`
+        : serviceWorkerLocation;
+    return navigator.serviceWorker.register(`${mountAt}${location}`);
   }
   return Promise.resolve(null);
 }
@@ -16,7 +21,7 @@ function updateOneSignalWorker(page, opts) {
   let { config: { "theme-attributes": pageThemeAttributes = {} } = {} } = page;
   let version = pageThemeAttributes["cache-burst"];
 
-  registerServiceWorker({ ...opts, serviceWorkerLocation: `/OneSignalSDKWorker.js?version=${version}` }).then(() =>
+  registerServiceWorker({ ...opts, serviceWorkerLocation: "/OneSignalSDKWorker.js", version }).then(() =>
     console.log("Updated OneSignal Worker")
   );
 }
@@ -51,7 +56,6 @@ function updateServiceWorker(app) {
 }
 
 export function checkForServiceWorkerUpdates(app, page = {}) {
-  console.log(global.qtVersion);
   if (page.appVersion && app.getAppVersion && app.getAppVersion() < page.appVersion) {
     console && console.log("Updating the Service Worker");
     updateServiceWorker(app);

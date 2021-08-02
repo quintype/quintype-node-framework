@@ -312,8 +312,6 @@ export function startApp(renderApplication, reducers, opts) {
     ? Promise.resolve(staticData.qt)
     : getRouteData(path, { existingFetch: global.initialFetch });
 
-  const serviceWorkerPromise = registerServiceWorker(opts);
-
   startAnalytics();
 
   const store = createQtStore(
@@ -329,9 +327,9 @@ export function startApp(renderApplication, reducers, opts) {
     runWithTiming("qt_preRender", () => opts.preRenderApplication(store));
   }
 
-  return dataPromise.then((page) => doStartApp(page));
+  return dataPromise.then((page) => doStartApp(page, opts));
 
-  function doStartApp(page) {
+  function doStartApp(page, opts) {
     if (!page) {
       console &&
         console.log("Recieved a null page. Expecting the browser to redirect.");
@@ -343,6 +341,11 @@ export function startApp(renderApplication, reducers, opts) {
       const mssgSenderId = get(page, ["config", "fcmMessageSenderId"], null);
       initializeFCM(mssgSenderId);
     }
+
+    let { config: { "theme-attributes": pageThemeAttributes = {} } = {} } = page;
+    let version = pageThemeAttributes["cache-burst"];
+
+    const serviceWorkerPromise = registerServiceWorker({...opts, version});
 
     setupServiceWorkerUpdates(serviceWorkerPromise, app, store, page, opts);
 
