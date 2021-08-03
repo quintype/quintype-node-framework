@@ -60,7 +60,6 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   apiProxy.on("proxyReq", (proxyReq, req, res, options) => {
     proxyReq.setHeader("Host", getClient(req.hostname).getHostname());
-    
   });
 
   const sketchesProxy = (req, res) => apiProxy.web(req, res);
