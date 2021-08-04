@@ -227,6 +227,8 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
     cdnProvider,
     redirectToLowercaseSlugs,
     sMaxAge,
+    isEnableRouteDataField,
+    routeDataFeild,
   }
 ) {
   const url = urlLib.parse(req.query.path || "/", true);
@@ -303,6 +305,8 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
           appVersion,
           data: mobileApiEnabled
             ? chunkDataForMobile(result.data, mobileConfigFields, result.pageType)
+            : isEnableRouteDataField
+            ? chunkDataForMobile(result.data, routeDataFeild, result.pageType)
             : _.omit(result.data, ["cacheKeys"]),
           config: mobileApiEnabled ? chunkDataForMobile(result.config, mobileConfigFields, "config") : result.config,
           title: seoInstance ? seoInstance.getTitle(config, result.pageType, result) : result.title,

@@ -299,6 +299,8 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     redirectToLowercaseSlugs = false,
     shouldEncodeAmpUri,
     sMaxAge = "900",
+    isEnableRouteDataField = false,
+    routeDataFeild = {},
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
@@ -383,6 +385,8 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       cdnProvider,
       redirectToLowercaseSlugs,
       sMaxAge,
+      isEnableRouteDataField,
+      routeDataFeild,
     })
   );
 
