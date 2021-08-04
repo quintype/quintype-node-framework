@@ -299,6 +299,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     redirectToLowercaseSlugs = false,
     shouldEncodeAmpUri,
     sMaxAge = "900",
+    enableGtm = false,
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
@@ -441,6 +442,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
             oneSignalServiceWorkers,
             publisherConfig,
             sMaxAge,
+            enableGtm,
           },
           route
         )
@@ -469,6 +471,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       oneSignalServiceWorkers,
       publisherConfig,
       sMaxAge,
+      enableGtm,
     })
   );
 

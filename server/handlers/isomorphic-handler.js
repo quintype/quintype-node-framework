@@ -16,6 +16,7 @@ const { addLightPageHeaders } = require("../impl/light-page-impl");
 const { getOneSignalScript } = require("./onesignal-script");
 const { getRedirectUrl } = require("../redirect-url-helper");
 const { handleSpanInstance } = require("../utils/apm");
+const { getGtmScript } = require("./gtm-script");
 const ABORT_HANDLER = "__ABORT__";
 function abortHandler() {
   return Promise.resolve({ pageType: ABORT_HANDLER, [ABORT_HANDLER]: true });
@@ -415,6 +416,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     shouldEncodeAmpUri,
     publisherConfig,
     sMaxAge,
+    enableGtm,
   }
 ) {
   const apmInstance = handleSpanInstance({
@@ -465,6 +467,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
       res.append("Link", `<${assetHelper.assetPath("app.js")}>; rel=preload; as=script;`);
     }
     const oneSignalScript = oneSignalServiceWorkers ? getOneSignalScript({ config, publisherConfig }) : null;
+    const gtmScript = enableGtm ? getGtmScript({ publisherConfig }) : null;
     return pickComponent.preloadComponent(store.getState().qt.pageType, store.getState().qt.subPageType).then(() =>
       renderLayout(res, {
         config,
@@ -477,6 +480,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
         pageType: store.getState().qt.pageType,
         subPageType: store.getState().qt.subPageType,
         oneSignalScript,
+        gtmScript,
       })
     );
   }
@@ -533,6 +537,7 @@ exports.handleStaticRoute = function handleStaticRoute(
     oneSignalServiceWorkers,
     publisherConfig,
     sMaxAge,
+    enableGtm,
   }
 ) {
   const apmInstance = handleSpanInstance({
@@ -580,7 +585,7 @@ exports.handleStaticRoute = function handleStaticRoute(
       });
 
       const oneSignalScript = oneSignalServiceWorkers ? getOneSignalScript({ config, publisherConfig }) : null;
-
+      const gtmScript = enableGtm ? getGtmScript({ publisherConfig }) : null;
       return renderLayout(
         res,
         Object.assign(
@@ -593,6 +598,7 @@ exports.handleStaticRoute = function handleStaticRoute(
             disableAjaxNavigation: true,
             seoTags,
             oneSignalScript,
+            gtmScript,
           },
           renderParams
         )
