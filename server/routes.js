@@ -70,9 +70,10 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
       console.log("RAW Response from the target11111111", proxyRes.headers["cache-control"]);
 
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "").split(",")[0];
-      console.log("getCacheControl-------=====", getCacheControl);
+      console.log("req.originalUrl----", req.originalUrl);
+      console.log("req.url-----------", req.url);
 
-      if (req.originalUrl !== "/api/v1/breaking-news" && getCacheControl !== "private") {
+      if (req.originalUrl !== "/api/v1/breaking-news" || getCacheControl !== "private") {
         proxyRes.headers[
           "cache-control"
         ] = `public,max-age=15,s-maxage=${sMaxAge},stale-while-revalidate=300,stale-if-error=7200`;
