@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.0.3](https://github.com/quintype/quintype-node-framework/compare/v5.0.2...v5.0.3) (2021-07-29)
+
+
+### Features
+
+* **Cookies:** Added support for cookies in load data function ⚡  ([#265](https://github.com/quintype/quintype-node-framework/issues/265)) ([d29cdde](https://github.com/quintype/quintype-node-framework/commit/d29cdde9e0dd7e4bf6e602ef85fea66f4f1f3203))
+
 ### [5.0.2](https://github.com/quintype/quintype-node-framework/compare/v5.0.1...v5.0.2) (2021-07-22)
 
 
