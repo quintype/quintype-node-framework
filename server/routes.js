@@ -37,6 +37,7 @@ const prerender = require("@quintype/prerender-node");
  * @param {Object} opts Options
  * @param {Array<string>} opts.extraRoutes Additionally forward some routes upstream. This takes an array of express compatible routes, such as ["/foo/*"]
  * @param {boolean} opts.forwardAmp Forward amp story routes upstream (default false)
+ * @param {string} opts.sMaxAge Overrides the s-maxage value.
  * @param {boolean} opts.forwardFavicon Forward favicon requests to the CMS (default false)
  * @param {boolean} opts.isSitemapUrlEnabled To enable /news_sitemap/today and /news_sitemap/yesterday sitemap news url (default /news_sitemap.xml)
  */
@@ -46,6 +47,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     forwardAmp = false,
     forwardFavicon = false,
     extraRoutes = [],
+    sMaxAge = "",
 
     config = require("./publisher-config"),
     getClient = require("./api-client").getClient,
@@ -53,6 +55,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   } = {}
 ) {
   const host = config.sketches_host;
+  const get = require("lodash/get");
   const apiProxy = require("http-proxy").createProxyServer({
     target: host,
     ssl: host.startsWith("https") ? { servername: host.replace(/^https:\/\//, "") } : undefined,
@@ -60,8 +63,21 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   apiProxy.on("proxyReq", (proxyReq, req, res, options) => {
     proxyReq.setHeader("Host", getClient(req.hostname).getHostname());
-    res.setHeader("Cache-Control", "public,s-maxage=800");
   });
+
+  sMaxAge &&
+    apiProxy.on("proxyRes", function (proxyRes, req, res) {
+      console.log("RAW Response from the target11111111", proxyRes.headers["cache-control"]);
+
+      const getCacheControl = get(proxyRes, ["headers", "cache-control"], "").split(",")[0];
+      console.log("getCacheControl-------=====", getCacheControl);
+
+      if (req.originalUrl !== "/api/v1/breaking-news" && getCacheControl !== "private") {
+        proxyRes.headers[
+          "cache-control"
+        ] = `public,max-age=15,s-maxage=${sMaxAge},stale-while-revalidate=300,stale-if-error=7200`;
+      }
+    });
 
   const sketchesProxy = (req, res) => apiProxy.web(req, res);
 
