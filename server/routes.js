@@ -67,16 +67,13 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   sMaxAge &&
     apiProxy.on("proxyRes", function (proxyRes, req, res) {
-      console.log("RAW Response from the target11111111", proxyRes.headers["cache-control"]);
+      const getBreakingNewsPath = get(req, ["originalUrl"], "").split("?")[0];
+      const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
+      console.log("getCacheControl----------", getCacheControl);
+      console.log("getBreakingNewsPath-------", getBreakingNewsPath);
 
-      const getCacheControl = get(proxyRes, ["headers", "cache-control"], "").split(",")[0];
-      console.log("req.originalUrl----", req.originalUrl);
-      console.log("req.url-----------", req.url);
-
-      if (req.originalUrl !== "/api/v1/breaking-news" || getCacheControl !== "private") {
-        proxyRes.headers[
-          "cache-control"
-        ] = `public,max-age=15,s-maxage=${sMaxAge},stale-while-revalidate=300,stale-if-error=7200`;
+      if (getBreakingNewsPath !== "/api/v1/breaking-news" && getCacheControl.includes("public")) {
+        proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${sMaxAge}`);
       }
     });
 
