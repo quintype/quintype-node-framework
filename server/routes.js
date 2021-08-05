@@ -69,9 +69,6 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     apiProxy.on("proxyRes", function (proxyRes, req, res) {
       const getBreakingNewsPath = get(req, ["originalUrl"], "").split("?")[0];
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
-      console.log("getCacheControl----------", getCacheControl);
-      console.log("getBreakingNewsPath-------", getBreakingNewsPath);
-
       if (getBreakingNewsPath !== "/api/v1/breaking-news" && getCacheControl.includes("public")) {
         proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${sMaxAge}`);
       }
