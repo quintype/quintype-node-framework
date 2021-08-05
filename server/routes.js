@@ -536,6 +536,7 @@ exports.getWithConfig = getWithConfig;
  * @param opts.cacheControl The cache control header to set on proxied requests (default: *"public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=3600"*)
  */
 exports.proxyGetRequest = function (app, route, handler, opts = {}) {
+  const { logError = require("./logger").error } = opts;
   const { cacheControl = "public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=3600" } = opts;
 
   getWithConfig(app, route, proxyHandler, opts);

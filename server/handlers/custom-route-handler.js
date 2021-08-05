@@ -1,14 +1,9 @@
 const urlLib = require("url");
-const Promise = require("bluebird");
-const get = require("lodash/get");
 const ejs = require("ejs");
 const fs = require("fs");
 const path = require("path");
 
-const staticPageTemplateStr = fs.readFileSync(
-  path.join(__dirname, "../views/static-page.ejs"),
-  { encoding: "utf-8" }
-);
+const staticPageTemplateStr = fs.readFileSync(path.join(__dirname, "../views/static-page.ejs"), { encoding: "utf-8" });
 const staticPageTemplate = ejs.compile(staticPageTemplateStr);
 
 const { CustomPath } = require("../impl/api-client-impl");
@@ -22,16 +17,10 @@ function renderStaticPageContent(store, content) {
   return renderedContent;
 }
 
-function writeStaticPageResponse(
-  res,
-  url,
-  page,
-  result,
-  { config, renderLayout, seo }
-) {
+function writeStaticPageResponse(res, url, page, result, { config, renderLayout, seo }) {
   const qt = {
     pageType: page.type,
-    //remove content from data to avoid the script tag inside json breaking the page
+    // remove content from data to avoid the script tag inside json breaking the page
     data: Object.assign({}, page, result.data, { content: "" }),
     currentPath: `${url.pathname}${url.search || ""}`,
   };
@@ -40,8 +29,7 @@ function writeStaticPageResponse(
   });
 
   const seoInstance = typeof seo === "function" ? seo(config) : seo;
-  const seoTags =
-    seoInstance && seoInstance.getMetaTags(config, page.type, {}, { url });
+  const seoTags = seoInstance && seoInstance.getMetaTags(config, page.type, {}, { url });
 
   res.status(page["status-code"] || 200);
 
@@ -58,23 +46,10 @@ exports.customRouteHandler = function customRouteHandler(
   req,
   res,
   next,
-  {
-    config,
-    client,
-    loadData,
-    loadErrorData,
-    renderLayout,
-    logError,
-    seo,
-    domainSlug,
-    cdnProvider = null,
-    sMaxAge,
-  }
+  { config, client, loadData, loadErrorData, renderLayout, logError, seo, domainSlug, cdnProvider = null, sMaxAge }
 ) {
   const url = urlLib.parse(req.url, true);
-  const path = req.params[0].endsWith("/")
-    ? req.params[0].slice(0, -1)
-    : req.params[0];
+  const path = req.params[0].endsWith("/") ? req.params[0].slice(0, -1) : req.params[0];
   return CustomPath.getCustomPathData(client, path)
     .then((page) => {
       if (!page) {
@@ -83,9 +58,7 @@ exports.customRouteHandler = function customRouteHandler(
 
       if (page.type === "redirect") {
         if (!page["status-code"] || !page["destination-path"]) {
-          logError(
-            "Defaulting the status-code to 302 with destination-path as home-page"
-          );
+          logError("Defaulting the status-code to 302 with destination-path as home-page");
         }
         addCacheHeadersToResult({
           res: res,
@@ -119,6 +92,7 @@ exports.customRouteHandler = function customRouteHandler(
           return loadData("custom-static-page", {}, config, client, {
             host: req.hostname,
             domainSlug,
+            cookies: req.cookies,
           }).then((response) => {
             return writeStaticPageResponse(res, url, page.page, response, {
               config,
