@@ -37,7 +37,7 @@ const prerender = require("@quintype/prerender-node");
  * @param {Object} opts Options
  * @param {Array<string>} opts.extraRoutes Additionally forward some routes upstream. This takes an array of express compatible routes, such as ["/foo/*"]
  * @param {boolean} opts.forwardAmp Forward amp story routes upstream (default false)
- * @param {string} opts.sMaxAge Overrides the s-maxage value.
+ * @param {number} opts.sMaxAge Support overriding of proxied response cache header `s-maxage` from Sketches. For Breaking News and if the cacheability is Private, it is not overwritten instead the cache control will be the same as how it's set in sketches
  * @param {boolean} opts.forwardFavicon Forward favicon requests to the CMS (default false)
  * @param {boolean} opts.isSitemapUrlEnabled To enable /news_sitemap/today and /news_sitemap/yesterday sitemap news url (default /news_sitemap.xml)
  */
@@ -47,7 +47,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     forwardAmp = false,
     forwardFavicon = false,
     extraRoutes = [],
-    sMaxAge = "",
+    sMaxAge,
 
     config = require("./publisher-config"),
     getClient = require("./api-client").getClient,
@@ -65,11 +65,11 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     proxyReq.setHeader("Host", getClient(req.hostname).getHostname());
   });
 
-  sMaxAge &&
+  typeof sMaxAge === "number" &&
     apiProxy.on("proxyRes", function (proxyRes, req, res) {
-      const getBreakingNewsPath = get(req, ["originalUrl"], "").split("?")[0];
+      const pathName = get(req, ["originalUrl"], "").split("?")[0];
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
-      if (getBreakingNewsPath !== "/api/v1/breaking-news" && getCacheControl.includes("public")) {
+      if (pathName !== "/api/v1/breaking-news" && getCacheControl.includes("public")) {
         proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${sMaxAge}`);
       }
     });

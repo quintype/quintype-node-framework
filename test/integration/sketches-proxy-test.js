@@ -128,7 +128,7 @@ describe("Sketches Proxy", function () {
         baseUrl: "https://www.foo.com",
       };
     }
-    function buildApp(sMaxAge = "", { app = express() } = {}) {
+    function buildApp(sMaxAge, { app = express() } = {}) {
       upstreamQuintypeRoutes(app, {
         config: {
           sketches_host: `https://demo.quintype.io`,
@@ -138,13 +138,13 @@ describe("Sketches Proxy", function () {
         forwardAmp: true,
         forwardFavicon: true,
         publisherConfig: {},
-        sMaxAge: `${sMaxAge}`,
+        sMaxAge: sMaxAge,
       });
       return app;
     }
 
     it("Override the s-maxage cache header when sMaxAge value is present", function (done) {
-      const sMaxAge = "900";
+      const sMaxAge = 900;
       supertest(buildApp(sMaxAge))
         .get("/api/v1/config")
         .expect(200)
@@ -156,7 +156,7 @@ describe("Sketches Proxy", function () {
     });
 
     it("Does not override the s-maxage cache header if cacheability is Private", function (done) {
-      const sMaxAge = "900";
+      const sMaxAge = 900;
       supertest(buildApp(sMaxAge))
         .get("/api/auth/v1/users/me")
         .then((res) => {
@@ -167,7 +167,7 @@ describe("Sketches Proxy", function () {
     });
 
     it("Does not override the s-maxage cache header for Breaking News", function (done) {
-      const sMaxAge = "900";
+      const sMaxAge = 900;
       supertest(buildApp(sMaxAge))
         .get("/api/v1/breaking-news")
         .then((res) => {
