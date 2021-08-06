@@ -65,7 +65,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     proxyReq.setHeader("Host", getClient(req.hostname).getHostname());
   });
 
-  typeof sMaxAge === "number" &&
+  parseInt(sMaxAge) &&
     apiProxy.on("proxyRes", function (proxyRes, req, res) {
       const pathName = get(req, ["originalUrl"], "").split("?")[0];
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
