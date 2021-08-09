@@ -332,7 +332,7 @@ export function startApp(renderApplication, reducers, opts) {
   function doStartApp(page, opts) {
     if (!page) {
       console &&
-        console.log("Recieved a null page. Expecting the browser to redirect.");
+        console.log("Received a null page. Expecting the browser to redirect.");
       return;
     }
 
