@@ -342,8 +342,8 @@ export function startApp(renderApplication, reducers, opts) {
       initializeFCM(mssgSenderId);
     }
 
-    let { config: { "theme-attributes": pageThemeAttributes = {} } = {} } = page;
-    let version = pageThemeAttributes["cache-burst"];
+    const { config: { "theme-attributes": pageThemeAttributes = {} } = {} } = page;
+    const version = pageThemeAttributes["cache-burst"] || page.appVersion;
 
     const serviceWorkerPromise = registerServiceWorker({...opts, version});
 

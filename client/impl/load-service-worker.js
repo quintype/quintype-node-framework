@@ -18,8 +18,8 @@ export function registerServiceWorker({
 }
 
 function updateOneSignalWorker(page, opts) {
-  let { config: { "theme-attributes": pageThemeAttributes = {} } = {} } = page;
-  let version = pageThemeAttributes["cache-burst"];
+  const { config: { "theme-attributes": pageThemeAttributes = {} } = {} } = page;
+  const version = pageThemeAttributes["cache-burst"] || page.appVersion;
 
   registerServiceWorker({ ...opts, serviceWorkerLocation: "/OneSignalSDKWorker.js", version }).then(() =>
     console.log("Updated OneSignal Worker")
