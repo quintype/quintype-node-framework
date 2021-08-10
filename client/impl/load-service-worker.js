@@ -17,9 +17,9 @@ export function registerServiceWorker({
   return Promise.resolve(null);
 }
 
-function updateOneSignalWorker(page, opts) {
+function updateOneSignalWorker(appVersion, page, opts) {
   const { config: { "theme-attributes": pageThemeAttributes = {} } = {} } = page;
-  const version = pageThemeAttributes["cache-burst"] || page.appVersion;
+  const version = pageThemeAttributes["cache-burst"] || appVersion;
 
   registerServiceWorker({ ...opts, serviceWorkerLocation: "/OneSignalSDKWorker.js", version }).then(() =>
     console.log("Updated OneSignal Worker")
@@ -37,7 +37,8 @@ export function setupServiceWorkerUpdates(serviceWorkerPromise, app, store, page
         registration.update().then(() => store.dispatch({ type: SERVICE_WORKER_UPDATED }));
 
       if (global.OneSignal) {
-        app.updateOneSignalWorker = () => updateOneSignalWorker(page, opts);
+        const appVersion = app.getAppVersion();
+        app.updateOneSignalWorker = () => updateOneSignalWorker(appVersion, page, opts);
       }
     }
 

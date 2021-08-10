@@ -343,7 +343,7 @@ export function startApp(renderApplication, reducers, opts) {
     }
 
     const { config: { "theme-attributes": pageThemeAttributes = {} } = {} } = page;
-    const version = pageThemeAttributes["cache-burst"] || page.appVersion;
+    const version = pageThemeAttributes["cache-burst"] || app.getAppVersion();
 
     const serviceWorkerPromise = registerServiceWorker({...opts, version});
 
