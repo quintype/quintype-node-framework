@@ -73,6 +73,8 @@ export function initializeQServiceWorker(params = {}) {
   const shell = params.shell || "/shell.html";
   const shellHandler = ({ event }) => caches.match(shell).then((r) => r || fetch(event.request));
 
+  self.skipWaiting();
+  workbox.core.clientsClaim();
   workbox.precaching.cleanupOutdatedCaches();
   workbox.precaching.precache(params.assets);
   workbox.routing.registerRoute(routeMatcher, shellHandler);
