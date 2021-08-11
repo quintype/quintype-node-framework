@@ -15,7 +15,7 @@
 
 import { matchBestRoute } from "../isomorphic/match-best-route";
 
-const workboxVersion = "2.1.1";
+const workboxVersion = "6.2.0";
 
 function qDebug() {
   if (process.env.NODE_ENV !== "production") {
@@ -34,11 +34,7 @@ function qDebug() {
  * @param {string} params.shell Path for the shell. Default '/shell.html'
  */
 export function initializeQServiceWorker(self, params = {}) {
-  importScripts(
-    `https://unpkg.com/workbox-sw@${workboxVersion}/build/importScripts/workbox-sw.${
-      process.env.NODE_ENV == "production" ? "prod" : "dev"
-    }.v${workboxVersion}.js`
-  );
+  importScripts(`https://storage.googleapis.com/workbox-cdn/releases/${workboxVersion}/workbox-sw.js`);
 
   const routeMatcher = function routeMatcher({ event, url }) {
     if (event.request.mode !== "navigate") {
@@ -75,11 +71,9 @@ export function initializeQServiceWorker(self, params = {}) {
     return false;
   };
   const shell = params.shell || "/shell.html";
-  const shellHandler = ({ event }) =>
-    caches.match(shell).then((r) => r || fetch(event.request));
+  const shellHandler = ({ event }) => caches.match(shell).then((r) => r || fetch(event.request));
 
-  const workbox = new WorkboxSW({ clientsClaim: true, skipWaiting: true });
-  workbox.precache(params.assets);
-  workbox.router.registerRoute(routeMatcher, shellHandler);
-  return workbox;
+  workbox.precaching.cleanupOutdatedCaches();
+  workbox.precaching.precache(params.assets);
+  workbox.routing.registerRoute(routeMatcher, shellHandler);
 }
