@@ -11,7 +11,7 @@ import {
   BreakingNews,
   CLIENT_SIDE_RENDERED,
   NAVIGATE_TO_PAGE,
-  PAGE_LOADING,
+  PAGE_LOADING
 } from "@quintype/components";
 import { createBrowserHistory } from "history";
 import get from "lodash/get";
@@ -25,13 +25,13 @@ import {
   registerPageView,
   registerStoryShare,
   setMemberId,
-  startAnalytics,
+  startAnalytics
 } from "./analytics";
 import { initializeFCM } from "./impl/fcm";
 import {
   checkForServiceWorkerUpdates,
   registerServiceWorker,
-  setupServiceWorkerUpdates,
+  setupServiceWorkerUpdates
 } from "./impl/load-service-worker";
 
 require("../assetify/client")();
@@ -312,8 +312,6 @@ export function startApp(renderApplication, reducers, opts) {
     ? Promise.resolve(staticData.qt)
     : getRouteData(path, { existingFetch: global.initialFetch });
 
-  const serviceWorkerPromise = registerServiceWorker(opts);
-
   startAnalytics();
 
   const store = createQtStore(
@@ -329,12 +327,12 @@ export function startApp(renderApplication, reducers, opts) {
     runWithTiming("qt_preRender", () => opts.preRenderApplication(store));
   }
 
-  return dataPromise.then((page) => doStartApp(page));
+  return dataPromise.then((page) => doStartApp(page, opts));
 
-  function doStartApp(page) {
+  function doStartApp(page, opts) {
     if (!page) {
       console &&
-        console.log("Recieved a null page. Expecting the browser to redirect.");
+        console.log("Received a null page. Expecting the browser to redirect.");
       return;
     }
 
@@ -343,7 +341,13 @@ export function startApp(renderApplication, reducers, opts) {
       const mssgSenderId = get(page, ["config", "fcmMessageSenderId"], null);
       initializeFCM(mssgSenderId);
     }
-    setupServiceWorkerUpdates(serviceWorkerPromise, app, store, page);
+
+    const { config: { "theme-attributes": pageThemeAttributes = {} } = {} } = page;
+    const version = pageThemeAttributes["cache-burst"] || app.getAppVersion();
+
+    const serviceWorkerPromise = registerServiceWorker({...opts, version});
+
+    setupServiceWorkerUpdates(serviceWorkerPromise, app, store, page, opts);
 
     runWithTiming("qt_render", () => renderApplication(store));
 
