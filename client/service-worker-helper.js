@@ -33,7 +33,7 @@ function qDebug() {
  * @param {string|undefined} params.mountAt Mount point for the routes to be mounted
  * @param {string} params.shell Path for the shell. Default '/shell.html'
  */
-export function initializeQServiceWorker(self, params = {}) {
+export function initializeQServiceWorker(params = {}) {
   importScripts(`https://storage.googleapis.com/workbox-cdn/releases/${workboxVersion}/workbox-sw.js`);
 
   const routeMatcher = function routeMatcher({ event, url }) {
