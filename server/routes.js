@@ -66,10 +66,11 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   });
 
   parseInt(sMaxAge) &&
-    apiProxy.on("proxyRes", function (proxyRes, req, res) {
+    apiProxy.on("proxyRes", function (proxyRes, req) {
       const pathName = get(req, ["originalUrl"], "").split("?")[0];
+      const checkForExcludeRoutes = excludeRoutes.every((item) => item !== pathName);
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
-      if (pathName !== "/qlitics.js" && pathName !== "/api/v1/breaking-news" && getCacheControl.includes("public")) {
+      if (checkForExcludeRoutes && getCacheControl.includes("public")) {
         proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${sMaxAge}`);
       }
     });
@@ -83,9 +84,12 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
       .catch(() => res.status(503).send({ error: { message: "Config not loaded" } }));
   });
 
+  // Mention the routes which don't want to override the s-maxage value
+  const excludeRoutes = ["/qlitics.js", "/api/v1/breaking-news"];
+
   app.all("/api/*", sketchesProxy);
   app.all("/login", sketchesProxy);
-  app.all("/qlitics.js", sketchesProxy);
+  app.all("/qlitics.js", (exclude) => sketchesProxy(exclude));
   app.all("/auth.form", sketchesProxy);
   app.all("/auth.callback", sketchesProxy);
   app.all("/auth", sketchesProxy);
