@@ -69,7 +69,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     apiProxy.on("proxyRes", function (proxyRes, req, res) {
       const pathName = get(req, ["originalUrl"], "").split("?")[0];
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
-      if (pathName !== "/api/v1/breaking-news" && getCacheControl.includes("public")) {
+      if (pathName !== "/qlitics.js" && pathName !== "/api/v1/breaking-news" && getCacheControl.includes("public")) {
         proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${sMaxAge}`);
       }
     });
