@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "5.0.4-onesignal-sw.0",
+  "version": "5.0.4",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "scripts": {

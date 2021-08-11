@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.0.4](https://github.com/quintype/quintype-node-framework/compare/v5.0.3...v5.0.4) (2021-08-11)
+
+
+### Bug Fixes
+
+* **service-worker:** Re-register one signal service worker on update ([#260](https://github.com/quintype/quintype-node-framework/issues/260)) ([0c9401d](https://github.com/quintype/quintype-node-framework/commit/0c9401d25b22d54d8183612c3c225b4842c5b942)), closes [#259](https://github.com/quintype/quintype-node-framework/issues/259)
+* **service-worker:** Re-register one signal service worker on update ([#268](https://github.com/quintype/quintype-node-framework/issues/268)) ([d965baa](https://github.com/quintype/quintype-node-framework/commit/d965baa5d4c98e398788e199fdedf5e2c16fd6b5)), closes [#259](https://github.com/quintype/quintype-node-framework/issues/259)
+
 ### [5.0.3](https://github.com/quintype/quintype-node-framework/compare/v5.0.2...v5.0.3) (2021-07-29)
 
 
