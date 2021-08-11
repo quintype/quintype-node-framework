@@ -89,7 +89,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   app.all("/api/*", sketchesProxy);
   app.all("/login", sketchesProxy);
-  app.all("/qlitics.js", (exclude) => sketchesProxy(exclude));
+  app.all("/qlitics.js", sketchesProxy);
   app.all("/auth.form", sketchesProxy);
   app.all("/auth.callback", sketchesProxy);
   app.all("/auth", sketchesProxy);
