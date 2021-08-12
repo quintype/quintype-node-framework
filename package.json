@@ -28,6 +28,7 @@
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.0",
     "@quintype/amp": "^2.4.10",
+    "@quintype/arrow": "^2.2.2-test-branch.2",
     "@quintype/backend": "^2.0.2",
     "@quintype/components": "^2.31.2",
     "@quintype/prerender-node": "^3.2.24",
