@@ -23,6 +23,16 @@ function qDebug() {
   }
 }
 
+const getAssetsWithRevision = (assets) =>
+  assets.map((asset) =>
+    typeof asset === "string"
+      ? {
+          url: asset,
+          revision: null,
+        }
+      : asset
+  );
+
 /**
  * Start the Service Worker.
  * @param {ServiceWorkerScope} self
@@ -72,10 +82,11 @@ export function initializeQServiceWorker(params = {}) {
   };
   const shell = params.shell || "/shell.html";
   const shellHandler = ({ event }) => caches.match(shell).then((r) => r || fetch(event.request));
+  const assetsToPrecache = getAssetsWithRevision(params.assets);
 
   self.skipWaiting();
   workbox.core.clientsClaim();
   workbox.precaching.cleanupOutdatedCaches();
-  workbox.precaching.precache(params.assets);
+  workbox.precaching.precache(assetsToPrecache);
   workbox.routing.registerRoute(routeMatcher, shellHandler);
 }
