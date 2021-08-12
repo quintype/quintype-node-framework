@@ -7,6 +7,7 @@ export function registerServiceWorker({
   mountAt = global.qtMountAt || "",
   version = 0,
 }) {
+  console.log(version, "<------version");
   if (enableServiceWorker && navigator.serviceWorker) {
     const location =
       serviceWorkerLocation === "/OneSignalSDKWorker.js"
@@ -27,6 +28,7 @@ function updateOneSignalWorker(appVersion, page, opts) {
 }
 
 export function setupServiceWorkerUpdates(serviceWorkerPromise, app, store, page, opts = {}) {
+  console.log(page, "<-----page");
   if (!serviceWorkerPromise) return Promise.resolve();
 
   return serviceWorkerPromise.then((registration) => {
@@ -57,6 +59,7 @@ function updateServiceWorker(app) {
 }
 
 export function checkForServiceWorkerUpdates(app, page = {}) {
+  console.log(page, "<------page inside checkForServiceWorkerUpdates");
   if (page.appVersion && app.getAppVersion && app.getAppVersion() < page.appVersion) {
     console && console.log("Updating the Service Worker");
     updateServiceWorker(app);
