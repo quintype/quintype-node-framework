@@ -65,15 +65,15 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     proxyReq.setHeader("Host", getClient(req.hostname).getHostname());
   });
 
-  sMaxAge = get(config, ["publisher", "upstreamRoutesSmaxage"], sMaxAge);
+  const _sMaxAge = get(config, ["publisher", "upstreamRoutesSmaxage"], sMaxAge);
 
-  parseInt(sMaxAge) &&
+  parseInt(_sMaxAge) &&
     apiProxy.on("proxyRes", function (proxyRes, req) {
       const pathName = get(req, ["originalUrl"], "").split("?")[0];
       const checkForExcludeRoutes = excludeRoutes.every((item) => item !== pathName);
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
       if (checkForExcludeRoutes && getCacheControl.includes("public")) {
-        proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${sMaxAge}`);
+        proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${_sMaxAge}`);
       }
     });
 
@@ -321,7 +321,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
 
-  sMaxAge = parseInt(get(publisherConfig, ["publisher", "isomorphicRoutesSmaxage"], sMaxAge));
+  const _sMaxAge = parseInt(get(publisherConfig, ["publisher", "isomorphicRoutesSmaxage"], sMaxAge));
 
   pickComponent = makePickComponentSync(pickComponent);
   loadData = wrapLoadDataWithMultiDomain(publisherConfig, loadData, 2);
@@ -402,7 +402,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       appVersion,
       cdnProvider,
       redirectToLowercaseSlugs,
-      sMaxAge,
+      sMaxAge: _sMaxAge,
     })
   );
 
@@ -427,7 +427,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
         mobileConfigFields,
         cdnProvider,
         redirectToLowercaseSlugs,
-        sMaxAge,
+        sMaxAge: _sMaxAge,
       })
     );
   }
@@ -460,7 +460,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
             cdnProvider,
             oneSignalServiceWorkers,
             publisherConfig,
-            sMaxAge,
+            sMaxAge: _sMaxAge,
           },
           route
         )
@@ -488,12 +488,12 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       shouldEncodeAmpUri,
       oneSignalServiceWorkers,
       publisherConfig,
-      sMaxAge,
+      sMaxAge: _sMaxAge,
     })
   );
 
   if (redirectRootLevelStories) {
-    app.get("/:storySlug", withConfig(redirectStory, { logError, cdnProvider, sMaxAge }));
+    app.get("/:storySlug", withConfig(redirectStory, { logError, cdnProvider, sMaxAge: _sMaxAge }));
   }
 
   if (handleCustomRoute) {
@@ -505,7 +505,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
         logError,
         seo,
         cdnProvider,
-        sMaxAge,
+        sMaxAge: _sMaxAge,
       })
     );
   }
