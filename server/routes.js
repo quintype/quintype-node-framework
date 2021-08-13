@@ -37,6 +37,7 @@ const prerender = require("@quintype/prerender-node");
  * @param {Object} opts Options
  * @param {Array<string>} opts.extraRoutes Additionally forward some routes upstream. This takes an array of express compatible routes, such as ["/foo/*"]
  * @param {boolean} opts.forwardAmp Forward amp story routes upstream (default false)
+ * @param {number} opts.sMaxAge Support overriding of proxied response cache header `s-maxage` from Sketches. For Breaking News and if the cacheability is Private, it is not overwritten instead the cache control will be the same as how it's set in sketches. We can set `isomorphicRoutesSmaxage: 9000` under `publisher` in publisher.yml config file that comes from BlackKnight or pass sMaxAge as a param.
  * @param {boolean} opts.forwardFavicon Forward favicon requests to the CMS (default false)
  * @param {boolean} opts.isSitemapUrlEnabled To enable /news_sitemap/today and /news_sitemap/yesterday sitemap news url (default /news_sitemap.xml)
  */
@@ -46,6 +47,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     forwardAmp = false,
     forwardFavicon = false,
     extraRoutes = [],
+    sMaxAge,
 
     config = require("./publisher-config"),
     getClient = require("./api-client").getClient,
@@ -53,6 +55,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   } = {}
 ) {
   const host = config.sketches_host;
+  const get = require("lodash/get");
   const apiProxy = require("http-proxy").createProxyServer({
     target: host,
     ssl: host.startsWith("https") ? { servername: host.replace(/^https:\/\//, "") } : undefined,
@@ -62,6 +65,18 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     proxyReq.setHeader("Host", getClient(req.hostname).getHostname());
   });
 
+  const _sMaxAge = get(config, ["publisher", "upstreamRoutesSmaxage"], sMaxAge);
+
+  parseInt(_sMaxAge) > 0 &&
+    apiProxy.on("proxyRes", function (proxyRes, req) {
+      const pathName = get(req, ["originalUrl"], "").split("?")[0];
+      const checkForExcludeRoutes = excludeRoutes.includes(pathName);
+      const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
+      if (!checkForExcludeRoutes && getCacheControl.includes("public")) {
+        proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${_sMaxAge}`);
+      }
+    });
+
   const sketchesProxy = (req, res) => apiProxy.web(req, res);
 
   app.get("/ping", (req, res) => {
@@ -70,6 +85,9 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
       .then(() => res.send("pong"))
       .catch(() => res.status(503).send({ error: { message: "Config not loaded" } }));
   });
+
+  // Mention the routes which don't want to override the s-maxage value
+  const excludeRoutes = ["/qlitics.js", "/api/v1/breaking-news"];
 
   app.all("/api/*", sketchesProxy);
   app.all("/login", sketchesProxy);
@@ -257,7 +275,7 @@ function getWithConfig(app, route, handler, opts = {}) {
  * @param {Array<object>|function} opts.redirectUrls An array or async function which used to render the redirect url provided in the array of object - >ex- REDIRECT_URLS = [{sourceUrl: "/tag/:tagSlug",destinationUrl: "/topic/:tagSlug",statusCode: 301,}]
  * @param {boolean|function} redirectToLowercaseSlugs If set or evaluates to true, then for every story-page request having capital latin letters in the slug, it responds with a 301 redirect to the lowercase slug URL. (default: true)
  * @param {boolean|function} shouldEncodeAmpUri If set to true, then for every story-page request the slug will be encoded, in case of a vernacular slug this should be set to false. Receives path as param (default: true)
- * @param {string} sMaxAge Overrides the s-maxage value, the default value is set to 900 seconds
+ * @param {number} sMaxAge Overrides the s-maxage value, the default value is set to 900 seconds. We can set `isomorphicRoutesSmaxage: 900` under `publisher` in publisher.yml config file that comes from BlackKnight or pass sMaxAge as a param.
  */
 exports.isomorphicRoutes = function isomorphicRoutes(
   app,
@@ -298,10 +316,12 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     prerenderServiceUrl = "",
     redirectToLowercaseSlugs = false,
     shouldEncodeAmpUri,
-    sMaxAge = "900",
+    sMaxAge = 900,
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
+
+  const _sMaxAge = parseInt(get(publisherConfig, ["publisher", "isomorphicRoutesSmaxage"], sMaxAge));
 
   pickComponent = makePickComponentSync(pickComponent);
   loadData = wrapLoadDataWithMultiDomain(publisherConfig, loadData, 2);
@@ -382,7 +402,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       appVersion,
       cdnProvider,
       redirectToLowercaseSlugs,
-      sMaxAge,
+      sMaxAge: _sMaxAge,
     })
   );
 
@@ -407,7 +427,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
         mobileConfigFields,
         cdnProvider,
         redirectToLowercaseSlugs,
-        sMaxAge,
+        sMaxAge: _sMaxAge,
       })
     );
   }
@@ -440,7 +460,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
             cdnProvider,
             oneSignalServiceWorkers,
             publisherConfig,
-            sMaxAge,
+            sMaxAge: _sMaxAge,
           },
           route
         )
@@ -468,12 +488,12 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       shouldEncodeAmpUri,
       oneSignalServiceWorkers,
       publisherConfig,
-      sMaxAge,
+      sMaxAge: _sMaxAge,
     })
   );
 
   if (redirectRootLevelStories) {
-    app.get("/:storySlug", withConfig(redirectStory, { logError, cdnProvider, sMaxAge }));
+    app.get("/:storySlug", withConfig(redirectStory, { logError, cdnProvider, sMaxAge: _sMaxAge }));
   }
 
   if (handleCustomRoute) {
@@ -485,7 +505,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
         logError,
         seo,
         cdnProvider,
-        sMaxAge,
+        sMaxAge: _sMaxAge,
       })
     );
   }
