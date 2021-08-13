@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.0.5](https://github.com/quintype/quintype-node-framework/compare/v4.16.15...v5.0.5) (2021-08-13)
+
+
+### Features
+
+* **Cookies:** Added support for cookies in load data function ⚡  ([#265](https://github.com/quintype/quintype-node-framework/issues/265)) ([d29cdde](https://github.com/quintype/quintype-node-framework/commit/d29cdde9e0dd7e4bf6e602ef85fea66f4f1f3203))
+
+
+### Bug Fixes
+
+* **service-worker:** Re-register one signal service worker on update ([#260](https://github.com/quintype/quintype-node-framework/issues/260)) ([0c9401d](https://github.com/quintype/quintype-node-framework/commit/0c9401d25b22d54d8183612c3c225b4842c5b942)), closes [#259](https://github.com/quintype/quintype-node-framework/issues/259)
+* **service-worker:** Re-register one signal service worker on update ([#268](https://github.com/quintype/quintype-node-framework/issues/268)) ([d965baa](https://github.com/quintype/quintype-node-framework/commit/d965baa5d4c98e398788e199fdedf5e2c16fd6b5)), closes [#259](https://github.com/quintype/quintype-node-framework/issues/259)
+* **timeout:** Increase dev timeout to 50s ([a1cf9a3](https://github.com/quintype/quintype-node-framework/commit/a1cf9a3469083d02e476f339f58176d12d018bc7))
+
 ### [5.0.4](https://github.com/quintype/quintype-node-framework/compare/v5.0.3...v5.0.4) (2021-08-11)
 
 
