@@ -69,8 +69,8 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   parseInt(sMaxAge) &&
     apiProxy.on("proxyRes", function (proxyRes, req) {
-      const pathName = get(req, ["originalUrl"], "");
-      const checkForExcludeRoutes = excludeRoutes.every((item) => pathName.includes(item));
+      const pathName = get(req, ["originalUrl"], "").split("?")[0];
+      const checkForExcludeRoutes = excludeRoutes.every((item) => item !== pathName);
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
       if (checkForExcludeRoutes && getCacheControl.includes("public")) {
         proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${sMaxAge}`);
