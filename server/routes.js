@@ -403,6 +403,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       cdnProvider,
       redirectToLowercaseSlugs,
       sMaxAge: _sMaxAge,
+      staleWhileRevalidate: 0,
     })
   );
 
