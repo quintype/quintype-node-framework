@@ -34,7 +34,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
     } else {
       res.setHeader(
         "Cache-Control",
-        `public,max-age=10,s-maxage=${sMaxAge},stale-while-revalidate=${staleWhileRevalidate},stale-if-error=14400`
+        `public,max-age=15,s-maxage=${sMaxAge},stale-while-revalidate=${staleWhileRevalidate},stale-if-error=14400`
       );
       cdnProviderVal === "akamai" &&
         res.setHeader(
