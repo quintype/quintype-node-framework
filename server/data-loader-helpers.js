@@ -14,12 +14,18 @@ exports.catalogDataLoader = function catalogDataLoader(client, config) {
   });
 };
 
-exports.homeCollectionOrStories = function homeCollectionOrStories(client, depth = 1, getStoryLimits, params = {}, collectionOfCollectionsIndex = []) {
+exports.homeCollectionOrStories = function homeCollectionOrStories(
+  client,
+  depth = 1,
+  getStoryLimits,
+  params = {},
+  collectionOfCollectionsIndexes = []
+) {
   return Collection.getCollectionBySlug(
     client,
     "home",
     { "item-type": "collection", ...params },
-    { depth, ...(getStoryLimits && { storyLimits: getStoryLimits() }), collectionOfCollectionsIndex }
+    { depth, ...(getStoryLimits && { storyLimits: getStoryLimits() }), collectionOfCollectionsIndexes }
   ).then((collection) => {
     if (collection) return collection;
     return Story.getStories(client).then((stories) =>
