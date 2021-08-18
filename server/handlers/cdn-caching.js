@@ -7,7 +7,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
   cdnProvider = "cloudflare",
   config,
   sMaxAge = "900",
-  staleWhileRevalidate = "1000",
+  networkOnly = false,
 }) {
   let cdnProviderVal = null;
   cdnProviderVal =
@@ -32,21 +32,24 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
           `block-all-mixed-content;`
       );
     } else {
-      res.setHeader(
-        "Cache-Control",
-        `public,max-age=15,s-maxage=${sMaxAge},stale-while-revalidate=${staleWhileRevalidate},stale-if-error=14400`
-      );
-      cdnProviderVal === "akamai" &&
+      if (networkOnly) {
+        res.setHeader("Cache-Control", `public,s-maxage=${sMaxAge}`);
+        cdnProviderVal === "akamai" && res.setHeader("Edge-Control", `public,maxage=${sMaxAge}`);
+      } else {
         res.setHeader(
-          "Edge-Control",
-          `public,maxage=${sMaxAge},stale-while-revalidate=${staleWhileRevalidate},stale-if-error=14400`
+          "Cache-Control",
+          `public,max-age=15,s-maxage=${sMaxAge},stale-while-revalidate=1000,stale-if-error=14400`
         );
+        cdnProviderVal === "akamai" &&
+          res.setHeader("Edge-Control", `public,maxage=${sMaxAge},stale-while-revalidate=1000,stale-if-error=14400`);
+      }
+
       res.setHeader("Vary", "Accept-Encoding");
 
       // Cloudflare Headers
       res.setHeader("Cache-Tag", _(cacheKeys).uniq().join(","));
 
-      //Akamai Headers
+      // Akamai Headers
       cdnProviderVal === "akamai" && res.setHeader("Edge-Cache-Tag", _(cacheKeys).uniq().join(","));
 
       res.setHeader("Surrogate-Key", _(cacheKeys).uniq().join(" "));

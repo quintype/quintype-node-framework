@@ -227,7 +227,7 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
     cdnProvider,
     redirectToLowercaseSlugs,
     sMaxAge,
-    staleWhileRevalidate,
+    networkOnly,
   }
 ) {
   const url = urlLib.parse(req.query.path || "/", true);
@@ -297,7 +297,7 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
         cdnProvider: cdnProvider,
         config: config,
         sMaxAge,
-        staleWhileRevalidate,
+        networkOnly,
       });
       const seoInstance = getSeoInstance(seo, config, result.pageType);
       res.json(
