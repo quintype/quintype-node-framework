@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "5.0.6-fix-error-management.0",
+  "version": "5.0.6-fix-error-management.1",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "scripts": {
