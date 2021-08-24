@@ -317,6 +317,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     redirectToLowercaseSlugs = false,
     shouldEncodeAmpUri,
     sMaxAge = 900,
+    lowfidelitySvg = "",
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
@@ -388,6 +389,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       logError,
       preloadJs,
       maxConfigVersion,
+      lowfidelitySvg,
     })
   );
   app.get(
