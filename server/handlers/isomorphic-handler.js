@@ -121,7 +121,7 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
     preloadJs,
     domainSlug,
     maxConfigVersion,
-    lowfidelitySvg = "",
+    appLoadingPlaceholder = "",
   }
 ) {
   const url = urlLib.parse(req.url, true);
@@ -151,7 +151,7 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
     return renderLayout(res, {
       config,
       seoTags,
-      content: `<div class="app-loading">${lowfidelitySvg}<script type="text/javascript">window.qtLoadedFromShell = true</script></div>`,
+      content: `<div class="app-loading">${appLoadingPlaceholder}<script type="text/javascript">window.qtLoadedFromShell = true</script></div>`,
       store: createStore((state) => state, getDefaultState(result)),
       shell: true,
     });
