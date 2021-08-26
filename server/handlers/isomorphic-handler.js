@@ -265,6 +265,15 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
   }
 
   function isomorphicDataLoader() {
+    const randomBoolean = _.sample([true, false]);
+    console.log("test-----------req.path", req.path);
+    console.log("test-----------randomBoolean", randomBoolean);
+    if (req.path === "/route-data.json" && randomBoolean) {
+      console.log("test-----------throwing error");
+      return new Promise((resolve, reject) => {
+        reject("custom error- cf-stale-while-revalidate");
+      });
+    }
     return loadDataForIsomorphicRoute(loadData, loadErrorData, url, allRoutes(), {
       config,
       client,
