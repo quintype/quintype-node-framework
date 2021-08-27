@@ -276,6 +276,7 @@ function getWithConfig(app, route, handler, opts = {}) {
  * @param {boolean|function} redirectToLowercaseSlugs If set or evaluates to true, then for every story-page request having capital latin letters in the slug, it responds with a 301 redirect to the lowercase slug URL. (default: true)
  * @param {boolean|function} shouldEncodeAmpUri If set to true, then for every story-page request the slug will be encoded, in case of a vernacular slug this should be set to false. Receives path as param (default: true)
  * @param {number} sMaxAge Overrides the s-maxage value, the default value is set to 900 seconds. We can set `isomorphicRoutesSmaxage: 900` under `publisher` in publisher.yml config file that comes from BlackKnight or pass sMaxAge as a param.
+ * @param {string} appLoadingPlaceholder This string gets injected into the app container when the page is loaded via service worker. Can be used to show skeleton layouts, animations or other progress indicators before it is replaced by the page content.
  */
 exports.isomorphicRoutes = function isomorphicRoutes(
   app,
@@ -317,6 +318,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     redirectToLowercaseSlugs = false,
     shouldEncodeAmpUri,
     sMaxAge = 900,
+    appLoadingPlaceholder = "",
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
@@ -388,6 +390,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       logError,
       preloadJs,
       maxConfigVersion,
+      appLoadingPlaceholder,
     })
   );
   app.get(
