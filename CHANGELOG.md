@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/quintype/quintype-node-framework/compare/v5.0.6...v5.1.0) (2021-08-27)
+
+
+### Features
+
+* support svg in between header and footer when service worker is enabled ([#273](https://github.com/quintype/quintype-node-framework/issues/273)) ([07a61ce](https://github.com/quintype/quintype-node-framework/commit/07a61ce50c4759c1dfb77436d14077dfc6f625f1))
+
 ### [5.0.6](https://github.com/quintype/quintype-node-framework/compare/v5.0.5...v5.0.6) (2021-08-25)
 
 
