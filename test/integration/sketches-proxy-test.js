@@ -1,10 +1,7 @@
 const assert = require("assert");
 const express = require("express");
 
-const {
-  upstreamQuintypeRoutes,
-  mountQuintypeAt,
-} = require("../../server/routes");
+const { upstreamQuintypeRoutes, mountQuintypeAt } = require("../../server/routes");
 const supertest = require("supertest");
 
 describe("Sketches Proxy", function () {
@@ -114,6 +111,79 @@ describe("Sketches Proxy", function () {
           assert.equal("GET", method);
           assert.equal("/api/v1/config", url);
           assert.equal("127.0.0.1", host);
+        })
+        .then(done);
+    });
+  });
+
+  describe("Override the s-maxage cache header", function () {
+    function getClientStub(hostname) {
+      return {
+        getHostname: () => "demo.quintype.io",
+        getConfig: () =>
+          Promise.resolve({
+            foo: "bar",
+            "sketches-host": "https://www.foo.com",
+          }),
+        baseUrl: "https://www.foo.com",
+      };
+    }
+    function buildApp(sMaxAge, { app = express() } = {}) {
+      upstreamQuintypeRoutes(app, {
+        config: {
+          sketches_host: `https://demo.quintype.io`,
+        },
+        getClient: getClientStub,
+        extraRoutes: ["/custom-route"],
+        forwardAmp: true,
+        forwardFavicon: true,
+        publisherConfig: {},
+        sMaxAge: sMaxAge,
+      });
+      return app;
+    }
+
+    it("Override the s-maxage cache header when sMaxAge value is present", function (done) {
+      const sMaxAge = 900;
+      supertest(buildApp(sMaxAge))
+        .get("/api/v1/config")
+        .expect(200)
+        .then((res) => {
+          const cacheControl = res.headers["cache-control"];
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=900,stale-while-revalidate=300,stale-if-error=7200");
+        })
+        .then(done);
+    });
+
+    it("Does not override the s-maxage cache header if cacheability is Private", function (done) {
+      const sMaxAge = 900;
+      supertest(buildApp(sMaxAge))
+        .get("/api/auth/v1/users/me")
+        .then((res) => {
+          const cacheControl = res.headers["cache-control"];
+          assert.equal(cacheControl, "private,no-cache,no-store");
+        })
+        .then(done);
+    });
+
+    it("Does not override the s-maxage cache header for Breaking News", function (done) {
+      const sMaxAge = 900;
+      supertest(buildApp(sMaxAge))
+        .get("/api/v1/breaking-news")
+        .then((res) => {
+          const cacheControl = res.headers["cache-control"];
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=7200");
+        })
+        .then(done);
+    });
+
+    it("if sMaxAge value is not present, do not override cache headers", function (done) {
+      supertest(buildApp())
+        .get("/api/v1/config")
+        .expect(200)
+        .then((res) => {
+          const cacheControl = res.headers["cache-control"];
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=7200");
         })
         .then(done);
     });
