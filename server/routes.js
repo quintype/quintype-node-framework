@@ -37,7 +37,7 @@ const prerender = require("@quintype/prerender-node");
  * @param {Object} opts Options
  * @param {Array<string>} opts.extraRoutes Additionally forward some routes upstream. This takes an array of express compatible routes, such as ["/foo/*"]
  * @param {boolean} opts.forwardAmp Forward amp story routes upstream (default false)
- * @param {number} opts.sMaxAge Support overriding of proxied response cache header `s-maxage` from Sketches. For Breaking News and if the cacheability is Private, it is not overwritten instead the cache control will be the same as how it's set in sketches. We can set `isomorphicRoutesSmaxage: 9000` under `publisher` in publisher.yml config file that comes from BlackKnight or pass sMaxAge as a param.
+ * @param {number} opts.sMaxAge Support overriding of proxied response cache header `s-maxage` from Sketches. For Breaking News and if the cacheability is Private, it is not overwritten instead the cache control will be the same as how it's set in sketches. We can set `upstreamRoutesSmaxage: 900` under `publisher` in publisher.yml config file that comes from BlackKnight or pass sMaxAge as a param.
  * @param {boolean} opts.forwardFavicon Forward favicon requests to the CMS (default false)
  * @param {boolean} opts.isSitemapUrlEnabled To enable /news_sitemap/today and /news_sitemap/yesterday sitemap news url (default /news_sitemap.xml)
  */
@@ -276,6 +276,7 @@ function getWithConfig(app, route, handler, opts = {}) {
  * @param {boolean|function} redirectToLowercaseSlugs If set or evaluates to true, then for every story-page request having capital latin letters in the slug, it responds with a 301 redirect to the lowercase slug URL. (default: true)
  * @param {boolean|function} shouldEncodeAmpUri If set to true, then for every story-page request the slug will be encoded, in case of a vernacular slug this should be set to false. Receives path as param (default: true)
  * @param {number} sMaxAge Overrides the s-maxage value, the default value is set to 900 seconds. We can set `isomorphicRoutesSmaxage: 900` under `publisher` in publisher.yml config file that comes from BlackKnight or pass sMaxAge as a param.
+ * @param {string} appLoadingPlaceholder This string gets injected into the app container when the page is loaded via service worker. Can be used to show skeleton layouts, animations or other progress indicators before it is replaced by the page content.
  */
 exports.isomorphicRoutes = function isomorphicRoutes(
   app,
@@ -317,6 +318,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     redirectToLowercaseSlugs = false,
     shouldEncodeAmpUri,
     sMaxAge = 900,
+    appLoadingPlaceholder = "",
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
@@ -388,6 +390,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       logError,
       preloadJs,
       maxConfigVersion,
+      appLoadingPlaceholder,
     })
   );
   app.get(
