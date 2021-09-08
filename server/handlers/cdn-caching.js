@@ -33,8 +33,11 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
       );
     } else {
       if (networkOnly) {
-        res.setHeader("Cache-Control", `public,s-maxage=60`);
-        res.setHeader("Cloudflare-CDN-Cache-Control", `max-age=60, stale-while-revalidate=60, stale-if-error=14400`);
+        res.setHeader("Cache-Control", `public,s-maxage=${sMaxAge}`);
+        res.setHeader(
+          "Cloudflare-CDN-Cache-Control",
+          `max-age=${sMaxAge}, stale-while-revalidate=1000, stale-if-error=14400`
+        );
         cdnProviderVal === "akamai" && res.setHeader("Edge-Control", `public,maxage=${sMaxAge}`);
       } else {
         res.setHeader(
