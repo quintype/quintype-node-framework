@@ -1,6 +1,5 @@
 const merge = require("lodash/merge");
 const cloneDeep = require("lodash/cloneDeep");
-const { handleSpanInstance } = require("../../utils/apm");
 
 /**
  * Pick the correct opts for the subdomain
@@ -14,12 +13,11 @@ const { handleSpanInstance } = require("../../utils/apm");
 function getDomainSpecificOpts(opts = {}, domainSlug = null) {
   if (!domainSlug || !opts.domains || !opts.domains[domainSlug]) return opts;
 
-  const apmInstance = handleSpanInstance({ isStart: true, title: "getDomainSpecificOpts" });
   const clone = cloneDeep(opts);
   delete clone.domains;
   const domainSpecificOpts = opts.domains[domainSlug];
   const mergedOptions = merge(clone, domainSpecificOpts);
-  handleSpanInstance({ apmInstance });
+
   return mergedOptions;
 }
 

@@ -1,5 +1,4 @@
 const get = require("lodash/get");
-const { handleSpanInstance } = require("../../utils/apm");
 
 function getStoryUrl(story, config) {
   if (get(story, ["story-template"]) === "news-elsewhere") {
@@ -8,16 +7,7 @@ function getStoryUrl(story, config) {
   return `${config["sketches-host"]}/${story.slug}`;
 }
 
-async function bookendHandler(
-  req,
-  res,
-  next,
-  { config, client, sMaxAge = "900" }
-) {
-  const apmInstance = handleSpanInstance({
-    isStart: true,
-    title: "bookendHandler",
-  });
+async function bookendHandler(req, res, next, { config, client, sMaxAge = "900" }) {
   const { storyId, sectionId } = req.query;
   if (!storyId || !sectionId) {
     res.status(400).json({
@@ -28,10 +18,7 @@ async function bookendHandler(
     return;
   }
 
-  const relatedStoriesResponse = await client.getRelatedStories(
-    storyId,
-    sectionId
-  );
+  const relatedStoriesResponse = await client.getRelatedStories(storyId, sectionId);
   const relatedStories = relatedStoriesResponse["related-stories"];
 
   if (!relatedStories.length) {
@@ -39,11 +26,7 @@ async function bookendHandler(
     return;
   }
 
-  const fbAppId = get(
-    config,
-    ["public-integrations", "facebook", "app-id"],
-    ""
-  );
+  const fbAppId = get(config, ["public-integrations", "facebook", "app-id"], "");
 
   const jsonPayLoad = {
     bookendVersion: "v1.0",
@@ -85,12 +68,9 @@ async function bookendHandler(
     ),
   };
 
-  res.header(
-    "Cache-Control",
-    `public,max-age=15,s-maxage=${sMaxAge},stale-while-revalidate=1000,stale-if-error=14400`
-  );
+  res.header("Cache-Control", `public,max-age=15,s-maxage=${sMaxAge},stale-while-revalidate=1000,stale-if-error=14400`);
   res.header("Vary", "Accept-Encoding");
-  handleSpanInstance({ apmInstance });
+
   res.json(jsonPayLoad);
 }
 

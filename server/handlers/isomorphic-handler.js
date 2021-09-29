@@ -15,7 +15,7 @@ const { customUrlToCacheKey } = require("../caching");
 const { addLightPageHeaders } = require("../impl/light-page-impl");
 const { getOneSignalScript } = require("./onesignal-script");
 const { getRedirectUrl } = require("../redirect-url-helper");
-const { handleSpanInstance } = require("../utils/apm");
+
 const ABORT_HANDLER = "__ABORT__";
 function abortHandler() {
   return Promise.resolve({ pageType: ABORT_HANDLER, [ABORT_HANDLER]: true });
@@ -420,10 +420,6 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     sMaxAge,
   }
 ) {
-  const apmInstance = handleSpanInstance({
-    isStart: true,
-    title: "handleIsomorphicRoute",
-  });
   const url = urlLib.parse(req.url, true);
 
   function writeResponse(result) {
@@ -487,7 +483,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
   if (typeof redirectUrls === "function" || (redirectUrls && Object.keys(redirectUrls).length > 0)) {
     getRedirectUrl(req, res, next, { redirectUrls, config });
   }
-  handleSpanInstance({ apmInstance });
+
   return loadDataForIsomorphicRoute(loadData, loadErrorData, url, generateRoutes(config, domainSlug), {
     config,
     client,
@@ -538,13 +534,9 @@ exports.handleStaticRoute = function handleStaticRoute(
     sMaxAge,
   }
 ) {
-  const apmInstance = handleSpanInstance({
-    isStart: true,
-    title: "handleStaticRoute",
-  });
   const url = urlLib.parse(path);
   pageType = pageType || "static-page";
-  handleSpanInstance({ apmInstance });
+
   return loadDataForPageType(loadData, loadErrorData, pageType, renderParams, {
     config,
     client,

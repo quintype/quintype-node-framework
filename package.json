@@ -36,7 +36,6 @@
     "cluster": "^0.7.7",
     "compression": "^1.7.4",
     "ejs": "^2.6.1",
-    "elastic-apm-node": "^3.14.0",
     "express": "^4.16.4",
     "firebase": "^6.0.2",
     "get-youtube-id": "^1.0.1",
