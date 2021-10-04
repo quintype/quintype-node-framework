@@ -18,7 +18,7 @@ module.exports = fs
   .readdirSync("config")
   .filter((x) => x.match(/\.yml$/))
   .reduce((acc, x) => {
-    acc[x.replace(/\.yml$/, "")] = yaml.safeLoad(
+    acc[x.replace(/\.yml$/, "")] = yaml.load(
       fs.readFileSync(`config/${x}`)
     );
     return acc;
