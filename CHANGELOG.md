@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.2.0](https://github.com/quintype/quintype-node-framework/compare/v5.0.5...v6.2.0) (2021-10-11)
+
+
+### Features
+
+* support collection of collection of stories data based on index ([#271](https://github.com/quintype/quintype-node-framework/issues/271)) ([6c7afa3](https://github.com/quintype/quintype-node-framework/commit/6c7afa37e02cdddbebf0ed57dca849133dfb0261))
+* support svg in between header and footer when service worker is enabled ([#273](https://github.com/quintype/quintype-node-framework/issues/273)) ([07a61ce](https://github.com/quintype/quintype-node-framework/commit/07a61ce50c4759c1dfb77436d14077dfc6f625f1))
+
+
+### Bug Fixes
+
+* update backend version ([#274](https://github.com/quintype/quintype-node-framework/issues/274)) ([16efdae](https://github.com/quintype/quintype-node-framework/commit/16efdae8a88f4dd8bcd2358512032108e7f13a14))
+
 ### [6.1.4](https://github.com/quintype/quintype-node-framework/compare/v6.1.2...v6.1.4) (2021-10-04)
 
 ### [6.1.3](https://github.com/quintype/quintype-node-framework/compare/v6.1.2...v6.1.3) (2021-10-04)
