@@ -73,10 +73,10 @@ async function startWorker(appThunk, opts) {
     const app = appThunk();
 
     await initializeAllClients();
-    const server = app.listen(opts.port || 3000, () =>{
-      console.log(logSuccess(`||=============================================||`));
+    const server = app.listen(opts.port || 3000, () => {
+      console.log(logSuccess(`||=============================||`));
       console.log(logSuccess(`|| App listening on port ${opts.port || 3000}! ||`))
-      console.log(logSuccess(`||=============================================||`));
+      console.log(logSuccess(`||=============================||`));
     });
 
     process.on("SIGTERM", () => {
