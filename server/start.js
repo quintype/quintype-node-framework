@@ -10,10 +10,12 @@
 // istanbul ignore file
 // This is the start file, to be called from your start.js
 
+const chalk = require('chalk');
 const cluster = require("cluster");
 const process = require("process");
 const { initializeAllClients } = require("./api-client");
 const logger = require("./logger");
+const logSuccess = chalk.bold.green.underline;
 
 function startMaster({ workers = 4 }) {
   let terminating = false;
@@ -62,7 +64,7 @@ function startMaster({ workers = 4 }) {
 }
 
 async function startWorker(appThunk, opts) {
-  if (process.env.NODE_ENV != "production") {
+  if (process.env.NODE_ENV !== "production") {
     require("@quintype/build")(opts);
   }
   require("../assetify/server")();
@@ -72,7 +74,7 @@ async function startWorker(appThunk, opts) {
 
     await initializeAllClients();
     const server = app.listen(opts.port || 3000, () =>
-      console.log(`App listening on port ${opts.port || 3000}!`)
+      console.log(logSuccess(`App listening on port ${opts.port || 3000}!`))
     );
 
     process.on("SIGTERM", () => {
@@ -83,7 +85,7 @@ async function startWorker(appThunk, opts) {
     });
     process.on("SIGHUP", () => {});
   } catch (e) {
-    if (process.env.NODE_ENV != "production") {
+    if (process.env.NODE_ENV !== "production") {
       console.log(e.stack);
     }
 

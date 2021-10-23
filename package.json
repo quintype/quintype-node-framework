@@ -33,6 +33,7 @@
     "@quintype/prerender-node": "^3.2.24",
     "@quintype/seo": "^1.38.1",
     "atob": "^2.1.2",
+    "chalk": "^4.1.2",
     "cluster": "^0.7.7",
     "compression": "^1.7.4",
     "ejs": "^3.1.6",
