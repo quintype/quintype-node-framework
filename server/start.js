@@ -15,7 +15,7 @@ const cluster = require("cluster");
 const process = require("process");
 const { initializeAllClients } = require("./api-client");
 const logger = require("./logger");
-const logSuccess = chalk.bold.green.underline;
+const logSuccess = chalk.bold.cyanBright;
 
 function startMaster({ workers = 4 }) {
   let terminating = false;
