@@ -9,7 +9,11 @@ class InfiniteScrollAmp {
   // eslint-disable-next-line class-methods-use-this
   getFilteredCollItems(coll, storyId) {
     return coll.items.filter(
-      ({ type, story }) => type === "story" && story["story-content-id"] !== storyId && story.access !== "subscription"
+      ({ type, story }) =>
+        type === "story" &&
+        story["story-content-id"] !== storyId &&
+        story.access !== "subscription" &&
+        story["story-template"] !== "visual-story"
     );
   }
 
