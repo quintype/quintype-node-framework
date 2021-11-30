@@ -14,6 +14,7 @@ function getClientStub({
               type: "story",
               id: 1111,
               story: {
+                "story-template": "text",
                 headline: "aaa",
                 "story-content-id": 1111,
                 slug: "sports/aa",
@@ -24,6 +25,7 @@ function getClientStub({
               type: "story",
               id: 2222,
               story: {
+                "story-template": "visual-story",
                 headline: "bbb",
                 "story-content-id": 2222,
                 slug: "sports/bb",
@@ -34,6 +36,7 @@ function getClientStub({
               type: "story",
               id: 3333,
               story: {
+                "story-template": "text",
                 headline: "ccc",
                 "story-content-id": 3333,
                 slug: "sports/cc",
@@ -44,6 +47,7 @@ function getClientStub({
               type: "story",
               id: 4444,
               story: {
+                "story-template": "text",
                 headline: "ddd",
                 "story-content-id": 4444,
                 slug: "sports/dd",
@@ -54,6 +58,7 @@ function getClientStub({
               type: "story",
               id: 5555,
               story: {
+                "story-template": "text",
                 headline: "eee",
                 "story-content-id": 5555,
                 slug: "sports/ee",
@@ -64,6 +69,7 @@ function getClientStub({
               type: "story",
               id: 6666,
               story: {
+                "story-template": "text",
                 headline: "fff",
                 "story-content-id": 6666,
                 slug: "sports/ff",
@@ -150,6 +156,20 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     assert.strictEqual(false, /sports\/bb/.test(inlineConfig));
     assert.strictEqual(false, /bb\/b.jpg/.test(inlineConfig));
   });
+  it("should remove visual stories from infinite scroll", async function () {
+    const clientStub = getClientStub();
+    const infiniteScrollAmp = new InfiniteScrollAmp({
+      ampConfig: {},
+      client: clientStub,
+      publisherConfig: dummyPublisherConfig,
+    });
+    const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
+      itemsToTake: 5,
+      storyId: 3333,
+    });
+    assert.strictEqual(false, /sports\/bb/.test(inlineConfig));
+    assert.strictEqual(false, /bb\/b.jpg/.test(inlineConfig));
+  });
   it("should format JSON as per AMP spec", async function () {
     // https://amp.dev/documentation/components/amp-next-page/
     const clientStub = getClientStub();
@@ -167,13 +187,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
       if (!stories.length) throw new Error("Can't verify empty array!");
       stories.forEach((story) => {
         const keys = Object.keys(story);
-        if (
-          keys.includes("image") &&
-          keys.includes("url") &&
-          keys.includes("title") &&
-          keys.length === 3
-        )
-          return;
+        if (keys.includes("image") && keys.includes("url") && keys.includes("title") && keys.length === 3) return;
         throw new Error("Invalid InlineConfigStructure");
       });
       return true;
@@ -215,7 +229,7 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
     const jsonResponse = await infiniteScrollAmp.getResponse({ itemsTaken: 2 });
     assert.strictEqual(jsonResponse instanceof Error, true);
   });
-  it("should remove current story from response", async function() {
+  it("should remove current story from response", async function () {
     const clientStub = getClientStub();
     const infiniteScrollAmp = new InfiniteScrollAmp({
       ampConfig: {},
@@ -226,8 +240,20 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
     const jsonResponse = await infiniteScrollAmp.getResponse({ itemsTaken: 2 });
     assert.strictEqual(false, /sports\/dd/.test(jsonResponse));
     assert.strictEqual(false, /dd\/d.jpg/.test(jsonResponse));
-  })
-  it("should format JSON as per AMP spec", async function() {
+  });
+  it("should remove visual stories from response", async function () {
+    const clientStub = getClientStub();
+    const infiniteScrollAmp = new InfiniteScrollAmp({
+      ampConfig: {},
+      client: clientStub,
+      publisherConfig: dummyPublisherConfig,
+      queryParams: { "story-id": 4444 },
+    });
+    const jsonResponse = await infiniteScrollAmp.getResponse({ itemsTaken: 2 });
+    assert.strictEqual(false, /sports\/bb/.test(jsonResponse));
+    assert.strictEqual(false, /bb\/b.jpg/.test(jsonResponse));
+  });
+  it("should format JSON as per AMP spec", async function () {
     // https://amp.dev/documentation/components/amp-next-page/
     const clientStub = getClientStub();
     const infiniteScrollAmp = new InfiniteScrollAmp({
@@ -239,23 +265,17 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
     const jsonResponse = await infiniteScrollAmp.getResponse({ itemsTaken: 2 });
     function isJsonConfigStructureValid(jsonStr) {
       const parsed = JSON.parse(jsonStr);
-      const stories = parsed.pages
+      const stories = parsed.pages;
       if (!stories.length) throw new Error("Can't verify empty array!");
       stories.forEach((story) => {
         const keys = Object.keys(story);
-        if (
-          keys.includes("image") &&
-          keys.includes("url") &&
-          keys.includes("title") &&
-          keys.length === 3
-        )
-          return;
+        if (keys.includes("image") && keys.includes("url") && keys.includes("title") && keys.length === 3) return;
         throw new Error("Invalid InlineConfigStructure");
       });
       return true;
     }
-    assert.strictEqual(isJsonConfigStructureValid(jsonResponse), true)
-  })
+    assert.strictEqual(isJsonConfigStructureValid(jsonResponse), true);
+  });
   // it("should omit the first 'n' stories, take the rest", async function() {
   //   // this test needs to be written after https://github.com/quintype/quintype-node-framework/pull/202 is merged
   // })

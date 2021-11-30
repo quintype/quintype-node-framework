@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "6.1.5-webpack5.7",
+  "version": "6.3.1",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "scripts": {
