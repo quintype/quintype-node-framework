@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.1](https://github.com/quintype/quintype-node-framework/compare/v6.3.0...v7.0.1) (2021-12-15)
+
+
+### Bug Fixes
+
+* remove visual stories from amp infinite scroll ([#282](https://github.com/quintype/quintype-node-framework/issues/282)) ([719f048](https://github.com/quintype/quintype-node-framework/commit/719f0482bcd730604dcc4273cf2e8465f2232fb6))
+
 ## [7.0.0](https://github.com/quintype/quintype-node-framework/compare/v6.3.1...v7.0.0) (2021-11-30)
 
 ### [6.3.1](https://github.com/quintype/quintype-node-framework/compare/v6.3.0...v6.3.1) (2021-11-25)
