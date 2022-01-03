@@ -18,7 +18,7 @@
     "readme": "docs-src/home.md",
     "recurse": true,
     "verbose": true,
-    "tutorials": false,
+    "tutorials": "./docs-src/tutorials",
     "template": "./docs-src",
     "sitemapRoot": "https://developers.quintype.com/quintype-node-framework"
   },
