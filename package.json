@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.0.2-parcel-devDependency.0",
+  "version": "7.0.2-parcel-devDependency.1",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "scripts": {
