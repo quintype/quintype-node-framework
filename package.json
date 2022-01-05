@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.0.1",
+  "version": "7.0.2-parcel-devDependency.2",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
-    "@quintype/amp": "^2.4.17",
+    "@quintype/amp": "^2.4.18",
     "@quintype/backend": "^2.1.0",
     "@quintype/components": "^3.0.0",
     "@quintype/prerender-node": "^3.2.24",
