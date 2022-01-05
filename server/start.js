@@ -10,7 +10,7 @@
 // istanbul ignore file
 // This is the start file, to be called from your start.js
 
-const chalk = require('chalk');
+const chalk = require("chalk");
 const cluster = require("cluster");
 const process = require("process");
 const { initializeAllClients } = require("./api-client");
@@ -48,9 +48,7 @@ function startMaster({ workers = 4 }) {
 
   cluster.on("exit", (worker, code, signal) => {
     logger.error(`worker ${worker.process.pid} died`);
-    const aliveWorkers = Object.values(cluster.workers).filter(
-      (worker) => worker.state !== "dead"
-    );
+    const aliveWorkers = Object.values(cluster.workers).filter((worker) => worker.state !== "dead");
 
     if (terminating) {
       if (aliveWorkers.length == 0) {
@@ -75,7 +73,7 @@ async function startWorker(appThunk, opts) {
     await initializeAllClients();
     const server = app.listen(opts.port || 3000, () => {
       console.log(logSuccess(`||=============================||`));
-      console.log(logSuccess(`|| App listening on port ${opts.port || 3000}! ||`))
+      console.log(logSuccess(`|| App listening on port ${opts.port || 3000}! ||`));
       console.log(logSuccess(`||=============================||`));
     });
 
@@ -93,7 +91,7 @@ async function startWorker(appThunk, opts) {
 
     e = e || "";
     const sleep = require("sleep-promise");
-    logger.error(`Worker died - ${e.message || e}`);
+    logger.error(`Worker died - ${JSON.stringify(e.message.format) || JSON.stringify(e)}`);
     cluster.worker.disconnect();
     await sleep(opts.sleep || 250);
     process.exit();
