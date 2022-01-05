@@ -91,7 +91,7 @@ async function startWorker(appThunk, opts) {
 
     e = e || "";
     const sleep = require("sleep-promise");
-    logger.error(`Worker died - ${JSON.stringify(e.message.format) || JSON.stringify(e)}`);
+    logger.error(`Worker died - ${JSON.stringify(e.message) || JSON.stringify(e)}`);
     cluster.worker.disconnect();
     await sleep(opts.sleep || 250);
     process.exit();
