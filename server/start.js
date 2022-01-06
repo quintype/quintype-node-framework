@@ -87,9 +87,10 @@ async function startWorker(appThunk, opts) {
     });
     process.on("SIGHUP", () => {});
   } catch (e) {
-    console.log(e.stack);
+    logger.error(`DEBUG: ========= ${JSON.stringify(e)} =============`);
+    logger.error(`DEBUG stack: ========= ${e.stack} =============`);
     const sleep = require("sleep-promise");
-    logger.error(`Worker died - ${JSON.stringify(e)}`);
+    logger.error(`DEBUG: Worker died - ${JSON.stringify(e)}`);
     cluster.worker.disconnect();
     await sleep(opts.sleep || 250);
     process.exit();
