@@ -20,13 +20,22 @@ exports.homeCollectionOrStories = function homeCollectionOrStories(
   getStoryLimits,
   params = {},
   collectionOfCollectionsIndexes = [],
-  customLayouts = []
+  customLayouts = [],
+  defaultNestedLimit = null,
+  getNestedCollectionLimit
 ) {
   return Collection.getCollectionBySlug(
     client,
     "home",
     { "item-type": "collection", ...params },
-    { depth, ...(getStoryLimits && { storyLimits: getStoryLimits() }), collectionOfCollectionsIndexes, customLayouts }
+    {
+      depth,
+      ...(getStoryLimits && { storyLimits: getStoryLimits() }),
+      collectionOfCollectionsIndexes,
+      customLayouts,
+      defaultNestedLimit,
+      ...(getNestedCollectionLimit && { nestedCollectionLimit: getNestedCollectionLimit() }),
+    }
   ).then((collection) => {
     if (collection) return collection;
     return Story.getStories(client).then((stories) =>
