@@ -20,7 +20,7 @@ exports.homeCollectionOrStories = function homeCollectionOrStories(
   getStoryLimits,
   params = {},
   collectionOfCollectionsIndexes = [],
-  customLayouts = [],
+  customLayoutsStoryLimit = [],
   defaultNestedLimit = null,
   getNestedCollectionLimit
 ) {
@@ -32,7 +32,7 @@ exports.homeCollectionOrStories = function homeCollectionOrStories(
       depth,
       ...(getStoryLimits && { storyLimits: getStoryLimits() }),
       collectionOfCollectionsIndexes,
-      customLayouts,
+      customLayoutsStoryLimit,
       defaultNestedLimit,
       ...(getNestedCollectionLimit && { nestedCollectionLimit: getNestedCollectionLimit() }),
     }
