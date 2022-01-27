@@ -21,8 +21,7 @@ exports.homeCollectionOrStories = function homeCollectionOrStories(
   params = {},
   collectionOfCollectionsIndexes = [],
   customLayouts = [],
-  defaultNestedLimit = null,
-  getNestedCollectionLimit
+  defaultNestedLimit = null
 ) {
   return Collection.getCollectionBySlug(
     client,
@@ -34,7 +33,6 @@ exports.homeCollectionOrStories = function homeCollectionOrStories(
       collectionOfCollectionsIndexes,
       customLayouts,
       defaultNestedLimit,
-      ...(getNestedCollectionLimit && { nestedCollectionLimit: getNestedCollectionLimit() }),
     }
   ).then((collection) => {
     if (collection) return collection;
