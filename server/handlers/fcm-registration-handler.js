@@ -1,19 +1,18 @@
 const { get } = require("lodash");
 const request = require("request-promise");
 
-exports.registerFCMTopic = async function registerFCM(
-  req,
-  res,
-  next,
-  { config, client, publisherConfig }
-) {
+exports.registerFCMTopic = async function registerFCM(req, res, next, { config, client, publisherConfig }) {
   const token = get(req, ["body", "token"], null);
   if (!token) {
     res.status(400).send("No Token Found");
     return;
   }
 
-  const serverKey = get(publisherConfig, ["fcm", "serverKey"], null);
+  const serverKey = get(
+    config,
+    ["pbConfig", "general", "notifications", "fcm", "apiKey"],
+    get(publisherConfig, ["fcm", "serverKey"], null)
+  );
   if (!serverKey) {
     res.status(500).send("Server Key is not available");
     return;
