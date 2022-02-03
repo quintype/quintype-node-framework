@@ -10,7 +10,7 @@ exports.registerFCMTopic = async function registerFCM(req, res, next, { config, 
 
   const serverKey = get(
     config,
-    ["pbConfig", "general", "notifications", "fcm", "apiKey"],
+    ["pbConfig", "general", "notifications", "fcm", "serverKey"],
     get(publisherConfig, ["fcm", "serverKey"], null)
   );
   if (!serverKey) {
