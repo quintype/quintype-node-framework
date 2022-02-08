@@ -26,7 +26,7 @@ function loadDataForIsomorphicRoute(
   loadErrorData,
   url,
   routes,
-  { otherParams, config, client, host, logError, domainSlug, redirectToLowercaseSlugs, cookies }
+  { otherParams, config, client, host, logError, domainSlug, redirectToLowercaseSlugs, cookies, mobileApiEnabled }
 ) {
   return loadDataForEachRoute().catch((error) => {
     logError(error);
@@ -61,6 +61,7 @@ function loadDataForIsomorphicRoute(
         next: abortHandler,
         domainSlug,
         cookies,
+        mobileApiEnabled,
       });
 
       if (result && result[ABORT_HANDLER]) continue;
@@ -253,6 +254,7 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
         logError,
         host: req.hostname,
         domainSlug,
+        mobileApiEnabled,
       }).then((result) => Object.assign({ pageType, disableIsomorphicComponent: true }, result));
     }
   }
@@ -275,6 +277,7 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
       domainSlug,
       redirectToLowercaseSlugs,
       cookies: req.cookies,
+      mobileApiEnabled,
     }).catch((e) => {
       logError(e);
       return { httpStatusCode: 500, pageType: "error" };
