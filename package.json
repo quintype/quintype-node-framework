@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.1.1-socket-timeout.0",
+  "version": "7.1.1-socket-timeout.1",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "scripts": {
