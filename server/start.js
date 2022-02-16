@@ -16,6 +16,7 @@ const process = require("process");
 const { initializeAllClients } = require("./api-client");
 const logger = require("./logger");
 const logSuccess = chalk.bold.cyanBright;
+const http = require('http');
 
 function startMaster({ workers = 4 }) {
   let terminating = false;
@@ -73,11 +74,18 @@ async function startWorker(appThunk, opts) {
     const app = appThunk();
 
     await initializeAllClients();
-    const server = app.listen(opts.port || 3000, () => {
+    const server = http.createServer(app).listen(opts.port || 3000, () => {
       console.log(logSuccess(`||=============================||`));
-      console.log(logSuccess(`|| App listening on port ${opts.port || 3000}! ||`))
+      console.log(logSuccess(`|| App listening on port ${opts.port || 3000}! ||`));
       console.log(logSuccess(`||=============================||`));
     });
+
+    server.setTimeout(900,()=>{
+      console.log("Socket is destroyed due to timeout");
+      server.close(()=>{
+        console.log("Server is closed");
+      })
+    })
 
     process.on("SIGTERM", () => {
       server.close(() => {
