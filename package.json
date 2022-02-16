@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.0.4-fcm-madrid.0",
+  "version": "7.0.4-fcm-madrid.1",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "scripts": {
