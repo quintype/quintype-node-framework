@@ -285,7 +285,7 @@ export function startApp(renderApplication, reducers, opts) {
     if (opts.fcmMessagingSenderId) {
       const mssgSenderId =
         typeof opts.fcmMessagingSenderId === "function" ? opts.fcmMessagingSenderId(page) : opts.fcmMessagingSenderId;
-      initializeFCM(mssgSenderId);
+      mssgSenderId && initializeFCM(mssgSenderId);
     }
 
     const { config: { "theme-attributes": pageThemeAttributes = {} } = {} } = page;
