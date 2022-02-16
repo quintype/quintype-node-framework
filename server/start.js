@@ -54,7 +54,7 @@ function startMaster({ workers = 4 }) {
     );
 
     if (terminating) {
-      if (aliveWorkers.length == 0) {
+      if (aliveWorkers.length === 0) {
         logger.info("All Workers Terminated. Gracefully Exiting");
         process.exit();
       }
@@ -80,7 +80,7 @@ async function startWorker(appThunk, opts) {
       console.log(logSuccess(`||=============================||`));
     });
 
-    server.setTimeout(2000,()=>{
+    server.setTimeout(opts.socketTimeout || 2000,()=>{
       console.log("Socket is destroyed due to timeout");
       server.close(()=>{
         console.log("Server is closed");
