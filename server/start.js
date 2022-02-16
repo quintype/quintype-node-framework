@@ -80,7 +80,7 @@ async function startWorker(appThunk, opts) {
       console.log(logSuccess(`||=============================||`));
     });
 
-    server.setTimeout(900,()=>{
+    server.setTimeout(2000,()=>{
       console.log("Socket is destroyed due to timeout");
       server.close(()=>{
         console.log("Server is closed");
