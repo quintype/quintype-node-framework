@@ -412,7 +412,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     })
   );
 
-  app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig }, fcmServerKey));
+  app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }));
 
   if (manifestFn) {
     app.get("/manifest.json", withConfig(handleManifest, { manifestFn, logError }));
