@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.1.0](https://github.com/quintype/quintype-node-framework/compare/v7.0.3...v7.1.0) (2022-02-11)
+
+
+### Features
+
+* **Custom Layout:** support custom storylimit and custom nestedCollectionLimit ([#288](https://github.com/quintype/quintype-node-framework/issues/288)) ([1e3e8ae](https://github.com/quintype/quintype-node-framework/commit/1e3e8ae7c7da2e336260911cf41f56c5419e9480))
+
 ### [7.0.3](https://github.com/quintype/quintype-node-framework/compare/v7.0.2...v7.0.3) (2022-02-01)
 
 ### [7.0.2](https://github.com/quintype/quintype-node-framework/compare/v7.0.1...v7.0.2) (2022-01-05)
