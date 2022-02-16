@@ -243,7 +243,7 @@ function runWithTiming(name, f) {
  * @param {Object} reducers A list of custom reducers for your application. This will be merged with the built in reducers
  * @param {Object} opts Options
  * @param {function} opts.preRenderApplication Render a part of the application on boot. See [preRenderApplication](https://developers.quintype.com/malibu/isomorphic-rendering/client-side-architecture.html#prerenderapplication)
- * @param {boolean} opts.enableFCM Enable Firebase Cloud Messaging for push notifications
+ * @param {(function|string)} opts.fcmMessagingSenderId Enable Firebase Cloud Messaging for push notifications
  * @param {boolean} opts.enableServiceWorker Should service worker be enabled
  * @param {string} opts.serviceWorkerLocation Location of the service worker (default: /service-worker.js). Note, if using mountAt, this is relative to the mount point.
  * @param {number} opts.appVersion App Version. See [Updating App Version](https://developers.quintype.com/malibu/tutorial/updating-app-version)
@@ -282,14 +282,9 @@ export function startApp(renderApplication, reducers, opts) {
 
     store.dispatch({ type: NAVIGATE_TO_PAGE, page, currentPath: path });
 
-    const pbGeneralConfig = get(page, ["config", "pagebuilder-config", "general"], {});
-
-    if (opts.enableFCM || get(pbGeneralConfig, ["notificationType"], "") === "fcm") {
-      const mssgSenderId = get(
-        pbGeneralConfig,
-        ["notifications", "fcm", "messagingSenderId"],
-        get(page, ["config", "fcmMessageSenderId"], null)
-      );
+    if (opts.fcmMessagingSenderId) {
+      const mssgSenderId =
+        typeof opts.fcmMessagingSenderId === "function" ? opts.fcmMessagingSenderId(page) : opts.fcmMessagingSenderId;
       initializeFCM(mssgSenderId);
     }
 
