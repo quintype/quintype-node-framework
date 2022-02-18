@@ -154,17 +154,20 @@ startApp(renderApplication,
   CUSTOM_REDUCERS,
   {
   enableServiceWorker: process.env.NODE_ENV === "production",
-  enableFCM: true,
+  fcmMessagingSenderId: (page) => <MessageSenderId> || fcmMessagingSenderId: <MessageSenderId> {(function|string)}
   ...
 })
 ```
 
-2. publisher_config.yml should have the fcm configuration as below:
+2. app/server/app.js should have the fcm configuration as below:
 
 ```
-    fcm:
-      message_sender_id: <MessageSenderId>
-      serverKey: <ServerKey>
+isomorphicRoutes(app, {
+  ...
+  fcmServerKey: (config) => <ServerKey> || fcmServerKey: <ServerKey> {(function|string)}
+  ...
+});
+
 ```
 
 3. You should have service worker script named firebase-messaging-sw.js in /public

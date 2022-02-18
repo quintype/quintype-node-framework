@@ -5,7 +5,7 @@ exports.registerFCMTopic = async function registerFCM(
   req,
   res,
   next,
-  { config, client, publisherConfig }
+  { config, client, publisherConfig, fcmServerKey }
 ) {
   const token = get(req, ["body", "token"], null);
   if (!token) {
@@ -13,7 +13,8 @@ exports.registerFCMTopic = async function registerFCM(
     return;
   }
 
-  const serverKey = get(publisherConfig, ["fcm", "serverKey"], null);
+  const serverKey = typeof fcmServerKey === "function" ? await fcmServerKey(config) : fcmServerKey;
+
   if (!serverKey) {
     res.status(500).send("Server Key is not available");
     return;

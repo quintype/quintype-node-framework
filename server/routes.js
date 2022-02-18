@@ -276,6 +276,7 @@ function getWithConfig(app, route, handler, opts = {}) {
  * @param {boolean|function} redirectToLowercaseSlugs If set or evaluates to true, then for every story-page request having capital latin letters in the slug, it responds with a 301 redirect to the lowercase slug URL. (default: true)
  * @param {boolean|function} shouldEncodeAmpUri If set to true, then for every story-page request the slug will be encoded, in case of a vernacular slug this should be set to false. Receives path as param (default: true)
  * @param {number} sMaxAge Overrides the s-maxage value, the default value is set to 900 seconds. We can set `isomorphicRoutesSmaxage: 900` under `publisher` in publisher.yml config file that comes from BlackKnight or pass sMaxAge as a param.
+ * @param {(string|function)} fcmServerKey  FCM serverKey is used for registering FCM Topic.
  * @param {string} appLoadingPlaceholder This string gets injected into the app container when the page is loaded via service worker. Can be used to show skeleton layouts, animations or other progress indicators before it is replaced by the page content.
  */
 exports.isomorphicRoutes = function isomorphicRoutes(
@@ -319,6 +320,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     shouldEncodeAmpUri,
     sMaxAge = 900,
     appLoadingPlaceholder = "",
+    fcmServerKey = "",
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
@@ -410,7 +412,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     })
   );
 
-  app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig }));
+  app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }));
 
   if (manifestFn) {
     app.get("/manifest.json", withConfig(handleManifest, { manifestFn, logError }));
