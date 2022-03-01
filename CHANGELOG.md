@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.0](https://github.com/quintype/quintype-node-framework/compare/v7.2.0...v7.3.0) (2022-03-01)
+
+
+### Features
+
+* **request:** Implement request fallback for external calls ([#296](https://github.com/quintype/quintype-node-framework/issues/296)) ([44e1f7e](https://github.com/quintype/quintype-node-framework/commit/44e1f7eea9825225c0c300fb57a8178bd22c0630))
+
 ## [7.2.0](https://github.com/quintype/quintype-node-framework/compare/v7.0.3...v7.2.0) (2022-02-18)
 
 
