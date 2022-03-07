@@ -60,7 +60,7 @@
     "@babel/eslint-parser": "^7.15.7",
     "@loadable/component": "^5.15.0",
     "@loadable/server": "^5.15.1",
-    "@quintype/build": "^3.13.1",
+    "@quintype/build": "^4.0.0",
     "babel-plugin-quintype-assets": "^1.1.1",
     "babel-plugin-react-css-modules": "^5.2.6",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
