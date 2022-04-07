@@ -350,6 +350,8 @@ exports.notFoundHandler = function notFoundHandler(
 ) {
   const url = urlLib.parse(req.url, true);
 
+  consolr.log("fooooooooooooooo-notFoundHandler------", req);
+
   return new Promise((resolve) =>
     resolve(
       loadErrorData(new NotFoundException(), config, client, {
