@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.3.1",
+  "version": "7.3.2-node14-upgrade.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "scripts": {
