@@ -25,6 +25,7 @@ const cdnProviderFunc = () => "akamai";
 
 function createApp(loadData, routes, opts = {}, app = express()) {
   const { redirectToLowercaseSlugs = false } = opts;
+  const emptyFunc = () => {};
   isomorphicRoutes(
     app,
     Object.assign(
@@ -33,9 +34,10 @@ function createApp(loadData, routes, opts = {}, app = express()) {
           assetHash: (file) => (file === "app.js" ? "abcdef" : null),
           assetPath: (file) => `/assets/${file}`,
         },
-        getClient: getClientStub,
+        getClient: opts.getClientStub || getClientStub,
         generateRoutes: () => routes,
         loadData,
+        logError: opts.logError || emptyFunc,
         pickComponent: opts.pickComponent || pickComponent,
         renderLayout: (res, { store, title, content }) =>
           res.send(JSON.stringify({ store: store.getState(), title, content })),
@@ -51,6 +53,33 @@ function createApp(loadData, routes, opts = {}, app = express()) {
 }
 
 describe("Isomorphic Handler", function () {
+  it("Renders a 404 when a publisher is not found", function (done) {
+    const app = createApp(
+      (pageType, params, config, client, { host }) => Promise.resolve({ pageType, data: { text: "foobar", host } }),
+      [{ pageType: "home-page", path: "/", exact: true }],
+      {
+        getClientStub: (hostname) => {
+          return {
+            getHostname: () => "demo.quintype.io",
+            getConfig: () => Promise.reject("Pubisher not found"),
+            baseUrl: "https://www.foo.com",
+          };
+        },
+        logError: (error) => {
+          console.log(error);
+        },
+      }
+    );
+
+    supertest(app)
+      .get("/")
+      .expect(500)
+      .then((res) => {
+        assert.equal("An internal error occured for this publisher's config", res.text);
+      })
+      .then(done);
+  });
+
   it("Renders the page if the route matches", function (done) {
     const app = createApp(
       (pageType, params, config, client, { host }) =>
