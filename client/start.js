@@ -11,7 +11,7 @@ import { BreakingNews, CLIENT_SIDE_RENDERED, NAVIGATE_TO_PAGE, PAGE_LOADING } fr
 import { createBrowserHistory } from "history";
 import get from "lodash/get";
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { IsomorphicComponent } from "../isomorphic/component";
 import { makePickComponentSync } from "../isomorphic/impl/make-pick-component-sync";
@@ -181,10 +181,21 @@ export function maybeSetUrl(path, title) {
 export function renderComponent(clazz, container, store, props = {}, callback) {
   const component = React.createElement(Provider, { store }, React.createElement(clazz, props || {}));
 
-  if (props.hydrate) {
-    return ReactDOM.hydrate(component, document.getElementById(container), callback);
+  function AppWithCallbackAfterRender() {
+    useEffect(() => {
+      callback();
+    });
+
+    return component;
   }
-  return ReactDOM.render(component, document.getElementById(container), callback);
+
+  let root = createRoot(document.getElementById(container));
+
+  if (props.hydrate) {
+    root = hydrateRoot(document.getElementById(container));
+  }
+
+  return root.render(<AppWithCallbackAfterRender />);
 }
 
 /**
