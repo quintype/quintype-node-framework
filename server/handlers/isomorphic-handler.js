@@ -1,6 +1,7 @@
 // FIMXE: Convert this entire thing to async await / or even Typescript
 
 const _ = require("lodash");
+const { get } = require("lodash");
 
 const urlLib = require("url");
 const { matchBestRoute, matchAllRoutes } = require("../../isomorphic/match-best-route");
@@ -138,6 +139,7 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
     {},
     { config, client, logError, host: req.hostname, domainSlug }
   ).then((result) => {
+    console.log;
     res.status(200);
     res.setHeader("Content-Type", "text/html");
     res.setHeader("Cache-Control", "public,max-age=900");
@@ -148,11 +150,21 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
     }
     const seoInstance = getSeoInstance(seo, config, "shell");
     const seoTags = seoInstance && seoInstance.getMetaTags(config, "shell", result, { url });
+    const story = get(result, ["data", "story"], {});
+    const qtData = {
+      pageType: result.pageType || "",
+      storySlug: get(story, ["slug"], ""),
+      storyId: get(story, ["id"], ""),
+      sections: get(story, ["sections"], []),
+      storyType: get(story, ["story-template"], ""),
+    };
+
+    console.log("qtData-------------", qtData);
 
     return renderLayout(res, {
       config,
       seoTags,
-      content: `<div class="app-loading">${appLoadingPlaceholder}<script type="text/javascript">window.qtLoadedFromShell = true</script></div>`,
+      content: `<div class="app-loading">${appLoadingPlaceholder}<script type="text/javascript">window.qtLoadedFromShell = true; window.qtPageType="story-page"; window.QT_DATA_TEST = ${qtData}; </script></div>`,
       store: createStore((state) => state, getDefaultState(result)),
       shell: true,
     });
