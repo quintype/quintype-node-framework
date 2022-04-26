@@ -27,11 +27,11 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
-    "@quintype/amp": "^2.4.19",
+    "@quintype/amp": "^2.4.20-saam-tv-issue.0",
     "@quintype/backend": "^2.3.1",
     "@quintype/components": "^3.0.0",
     "@quintype/prerender-node": "^3.2.24",
-    "@quintype/seo": "^1.38.1",
+    "@quintype/seo": "^1.39.0",
     "atob": "^2.1.2",
     "chalk": "^4.1.2",
     "cluster": "^0.7.7",
