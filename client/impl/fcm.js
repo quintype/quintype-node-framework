@@ -1,39 +1,26 @@
-export function initializeFCM(messageSenderId) {
-  if (!messageSenderId) {
-    console.log("messageSenderId is required");
+export function initializeFCM(firebaseConfig) {
+  if (!firebaseConfig.messagingSenderId) {
+    console.log("messagingSenderId is required");
     return false;
   }
   Promise.all([
     import(/* webpackChunkName: "firebase-app" */ "firebase/app"),
     import(/* webpackChunkName: "firebase-messaging" */ "firebase/messaging"),
-  ]).then(([firebase, m]) => {
-    try {
-      firebase.initializeApp({
-        messagingSenderId: messageSenderId.toString(),
+  ])
+    .then(([firebase, m]) => {
+      const app = firebase.initializeApp({
+        messagingSenderId: firebaseConfig.messagingSenderId.toString(),
+        ...firebaseConfig,
       });
-      const messaging = firebase.messaging();
-      messaging.requestPermission().then(() => {
-        updateToken(firebase)
-          .then(() => {
-            messaging.onTokenRefresh(() => updateToken(firebase));
-          })
-          .catch(console.error);
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  });
-}
-
-function updateToken(firebaseInstance) {
-  return firebaseInstance
-    .messaging()
-    .getToken()
+      const messaging = m.getMessaging(app);
+      return m.getToken(messaging);
+      // No need to refresh token https://github.com/firebase/firebase-js-sdk/issues/4132
+    })
     .then((token) => {
       return registerFCMTopic(token);
     })
     .catch((err) => {
-      throw new Error(err);
+      console.error(err);
     });
 }
 
