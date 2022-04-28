@@ -10,7 +10,11 @@ export function initializeFCM(firebaseConfig) {
     .then(([firebase, m]) => {
       const app = firebase.initializeApp({
         messagingSenderId: firebaseConfig.messagingSenderId.toString(),
-        ...firebaseConfig,
+        projectId: firebaseConfig.projectId,
+        apiKey: firebaseConfig.apiKey,
+        storageBucket: firebaseConfig.storageBucket,
+        authDomain: firebaseConfig.authDomain,
+        appId: firebaseConfig.appId,
       });
       const messaging = m.getMessaging(app);
       return m.getToken(messaging);
