@@ -284,8 +284,10 @@ export function startApp(renderApplication, reducers, opts) {
 
     if (opts.firebaseConfig) {
       const fcm = typeof opts.firebaseConfig === "function" ? opts.firebaseConfig(page) : opts.firebaseConfig;
-      const mssgSenderId = fcm.messagingSenderId;
-      mssgSenderId && initializeFCM(fcm);
+      if (fcm) {
+        const mssgSenderId = fcm.messagingSenderId;
+        mssgSenderId && initializeFCM(fcm);
+      }
     }
 
     const { config: { "theme-attributes": pageThemeAttributes = {} } = {} } = page;
