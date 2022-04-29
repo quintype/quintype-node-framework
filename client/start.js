@@ -286,7 +286,9 @@ export function startApp(renderApplication, reducers, opts) {
       const fcm = typeof opts.firebaseConfig === "function" ? opts.firebaseConfig(page) : opts.firebaseConfig;
       if (fcm) {
         const mssgSenderId = fcm.messagingSenderId;
-        mssgSenderId && initializeFCM(fcm);
+        const projectId = fcm.projectId;
+        const apiKey = fcm.apiKey;
+        if (mssgSenderId && projectId && apiKey) initializeFCM(fcm);
       }
     }
 

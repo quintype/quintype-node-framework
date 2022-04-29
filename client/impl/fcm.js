@@ -1,8 +1,4 @@
 export function initializeFCM(firebaseConfig) {
-  if (!firebaseConfig.messagingSenderId) {
-    console.log("messagingSenderId is required");
-    return false;
-  }
   Promise.all([
     import(/* webpackChunkName: "firebase-app" */ "firebase/app"),
     import(/* webpackChunkName: "firebase-messaging" */ "firebase/messaging"),
