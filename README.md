@@ -185,21 +185,28 @@ isomorphicRoutes(app, {
     importScripts("https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js");
     importScripts("https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging-compat.js");
 
-    const firebaseConfig =  <%- JSON.stringify(firebaseConfig ) %>
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp({
+      messagingSenderId: --YOUR KEY-- ,
+      projectId: --YOUR KEY--,
+      apiKey: --YOUR KEY--,
+      storageBucket: --YOUR KEY--,
+      authDomain: --YOUR KEY--,
+      appId: --YOUR KEY--,
+    });
     self.addEventListener('notificationclick', (event) => {
-      const url = get(event, ["notification", "data", "url"]);
+
+      const url = event.notification.data.url;
       if(url) {
         clients.openWindow(url);
       }
-      clients.openWindow('<%= sketchesHost %>');
+      clients.openWindow(-- YOUR Sketches Host --);
     }, false);
 
     const messaging = firebase.messaging();
 
     messaging.onBackgroundMessage(function(payload) {
       const data = payload["data"];
-      const notificationTitle = get(data, ["title"]);
+      const notificationTitle = data.title || ""
       const notificationOptions = {
         body: data.body,
         icon: data["hero_image_s3_url"],
