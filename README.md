@@ -187,7 +187,7 @@ isomorphicRoutes(app, {
 
     const firebaseConfig =  <%- JSON.stringify(firebaseConfig ) %>
     firebase.initializeApp(firebaseConfig);
-    self.addEventListener('notificationclick', function(event) {
+    self.addEventListener('notificationclick', (event) => {
       var url = event.notification.data.url;
       if(url) {
         clients.openWindow(url);
