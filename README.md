@@ -185,7 +185,7 @@ isomorphicRoutes(app, {
     importScripts("https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js");
     importScripts("https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging-compat.js");
 
-    var firebaseConfig =  <%- JSON.stringify(firebaseConfig ) %>
+    const firebaseConfig =  <%- JSON.stringify(firebaseConfig ) %>
     firebase.initializeApp(firebaseConfig);
     self.addEventListener('notificationclick', function(event) {
       var url = event.notification.data.url;
