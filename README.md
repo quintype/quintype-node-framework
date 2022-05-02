@@ -199,7 +199,7 @@ isomorphicRoutes(app, {
 
     messaging.onBackgroundMessage(function(payload) {
       const data = payload["data"];
-      const notificationTitle = data.title;
+      const notificationTitle = get(data, ["title"]);
       const notificationOptions = {
         body: data.body,
         icon: data["hero_image_s3_url"],
