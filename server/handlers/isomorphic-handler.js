@@ -483,7 +483,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     );
   }
 
-  if (typeof redirectUrls === "function" || (redirectUrls && Object.keys(redirectUrls).length > 0)) {
+  if (typeof redirectUrls === "function" || (redirectUrls && redirectUrls.length > 0)) {
     getRedirectUrl(req, res, next, { redirectUrls, config });
   }
 
