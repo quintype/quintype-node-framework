@@ -232,12 +232,13 @@ function wrapLoadDataWithMultiDomain(publisherConfig, f, configPos) {
  * @param {Object} opts Options that will be passed to the handler. These options will be merged with a *config* and *client*
  */
 function getWithConfig(app, route, handler, opts = {}) {
+  const configWrapper = opts.configWrapper;
   const {
     getClient = require("./api-client").getClient,
     publisherConfig = require("./publisher-config"),
     logError = require("./logger").error,
   } = opts;
-  const withConfig = withConfigPartial(getClient, logError, publisherConfig);
+  const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
   app.get(route, withConfig(handler, opts));
 }
 
