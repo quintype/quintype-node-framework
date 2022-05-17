@@ -39,13 +39,13 @@ async function ampStoryPageHandler(
   try {
     const opts = cloneDeep(rest);
 
-    const enableAmp =
-      opts.enableAmp && typeof opts.enableAmp === "function" ? opts.enableAmp(config) : opts.enableAmp || true;
+    const getEnableAmp = get(opts, ["enableAmp"], true);
+
+    const enableAmp = typeof getEnableAmp === "function" ? opts.enableAmp(config) : getEnableAmp;
 
     if (!enableAmp) {
       return res.redirect(301, `/${req.params[0]}`);
     }
-
 
     const redirectUrls = opts && opts.redirectUrls;
 
