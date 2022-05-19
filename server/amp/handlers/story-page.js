@@ -39,18 +39,17 @@ async function ampStoryPageHandler(
   try {
     const opts = cloneDeep(rest);
 
+    const redirectUrls = opts && opts.redirectUrls;
     const getEnableAmp = get(opts, ["enableAmp"], true);
 
     const enableAmp = typeof getEnableAmp === "function" ? opts.enableAmp(config) : getEnableAmp;
 
-    if (!enableAmp) {
-      return res.redirect(301, `/${req.params[0]}`);
+    if (typeof redirectUrls === "function" || (redirectUrls && Object.keys(redirectUrls).length > 0)) {
+      await getRedirectUrl(req, res, next, { redirectUrls, config });
     }
 
-    const redirectUrls = opts && opts.redirectUrls;
-
-    if (typeof redirectUrls === "function" || (redirectUrls && Object.keys(redirectUrls).length > 0)) {
-      getRedirectUrl(req, res, next, { redirectUrls, config });
+    if (!enableAmp) {
+      return res.redirect(301, `/${req.params[0]}`);
     }
 
     const domainSpecificOpts = getDomainSpecificOpts(opts, domainSlug);
