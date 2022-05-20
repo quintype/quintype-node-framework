@@ -3,6 +3,10 @@
   "version": "7.3.2",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
+  "engines": {
+    "node": "^16.0.0",
+    "npm": "^8.5.0"
+  },
   "scripts": {
     "prepublishOnly": "npm test && ./bin-dev-scripts/standard-version-release.sh",
     "test": "NODE_ENV=test npx mocha --recursive --require ./test/babel",
@@ -61,7 +65,7 @@
     "@babel/eslint-parser": "^7.15.7",
     "@loadable/component": "^5.15.0",
     "@loadable/server": "^5.15.1",
-    "@quintype/build": "^3.13.1",
+    "@quintype/build": "^4.0.0",
     "babel-plugin-quintype-assets": "^1.1.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
