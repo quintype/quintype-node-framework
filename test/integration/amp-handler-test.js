@@ -70,16 +70,14 @@ function getClientStub({
             "story-elements": [
               {
                 description: "",
-                "page-url":
-                  "/story/7f3d5bdb-ec52-4047-ac0d-df4036ec974b/element/9eb8f5cc-6ebe-4fb0-88b8-eca79efde210",
+                "page-url": "/story/7f3d5bdb-ec52-4047-ac0d-df4036ec974b/element/9eb8f5cc-6ebe-4fb0-88b8-eca79efde210",
                 type: "text",
                 "family-id": "e9e12f9f-8b9f-4b93-a8c8-83c7b278000f",
                 title: "",
                 id: "9eb8f5cc-6ebe-4fb0-88b8-eca79efde210",
                 metadata: {},
                 subtype: null,
-                text:
-                  "<p>In India today, the legal profession is growing in lockstep with one of the world’s most dynamic economies. It’s no surprise then— that in terms of absolute numbers— India’s legal profession is the world’s second largest, with over 1.4 million enrolled lawyers in legal practices nationwide.</p>",
+                text: "<p>In India today, the legal profession is growing in lockstep with one of the world’s most dynamic economies. It’s no surprise then— that in terms of absolute numbers— India’s legal profession is the world’s second largest, with over 1.4 million enrolled lawyers in legal practices nationwide.</p>",
               },
             ],
             "card-updated-at": 1581327522163,
@@ -195,20 +193,18 @@ const dummyAmpLib = {
 
 const getClientStubWithRelatedStories = (relatedStories) => () =>
   Object.assign({}, getClientStub(), {
-    getRelatedStories: () =>
-      Promise.resolve({ "related-stories": relatedStories }),
+    getRelatedStories: () => Promise.resolve({ "related-stories": relatedStories }),
   });
 
-function createApp({
-  clientStub = getClientStub,
-  ampLibrary = dummyAmpLib,
-} = {}) {
+function createApp({ clientStub = getClientStub, ampLibrary = dummyAmpLib, enableAmp = true, redirectUrls = {} } = {}) {
   const app = express();
   ampRoutes(app, {
     getClient: clientStub,
     publisherConfig: {},
     ampLibrary,
     additionalConfig: {},
+    enableAmp,
+    redirectUrls,
   });
   return app;
 }
@@ -236,6 +232,38 @@ describe("ampStoryPageHandler integration tests", () => {
       .get("/amp/story/test")
       .expect(500, /Dummy error/)
       .end(function (err, res) {
+        if (err) return done(err);
+        return done();
+      });
+  });
+  it("should redirect to non-amp page if enableAmp is false", (done) => {
+    const app = createApp({
+      enableAmp: false,
+    });
+    supertest(app)
+      .get("/amp/story/cricket/ipl-2021")
+      .expect(301)
+      .expect("Location", "/cricket/ipl-2021")
+      .end((err) => {
+        if (err) return done(err);
+        return done();
+      });
+  });
+  it("Redirects the urls with status code to 302 if redirectUrls is present ", (done) => {
+    const app = createApp({
+      enableAmp: true,
+      redirectUrls: {
+        "/amp/story/sports/ipl-2021": {
+          destinationUrl: "/amp/story/sports/cricket-2022",
+          statusCode: 302,
+        },
+      },
+    });
+    supertest(app)
+      .get("/amp/story/sports/ipl-2021")
+      .expect(302)
+      .expect("Location", "/amp/story/sports/cricket-2022")
+      .end((err) => {
         if (err) return done(err);
         return done();
       });

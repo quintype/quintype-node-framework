@@ -7,6 +7,7 @@ const { Story, AmpConfig } = require("../../impl/api-client-impl");
 const { optimize, getDomainSpecificOpts } = require("../helpers");
 const { storyToCacheKey } = require("../../caching");
 const { addCacheHeadersToResult } = require("../../handlers/cdn-caching");
+const { getRedirectUrl } = require("../../../server/redirect-url-helper");
 
 /**
  * ampStoryPageHandler gets all the things needed and calls "ampifyStory" function (which comes from ampLib)
@@ -37,6 +38,20 @@ async function ampStoryPageHandler(
 ) {
   try {
     const opts = cloneDeep(rest);
+
+    const redirectUrls = opts && opts.redirectUrls;
+    const getEnableAmp = get(opts, ["enableAmp"], true);
+
+    const enableAmp = typeof getEnableAmp === "function" ? opts.enableAmp(config) : getEnableAmp;
+
+    if (typeof redirectUrls === "function" || (redirectUrls && Object.keys(redirectUrls).length > 0)) {
+      await getRedirectUrl(req, res, next, { redirectUrls, config });
+    }
+
+    if (!enableAmp) {
+      return res.redirect(301, `/${req.params[0]}`);
+    }
+
     const domainSpecificOpts = getDomainSpecificOpts(opts, domainSlug);
     const url = urlLib.parse(req.url, true);
     const { ampifyStory, unsupportedStoryElementsPresent } = ampLibrary;

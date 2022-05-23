@@ -232,12 +232,13 @@ function wrapLoadDataWithMultiDomain(publisherConfig, f, configPos) {
  * @param {Object} opts Options that will be passed to the handler. These options will be merged with a *config* and *client*
  */
 function getWithConfig(app, route, handler, opts = {}) {
+  const configWrapper = opts.configWrapper;
   const {
     getClient = require("./api-client").getClient,
     publisherConfig = require("./publisher-config"),
     logError = require("./logger").error,
   } = opts;
-  const withConfig = withConfigPartial(getClient, logError, publisherConfig);
+  const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
   app.get(route, withConfig(handler, opts));
 }
 
@@ -608,6 +609,8 @@ exports.mountQuintypeAt = function (app, mountAt) {
  * @param {Object} opts.templates An object that's used to pass custom templates. Each key corresponds to the template name and corresponding value is the template
  * @param {Object} opts.slots An object used to pass slot data.
  * @param {SEO} opts.seo An SEO object that will generate html tags for each page. See [@quintype/seo](https://developers.quintype.com/malibu/isomorphic-rendering/server-side-architecture#quintypeseo)
+ * @param {boolean|function} opts.enableAmp  'amp/story/:slug' should redirect to non-amp page if enableAmp is false
+ * @param {object|function} opts.redirectUrls list of urls  which is used to redirect URL(sourceUrl) to a different URL(destinationUrl). Eg:  redirectUrls: { "/amp/story/sports/ipl-2021": {destinationUrl: "/amp/story/sports/cricket-2022", statusCode: 302,},}
  * @param {function} opts.headerCardRender Render prop for story headerCard. If passed, the headerCard in default stories will be replaced with this
  * @param {function} opts.relatedStoriesRender Render prop for relatedStories in a story page. If passed, this will replace the related stories
  *
