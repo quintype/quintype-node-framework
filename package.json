@@ -95,7 +95,7 @@
     "onchange": "^7.1.0",
     "path": "^0.12.7",
     "prettier": "^2.4.1",
-    "standard-version": "^9.3.1",
+    "standard-version": "^9.5.0",
     "supertest": "^6.1.6"
   },
   "peerDependencies": {
