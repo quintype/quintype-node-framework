@@ -112,6 +112,8 @@ async function ampStoryPageHandler(
         publisherConfig: additionalConfig,
       });
       merge(mergedAdditionalConfig, additionalConfig, fetchedAdditionalConfig);
+    } else {
+      merge(mergedAdditionalConfig, additionalConfig);
     }
 
     const ampHtml = ampifyStory({
