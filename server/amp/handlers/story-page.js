@@ -1,6 +1,7 @@
 const urlLib = require("url");
 const set = require("lodash/set");
 const get = require("lodash/get");
+const isEmpty = require("lodash/isEmpty");
 const cloneDeep = require("lodash/cloneDeep");
 const merge = require("lodash/merge");
 const { Story, AmpConfig } = require("../../impl/api-client-impl");
@@ -112,15 +113,13 @@ async function ampStoryPageHandler(
         publisherConfig: additionalConfig,
       });
       merge(mergedAdditionalConfig, additionalConfig, fetchedAdditionalConfig);
-    } else {
-      merge(mergedAdditionalConfig, additionalConfig);
     }
 
     const ampHtml = ampifyStory({
       story,
       publisherConfig: config.config,
       ampConfig: ampConfig.ampConfig,
-      additionalConfig: mergedAdditionalConfig,
+      additionalConfig: isEmpty(mergedAdditionalConfig) ? additionalConfig : mergedAdditionalConfig,
       opts: { ...domainSpecificOpts, domainSlug },
       seo: seoTags ? seoTags.toString() : "",
     });
