@@ -110,7 +110,7 @@ async function ampStoryPageHandler(
         ampApiConfig: ampConfig.ampConfig,
         publisherConfig: additionalConfig,
       });
-      merge(additionalConfig, fetchedAdditionalConfig);
+      merge({}, additionalConfig, fetchedAdditionalConfig);
     }
 
     const ampHtml = ampifyStory({
