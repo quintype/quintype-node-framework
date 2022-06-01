@@ -103,6 +103,7 @@ async function ampStoryPageHandler(
         infiniteScrollInlineConfig
       );
     }
+    additionalConfig = cloneDeep(additionalConfig);
     if (opts.getAdditionalConfig && opts.getAdditionalConfig instanceof Function) {
       const fetchedAdditionalConfig = await opts.getAdditionalConfig({
         story,
@@ -110,7 +111,7 @@ async function ampStoryPageHandler(
         ampApiConfig: ampConfig.ampConfig,
         publisherConfig: additionalConfig,
       });
-      merge({}, additionalConfig, fetchedAdditionalConfig);
+      merge(additionalConfig, fetchedAdditionalConfig);
     }
 
     const ampHtml = ampifyStory({
