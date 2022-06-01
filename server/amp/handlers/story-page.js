@@ -103,7 +103,7 @@ async function ampStoryPageHandler(
         infiniteScrollInlineConfig
       );
     }
-    additionalConfig = cloneDeep(additionalConfig);
+    const a = {};
     if (opts.getAdditionalConfig && opts.getAdditionalConfig instanceof Function) {
       const fetchedAdditionalConfig = await opts.getAdditionalConfig({
         story,
@@ -111,14 +111,14 @@ async function ampStoryPageHandler(
         ampApiConfig: ampConfig.ampConfig,
         publisherConfig: additionalConfig,
       });
-      merge(additionalConfig, fetchedAdditionalConfig);
+      merge(a, additionalConfig, fetchedAdditionalConfig);
     }
 
     const ampHtml = ampifyStory({
       story,
       publisherConfig: config.config,
       ampConfig: ampConfig.ampConfig,
-      additionalConfig,
+      additionalConfig: a,
       opts: { ...domainSpecificOpts, domainSlug },
       seo: seoTags ? seoTags.toString() : "",
     });
