@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.4.1](https://github.com/quintype/quintype-node-framework/compare/v7.4.0...v7.4.1) (2022-06-02)
+
+
+### Bug Fixes
+
+* **amp:** Incorrect localised content displayed across publishers ([#304](https://github.com/quintype/quintype-node-framework/issues/304)) ([c47d929](https://github.com/quintype/quintype-node-framework/commit/c47d9294c022100a95ba5ca1d755dd4731b6b580))
+
 ## [7.4.0](https://github.com/quintype/quintype-node-framework/compare/v7.2.0...v7.4.0) (2022-05-23)
 
 
