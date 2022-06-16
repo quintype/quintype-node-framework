@@ -87,7 +87,13 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   });
 
   // Mention the routes which don't want to override the s-maxage value
-  const excludeRoutes = ["/qlitics.js", "/api/v1/breaking-news"];
+  const excludeRoutes = [
+    "/qlitics.js",
+    "/api/v1/breaking-news",
+    "stories.rss",
+    "collection.rss",
+    "/api/v1/advanced-search",
+  ];
 
   app.all("/api/*", sketchesProxy);
   app.all("/login", sketchesProxy);
