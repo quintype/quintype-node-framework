@@ -90,8 +90,8 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   const excludeRoutes = [
     "/qlitics.js",
     "/api/v1/breaking-news",
-    "stories.rss",
-    "collection.rss",
+    "/stories.rss",
+    "/collection.rss",
     "/api/v1/advanced-search",
   ];
 
