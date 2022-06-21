@@ -94,7 +94,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     "/qlitics.js",
     "/api/v1/breaking-news",
     "/stories.rss",
-    "/collection.rss",
+    "/api/v1/collections/:slug.rss",
     "/api/v1/advanced-search",
   ];
 
