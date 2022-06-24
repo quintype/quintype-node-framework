@@ -2,6 +2,7 @@ const urlLib = require("url");
 const ejs = require("ejs");
 const fs = require("fs");
 const path = require("path");
+const set = require("lodash/set");
 
 const staticPageTemplateStr = fs.readFileSync(path.join(__dirname, "../views/static-page.ejs"), { encoding: "utf-8" });
 const staticPageTemplate = ejs.compile(staticPageTemplateStr);
