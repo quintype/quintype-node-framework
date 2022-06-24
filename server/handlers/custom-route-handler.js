@@ -29,7 +29,8 @@ function writeStaticPageResponse(res, url, page, result, { config, renderLayout,
   });
 
   const seoInstance = typeof seo === "function" ? seo(config) : seo;
-  const seoTags = seoInstance && seoInstance.getMetaTags(config, page.type, {}, { url });
+  set(result, ["data", "page"], page);
+  const seoTags = seoInstance && seoInstance.getMetaTags(config, page.type, result, { url });
 
   res.status(page["status-code"] || 200);
 
