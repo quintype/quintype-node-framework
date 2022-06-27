@@ -20,9 +20,7 @@ const {
 const _ = require("lodash");
 
 function getClientImpl(config, cachedSecondaryClients, hostname) {
-  return (
-    cachedSecondaryClients[hostname] || createTemporaryClient(config, hostname)
-  );
+  return cachedSecondaryClients[hostname] || createTemporaryClient(config, hostname);
 }
 
 function createTemporaryClient(config, hostname) {
@@ -31,11 +29,13 @@ function createTemporaryClient(config, hostname) {
     return new Client(configuredHosts[hostname], true);
   }
 
-  const matchedString = (config.host_to_automatic_api_host || []).find((str) =>
-    hostname.includes(str)
-  );
-  if (matchedString)
-    return new Client(`http://${hostname.replace(matchedString, ".internal")}`, true);
+  const matchedMadridUrl = (config.host_to_madrid_automatic_api_host || []).find((str) => hostname.includes(str));
+
+  if (matchedMadridUrl) return new Client(`http://${hostname.replace(matchedMadridUrl, ".internal")}`, true);
+
+  const matchedString = (config.host_to_automatic_api_host || []).find((str) => hostname.includes(str));
+
+  if (matchedString) return new Client(`https://${hostname.replace(matchedString, "")}`, true);
 }
 
 function itemToCacheKey(publisherId, item, depth) {
@@ -58,10 +58,7 @@ function getItemCacheKeys(publisherId, items, depth) {
         storyCacheKeys.push(storyToCacheKey(publisherId, item.story));
         break;
       case "collection":
-        const collectionKeys = Collection.build(item).getCollectionCacheKeys(
-          publisherId,
-          depth - 1
-        );
+        const collectionKeys = Collection.build(item).getCollectionCacheKeys(publisherId, depth - 1);
         storyCacheKeys.push(...collectionKeys.storyCacheKeys);
         collectionCacheKeys.push(...collectionKeys.collectionCacheKeys);
         break;
@@ -78,40 +75,36 @@ Collection.prototype.getCollectionCacheKeys = function (publisherId, depth) {
       collectionCacheKeys: [collectionToCacheKey(publisherId, this)],
     };
   }
-  const { storyCacheKeys, collectionCacheKeys } = getItemCacheKeys(
-    publisherId,
-    this.items,
-    depth
-  );
+  const { storyCacheKeys, collectionCacheKeys } = getItemCacheKeys(publisherId, this.items, depth);
   collectionCacheKeys.unshift(collectionToCacheKey(publisherId, this));
   return { storyCacheKeys, collectionCacheKeys };
 };
 
-Collection.prototype.isAutomated = function() {
+Collection.prototype.isAutomated = function () {
   return !!this.automated;
 };
 
-Collection.prototype.getChildCollections = function() {
+Collection.prototype.getChildCollections = function () {
   return this.items && this.items.filter((i) => i.type === "collection");
 };
 
-Collection.prototype.getCacheableChildItems = function() {
+Collection.prototype.getCacheableChildItems = function () {
   return this.isAutomated() ? this.getChildCollections() : this.items;
 };
 
-Collection.prototype.isLeafCollection = function() {
+Collection.prototype.isLeafCollection = function () {
   return !this.getCacheableChildItems() && !this["collection-cache-keys"];
 };
 
 Collection.prototype.cacheKeys = function (publisherId, depth) {
   if (depth < 0 || this.isLeafCollection()) {
-    return [collectionToCacheKey(publisherId,this)];
+    return [collectionToCacheKey(publisherId, this)];
   }
-  const remainingDepth = _.isNumber(depth) ? (depth - 1) : depth;
-  return ([
+  const remainingDepth = _.isNumber(depth) ? depth - 1 : depth;
+  return [
     ...(this["collection-cache-keys"] ? this["collection-cache-keys"] : []),
     ..._.flatMap(this.getCacheableChildItems(), (item) => itemToCacheKey(publisherId, item, remainingDepth)),
-  ]);
+  ];
 };
 
 Story.prototype.cacheKeys = function (publisherId) {
