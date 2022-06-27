@@ -29,9 +29,9 @@ function createTemporaryClient(config, hostname) {
     return new Client(configuredHosts[hostname], true);
   }
 
-  const matchedMadridUrl = (config.wildcard_to_api_host || []).find((str) => hostname.includes(str));
+  const matchedWildcardUrl = (config.wildcard_to_api_host || []).find((str) => hostname.includes(str));
 
-  if (matchedMadridUrl) return new Client(`http://${hostname.replace(matchedMadridUrl, ".internal")}`, true);
+  if (matchedWildcardUrl) return new Client(`http://${hostname.replace(matchedWildcardUrl, ".internal")}`, true);
 
   const matchedString = (config.host_to_automatic_api_host || []).find((str) => hostname.includes(str));
 
