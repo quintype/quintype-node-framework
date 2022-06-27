@@ -33,9 +33,9 @@ describe("ApiClient", function () {
       assert.equal("https://foo.quintype.io", client.baseUrl);
     });
 
-    it("creates a madrid temporary client if it matches a string", function () {
+    it("creates a wildcard temporary client if it matches a string", function () {
       const client = getClientImpl(
-        { host_to_madrid_automatic_api_host: [".madrid", "-madrid"] },
+        { wildcard_automatic_api_host: [".madrid", "-madrid"] },
         {},
         "foo.madrid.quintype.io"
       );
