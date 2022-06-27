@@ -35,7 +35,7 @@ describe("ApiClient", function () {
 
     it("creates a wildcard temporary client if it matches a string", function () {
       const client = getClientImpl(
-        { wildcard_automatic_api_host: [".madrid", "-madrid"] },
+        { wildcard_to_api_host: [".madrid", "-madrid"] },
         {},
         "foo.madrid.quintype.io"
       );
