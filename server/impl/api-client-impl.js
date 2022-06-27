@@ -35,7 +35,7 @@ function createTemporaryClient(config, hostname) {
     hostname.includes(str)
   );
   if (matchedString)
-    return new Client(`https://${hostname.replace(matchedString, ".internal")}`, true);
+    return new Client(`http://${hostname.replace(matchedString, ".internal")}`, true);
 }
 
 function itemToCacheKey(publisherId, item, depth) {

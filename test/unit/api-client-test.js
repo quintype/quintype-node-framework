@@ -27,7 +27,7 @@ describe("ApiClient", function () {
         {},
         "foo-web.staging.quintype.io"
       );
-      assert.equal("https://foo.internal.staging.quintype.io", client.baseUrl);
+      assert.equal("http://foo.internal.staging.quintype.io", client.baseUrl);
     });
 
     it("creates a temporary client if it matches a string with a .", function () {
@@ -36,7 +36,7 @@ describe("ApiClient", function () {
         {},
         "foo.madrid.quintype.io"
       );
-      assert.equal("https://foo.internal.quintype.io", client.baseUrl);
+      assert.equal("http://foo.internal.quintype.io", client.baseUrl);
     });
 
     it("creates a temporary client if host_to_api_host_is set", function () {
