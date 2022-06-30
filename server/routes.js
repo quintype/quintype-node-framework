@@ -6,7 +6,7 @@
  * @category Server
  * @module routes
  */
-
+const { match } = require("path-to-regexp");
 const { generateServiceWorker } = require("./handlers/generate-service-worker");
 const {
   handleIsomorphicShell,
@@ -70,7 +70,10 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   parseInt(_sMaxAge) > 0 &&
     apiProxy.on("proxyRes", function (proxyRes, req) {
       const pathName = get(req, ["originalUrl"], "").split("?")[0];
-      const checkForExcludeRoutes = excludeRoutes.includes(pathName);
+      const checkForExcludeRoutes = excludeRoutes.some((path) => {
+        const matchFn = match(path, { decode: decodeURIComponent });
+        return matchFn(pathName);
+      });
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
       if (!checkForExcludeRoutes && getCacheControl.includes("public")) {
         proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${_sMaxAge}`);
@@ -87,7 +90,13 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   });
 
   // Mention the routes which don't want to override the s-maxage value
-  const excludeRoutes = ["/qlitics.js", "/api/v1/breaking-news"];
+  const excludeRoutes = [
+    "/qlitics.js",
+    "/api/v1/breaking-news",
+    "/stories.rss",
+    "/api/v1/collections/:slug.rss",
+    "/api/v1/advanced-search",
+  ];
 
   app.all("/api/*", sketchesProxy);
   app.all("/login", sketchesProxy);
