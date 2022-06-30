@@ -2,6 +2,7 @@ const urlLib = require("url");
 const ejs = require("ejs");
 const fs = require("fs");
 const path = require("path");
+const set = require("lodash/set");
 
 const staticPageTemplateStr = fs.readFileSync(path.join(__dirname, "../views/static-page.ejs"), { encoding: "utf-8" });
 const staticPageTemplate = ejs.compile(staticPageTemplateStr);
@@ -29,7 +30,9 @@ function writeStaticPageResponse(res, url, page, result, { config, renderLayout,
   });
 
   const seoInstance = typeof seo === "function" ? seo(config) : seo;
-  const seoTags = seoInstance && seoInstance.getMetaTags(config, page.type, {}, { url });
+
+  const seoTags =
+    seoInstance && seoInstance.getMetaTags(config, page.type, set(result, ["data", "page"], page), { url });
 
   res.status(page["status-code"] || 200);
 
