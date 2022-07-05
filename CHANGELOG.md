@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.7.0](https://github.com/quintype/quintype-node-framework/compare/v7.4.1...v7.7.0) (2022-07-05)
+
+
+### Features
+
+* **api-client:** Implement wildcard_to_api_host ⚡  ([#308](https://github.com/quintype/quintype-node-framework/issues/308)) ([9c585f4](https://github.com/quintype/quintype-node-framework/commit/9c585f49fece1cba7271a47465633ca9c40034ff))
+
 ### [7.6.2](https://github.com/quintype/quintype-node-framework/compare/v7.6.1...v7.6.2) (2022-07-01)
 
 ### [7.6.1](https://github.com/quintype/quintype-node-framework/compare/v7.6.0...v7.6.1) (2022-06-30)
