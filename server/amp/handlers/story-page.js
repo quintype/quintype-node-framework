@@ -34,22 +34,21 @@ async function ampStoryPageHandler(
     ampLibrary = require("@quintype/amp"),
     additionalConfig = require("../../publisher-config"),
     InfiniteScrollAmp = require("../helpers/infinite-scroll"),
+    isVisualStory = false,
     ...rest
   }
 ) {
   try {
     const opts = cloneDeep(rest);
-
     const redirectUrls = opts && opts.redirectUrls;
     const getEnableAmp = get(opts, ["enableAmp"], true);
-
     const enableAmp = typeof getEnableAmp === "function" ? opts.enableAmp(config) : getEnableAmp;
 
     if (typeof redirectUrls === "function" || (redirectUrls && Object.keys(redirectUrls).length > 0)) {
       await getRedirectUrl(req, res, next, { redirectUrls, config });
     }
 
-    if (!enableAmp) {
+    if (!isVisualStory && !enableAmp) {
       return res.redirect(301, `/${req.params[0]}`);
     }
 

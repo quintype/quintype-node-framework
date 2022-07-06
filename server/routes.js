@@ -630,5 +630,5 @@ exports.ampRoutes = (app, opts = {}) => {
   getWithConfig(app, "/amp/story/*", ampStoryPageHandler, opts);
   getWithConfig(app, "/amp/api/v1/amp-infinite-scroll", storyPageInfiniteScrollHandler, opts);
   getWithConfig(app, "/amp/api/v1/bookend.json", bookendHandler, opts);
-  getWithConfig(app, "/ampstories/*", ampStoryPageHandler, opts);
+  getWithConfig(app, "/ampstories/*", ampStoryPageHandler, { ...opts, isVisualStory: true });
 };
