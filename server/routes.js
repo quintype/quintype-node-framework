@@ -96,6 +96,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     "/stories.rss",
     "/api/v1/collections/:slug.rss",
     "/api/v1/advanced-search",
+    "/api/instant-articles.rss",
   ];
 
   app.all("/api/*", sketchesProxy);
