@@ -1,6 +1,7 @@
 const urlLib = require("url");
 const set = require("lodash/set");
 const get = require("lodash/get");
+const isEmpty = require("lodash/isEmpty");
 const cloneDeep = require("lodash/cloneDeep");
 const merge = require("lodash/merge");
 const { Story, AmpConfig } = require("../../impl/api-client-impl");
@@ -33,22 +34,21 @@ async function ampStoryPageHandler(
     ampLibrary = require("@quintype/amp"),
     additionalConfig = require("../../publisher-config"),
     InfiniteScrollAmp = require("../helpers/infinite-scroll"),
+    isVisualStory = false,
     ...rest
   }
 ) {
   try {
     const opts = cloneDeep(rest);
-
     const redirectUrls = opts && opts.redirectUrls;
     const getEnableAmp = get(opts, ["enableAmp"], true);
-
     const enableAmp = typeof getEnableAmp === "function" ? opts.enableAmp(config) : getEnableAmp;
 
     if (typeof redirectUrls === "function" || (redirectUrls && Object.keys(redirectUrls).length > 0)) {
       await getRedirectUrl(req, res, next, { redirectUrls, config });
     }
 
-    if (!enableAmp) {
+    if (!isVisualStory && !enableAmp) {
       return res.redirect(301, `/${req.params[0]}`);
     }
 
@@ -103,6 +103,7 @@ async function ampStoryPageHandler(
         infiniteScrollInlineConfig
       );
     }
+    const mergedAdditionalConfig = {};
     if (opts.getAdditionalConfig && opts.getAdditionalConfig instanceof Function) {
       const fetchedAdditionalConfig = await opts.getAdditionalConfig({
         story,
@@ -110,14 +111,14 @@ async function ampStoryPageHandler(
         ampApiConfig: ampConfig.ampConfig,
         publisherConfig: additionalConfig,
       });
-      merge(additionalConfig, fetchedAdditionalConfig);
+      merge(mergedAdditionalConfig, additionalConfig, fetchedAdditionalConfig);
     }
 
     const ampHtml = ampifyStory({
       story,
       publisherConfig: config.config,
       ampConfig: ampConfig.ampConfig,
-      additionalConfig,
+      additionalConfig: isEmpty(mergedAdditionalConfig) ? additionalConfig : mergedAdditionalConfig,
       opts: { ...domainSpecificOpts, domainSlug },
       seo: seoTags ? seoTags.toString() : "",
     });
