@@ -348,6 +348,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
         delete req.query.prerender;
         try {
           // eslint-disable-next-line global-require
+          prerender.set("protocol", "https");
           prerender.set("prerenderServiceUrl", prerenderServiceUrl)(req, res, next);
         } catch (e) {
           logError(e);
