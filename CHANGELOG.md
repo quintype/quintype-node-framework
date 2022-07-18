@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.7.5](https://github.com/quintype/quintype-node-framework/compare/v7.7.4...v7.7.5) (2022-07-14)
+
+### [7.7.4](https://github.com/quintype/quintype-node-framework/compare/v7.7.3...v7.7.4) (2022-07-13)
+
+### [7.7.3](https://github.com/quintype/quintype-node-framework/compare/v7.7.2...v7.7.3) (2022-07-13)
+
+
+### Bug Fixes
+
+* remove prerender query param after the prerender check ([#314](https://github.com/quintype/quintype-node-framework/issues/314)) ([94eac28](https://github.com/quintype/quintype-node-framework/commit/94eac28bfd04483cc665c5ce4d2fc8768c84a31b))
+
 ### [7.7.2](https://github.com/quintype/quintype-node-framework/compare/v7.7.1...v7.7.2) (2022-07-08)
 
 ### [7.7.1](https://github.com/quintype/quintype-node-framework/compare/v7.7.0...v7.7.1) (2022-07-06)
