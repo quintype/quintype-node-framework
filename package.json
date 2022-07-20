@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.7.6-prerender-query-param.1",
+  "version": "7.7.6-prerender-query-param.2",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
