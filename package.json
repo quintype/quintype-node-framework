@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.7.5",
+  "version": "7.7.6-prerender-query-param.2",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
@@ -34,7 +34,7 @@
     "@quintype/amp": "^2.4.26",
     "@quintype/backend": "^2.3.1",
     "@quintype/components": "^3.0.0",
-    "@quintype/prerender-node": "^3.2.24",
+    "@quintype/prerender-node": "^3.2.26",
     "@quintype/seo": "^1.39.0",
     "atob": "^2.1.2",
     "babel-plugin-react-css-modules": "^5.2.6",
