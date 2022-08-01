@@ -2,6 +2,86 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.7.7](https://github.com/quintype/quintype-node-framework/compare/v7.7.0...v7.7.7) (2022-07-29)
+
+
+### Bug Fixes
+
+* remove prerender query param after the prerender check ([#314](https://github.com/quintype/quintype-node-framework/issues/314)) ([94eac28](https://github.com/quintype/quintype-node-framework/commit/94eac28bfd04483cc665c5ce4d2fc8768c84a31b))
+* remove prerender query param after the prerender check [#314](https://github.com/quintype/quintype-node-framework/issues/314) ([#317](https://github.com/quintype/quintype-node-framework/issues/317)) ([0067d81](https://github.com/quintype/quintype-node-framework/commit/0067d81fe545a726948db14a44768876b41f6ba8))
+
+### [7.7.6](https://github.com/quintype/quintype-node-framework/compare/v7.7.5...v7.7.6) (2022-07-28)
+
+
+### Bug Fixes
+
+* remove prerender query param after the prerender check [#314](https://github.com/quintype/quintype-node-framework/issues/314) ([#317](https://github.com/quintype/quintype-node-framework/issues/317)) ([0067d81](https://github.com/quintype/quintype-node-framework/commit/0067d81fe545a726948db14a44768876b41f6ba8))
+
+### [7.7.5](https://github.com/quintype/quintype-node-framework/compare/v7.7.4...v7.7.5) (2022-07-14)
+
+### [7.7.4](https://github.com/quintype/quintype-node-framework/compare/v7.7.3...v7.7.4) (2022-07-13)
+
+### [7.7.3](https://github.com/quintype/quintype-node-framework/compare/v7.7.2...v7.7.3) (2022-07-13)
+
+
+### Bug Fixes
+
+* remove prerender query param after the prerender check ([#314](https://github.com/quintype/quintype-node-framework/issues/314)) ([94eac28](https://github.com/quintype/quintype-node-framework/commit/94eac28bfd04483cc665c5ce4d2fc8768c84a31b))
+
+### [7.7.2](https://github.com/quintype/quintype-node-framework/compare/v7.7.1...v7.7.2) (2022-07-08)
+
+### [7.7.1](https://github.com/quintype/quintype-node-framework/compare/v7.7.0...v7.7.1) (2022-07-06)
+
+## [7.7.0](https://github.com/quintype/quintype-node-framework/compare/v7.4.1...v7.7.0) (2022-07-05)
+
+
+### Features
+
+* **api-client:** Implement wildcard_to_api_host ⚡  ([#308](https://github.com/quintype/quintype-node-framework/issues/308)) ([9c585f4](https://github.com/quintype/quintype-node-framework/commit/9c585f49fece1cba7271a47465633ca9c40034ff))
+
+### [7.6.2](https://github.com/quintype/quintype-node-framework/compare/v7.6.1...v7.6.2) (2022-07-01)
+
+### [7.6.1](https://github.com/quintype/quintype-node-framework/compare/v7.6.0...v7.6.1) (2022-06-30)
+
+## [7.6.0](https://github.com/quintype/quintype-node-framework/compare/v7.4.0...v7.6.0) (2022-06-28)
+
+
+### Features
+
+* **api-client:** Implement wildcard_to_api_host ⚡  ([#308](https://github.com/quintype/quintype-node-framework/issues/308)) ([9c585f4](https://github.com/quintype/quintype-node-framework/commit/9c585f49fece1cba7271a47465633ca9c40034ff))
+
+
+### Bug Fixes
+
+* **amp:** Incorrect localised content displayed across publishers ([#304](https://github.com/quintype/quintype-node-framework/issues/304)) ([c47d929](https://github.com/quintype/quintype-node-framework/commit/c47d9294c022100a95ba5ca1d755dd4731b6b580))
+
+## [7.5.0](https://github.com/quintype/quintype-node-framework/compare/v7.4.1...v7.5.0) (2022-06-27)
+
+
+### Features
+
+* **api-client:** Implement wildcard_to_api_host ⚡  ([#308](https://github.com/quintype/quintype-node-framework/issues/308)) ([9c585f4](https://github.com/quintype/quintype-node-framework/commit/9c585f49fece1cba7271a47465633ca9c40034ff))
+
+### [7.4.1](https://github.com/quintype/quintype-node-framework/compare/v7.4.0...v7.4.1) (2022-06-02)
+
+
+### Bug Fixes
+
+* **amp:** Incorrect localised content displayed across publishers ([#304](https://github.com/quintype/quintype-node-framework/issues/304)) ([c47d929](https://github.com/quintype/quintype-node-framework/commit/c47d9294c022100a95ba5ca1d755dd4731b6b580))
+
+## [7.4.0](https://github.com/quintype/quintype-node-framework/compare/v7.2.0...v7.4.0) (2022-05-23)
+
+
+### Features
+
+* **request:** Implement request fallback for external calls ([#296](https://github.com/quintype/quintype-node-framework/issues/296)) ([44e1f7e](https://github.com/quintype/quintype-node-framework/commit/44e1f7eea9825225c0c300fb57a8178bd22c0630))
+
+### [7.3.4](https://github.com/quintype/quintype-node-framework/compare/v7.3.3...v7.3.4) (2022-05-20)
+
+### [7.3.3](https://github.com/quintype/quintype-node-framework/compare/v7.3.2...v7.3.3) (2022-05-20)
+
+### [7.3.2](https://github.com/quintype/quintype-node-framework/compare/v7.3.1...v7.3.2) (2022-04-18)
+
 ### [7.3.1](https://github.com/quintype/quintype-node-framework/compare/v7.3.0...v7.3.1) (2022-03-03)
 
 ## [7.3.0](https://github.com/quintype/quintype-node-framework/compare/v7.2.0...v7.3.0) (2022-03-01)

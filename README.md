@@ -145,23 +145,30 @@ startApp(renderApplication, CUSTOM_REDUCERS, {
 
 Steps to Integrate FCM in your project
 
-1. While executing startApp in your project set enableFCM to true.
+1. app/client/app.js While executing startApp in your project send the firebaseConfig via opts. `firebaseConfig` can either be an object or a function that returns the firebase config object
 
-An Example
+Example:
 
-```
+```js
 startApp(renderApplication,
   CUSTOM_REDUCERS,
   {
   enableServiceWorker: process.env.NODE_ENV === "production",
-  fcmMessagingSenderId: (page) => <MessageSenderId> || fcmMessagingSenderId: <MessageSenderId> {(function|string)}
+  firebaseConfig: {
+    messagingSenderId: --YOUR KEY-- ,
+    projectId: --YOUR KEY--,
+    apiKey: --YOUR KEY--,
+    storageBucket: --YOUR KEY--,
+    authDomain: --YOUR KEY--,
+    appId: --YOUR KEY--,
+  }
   ...
 })
 ```
 
 2. app/server/app.js should have the fcm configuration as below:
 
-```
+```js
 isomorphicRoutes(app, {
   ...
   fcmServerKey: (config) => <ServerKey> || fcmServerKey: <ServerKey> {(function|string)}
@@ -174,28 +181,45 @@ isomorphicRoutes(app, {
 
    Example of the script:
 
-   ```
-       importScripts("https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js");
-       importScripts("https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js");
-       firebase.initializeApp({
-         messagingSenderId: <your message sender Id>
-       });
-       const messaging = firebase.messaging();
-       function messageHandler(payload) {
-         const data = payload["data"];
+   ```js
+    importScripts("https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js");
+    importScripts("https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging-compat.js");
 
-         var notificationTitle = data.title;
-         var notificationOptions = {
-           body: data.body,
-           icon: data["hero_image_s3_url"],
-           image: data["hero_image_s3_url"],
-           data: data
-         };
+    firebase.initializeApp({
+      messagingSenderId: --YOUR KEY-- ,
+      projectId: --YOUR KEY--,
+      apiKey: --YOUR KEY--,
+      storageBucket: --YOUR KEY--,
+      authDomain: --YOUR KEY--,
+      appId: --YOUR KEY--,
+    });
+    self.addEventListener('notificationclick', (event) => {
 
-         return self.registration.showNotification(notificationTitle,
-           notificationOptions);
-       }
-       messaging.setBackgroundMessageHandler(messageHandler);
+      const url = event.notification.data.url;
+      if(url) {
+        clients.openWindow(url);
+      }
+      clients.openWindow(-- YOUR Sketches Host --);
+    }, false);
+
+    const messaging = firebase.messaging();
+
+    messaging.onBackgroundMessage(function(payload) {
+      const data = payload["data"];
+      const notificationTitle = data.title || ""
+      const notificationOptions = {
+        body: data.body,
+        icon: data["hero_image_s3_url"],
+        image: data["hero_image_s3_url"],
+        data: {
+          url: data["click_action"],
+        }
+      };
+
+      self.registration.showNotification(notificationTitle,
+        notificationOptions);
+    });
+
    ```
 
 4. Make sure that the page data should have config with key fcmMessageSenderId refer doStartApp function in app/client/start.js.
@@ -262,7 +286,7 @@ Preloading app.js and /route-data.json can be triggered by passing preloadJS tru
 
 ### multiple publishers
 
-FIXME: Write notes on `host_to_api_host`, `host_to_automatic_api_host` and `skip_warm_config`
+FIXME: Write notes on `host_to_api_host`, `host_to_automatic_api_host`, `wildcard_to_api_host` and `skip_warm_config`
 
 ### forwardFavicon
 

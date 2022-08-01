@@ -6,7 +6,7 @@
  * @category Server
  * @module routes
  */
-
+const { match } = require("path-to-regexp");
 const { generateServiceWorker } = require("./handlers/generate-service-worker");
 const {
   handleIsomorphicShell,
@@ -70,7 +70,10 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   parseInt(_sMaxAge) > 0 &&
     apiProxy.on("proxyRes", function (proxyRes, req) {
       const pathName = get(req, ["originalUrl"], "").split("?")[0];
-      const checkForExcludeRoutes = excludeRoutes.includes(pathName);
+      const checkForExcludeRoutes = excludeRoutes.some((path) => {
+        const matchFn = match(path, { decode: decodeURIComponent });
+        return matchFn(pathName);
+      });
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
       if (!checkForExcludeRoutes && getCacheControl.includes("public")) {
         proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${_sMaxAge}`);
@@ -87,7 +90,14 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   });
 
   // Mention the routes which don't want to override the s-maxage value
-  const excludeRoutes = ["/qlitics.js", "/api/v1/breaking-news"];
+  const excludeRoutes = [
+    "/qlitics.js",
+    "/api/v1/breaking-news",
+    "/stories.rss",
+    "/api/v1/collections/:slug.rss",
+    "/api/v1/advanced-search",
+    "/api/instant-articles.rss",
+  ];
 
   app.all("/api/*", sketchesProxy);
   app.all("/login", sketchesProxy);
@@ -235,12 +245,13 @@ function wrapLoadDataWithMultiDomain(publisherConfig, f, configPos) {
  * @param {Object} opts Options that will be passed to the handler. These options will be merged with a *config* and *client*
  */
 function getWithConfig(app, route, handler, opts = {}) {
+  const configWrapper = opts.configWrapper;
   const {
     getClient = require("./api-client").getClient,
     publisherConfig = require("./publisher-config"),
     logError = require("./logger").error,
   } = opts;
-  const withConfig = withConfigPartial(getClient, logError, publisherConfig);
+  const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
   app.get(route, withConfig(handler, opts));
 }
 
@@ -339,6 +350,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       if (req.query.prerender) {
         try {
           // eslint-disable-next-line global-require
+          prerender.set("protocol", "https");
           prerender.set("prerenderServiceUrl", prerenderServiceUrl)(req, res, next);
         } catch (e) {
           logError(e);
@@ -611,15 +623,16 @@ exports.mountQuintypeAt = function (app, mountAt) {
  * @param {Object} opts.templates An object that's used to pass custom templates. Each key corresponds to the template name and corresponding value is the template
  * @param {Object} opts.slots An object used to pass slot data.
  * @param {SEO} opts.seo An SEO object that will generate html tags for each page. See [@quintype/seo](https://developers.quintype.com/malibu/isomorphic-rendering/server-side-architecture#quintypeseo)
+ * @param {boolean|function} opts.enableAmp  'amp/story/:slug' should redirect to non-amp page if enableAmp is false
+ * @param {object|function} opts.redirectUrls list of urls  which is used to redirect URL(sourceUrl) to a different URL(destinationUrl). Eg:  redirectUrls: { "/amp/story/sports/ipl-2021": {destinationUrl: "/amp/story/sports/cricket-2022", statusCode: 302,},}
  * @param {function} opts.headerCardRender Render prop for story headerCard. If passed, the headerCard in default stories will be replaced with this
  * @param {function} opts.relatedStoriesRender Render prop for relatedStories in a story page. If passed, this will replace the related stories
  *
  */
 exports.ampRoutes = (app, opts = {}) => {
-  const { ampStoryPageHandler, storyPageInfiniteScrollHandler, bookendHandler } = require("./amp/handlers");
+  const { ampStoryPageHandler, storyPageInfiniteScrollHandler } = require("./amp/handlers");
 
   getWithConfig(app, "/amp/story/*", ampStoryPageHandler, opts);
   getWithConfig(app, "/amp/api/v1/amp-infinite-scroll", storyPageInfiniteScrollHandler, opts);
-  getWithConfig(app, "/amp/api/v1/bookend.json", bookendHandler, opts);
-  getWithConfig(app, "/ampstories/*", ampStoryPageHandler, opts);
+  getWithConfig(app, "/ampstories/*", ampStoryPageHandler, { ...opts, isVisualStory: true });
 };
