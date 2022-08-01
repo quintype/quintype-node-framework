@@ -178,7 +178,10 @@ function withConfigPartial(
             })
           )
         )
-        .catch(logError);
+        .catch((e) => {
+          logError(e);
+          res.status(500).send("An internal error occured for this publisher's config");
+        });
     };
   };
 }

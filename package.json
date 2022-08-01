@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.7.7",
+  "version": "7.7.8-term-connection-on-config.1",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
