@@ -6,8 +6,10 @@ export function registerServiceWorker({
   navigator = global.navigator,
   mountAt = global.qtMountAt || "",
   version = 0,
+                                        page = {}
 }) {
-  if (enableServiceWorker && navigator.serviceWorker) {
+  const enableServiceWorkerVal = typeof enableServiceWorker === "function" ? enableServiceWorker(page) : enableServiceWorker;
+  if (enableServiceWorkerVal && navigator.serviceWorker) {
     const location =
       serviceWorkerLocation === "/OneSignalSDKWorker.js"
         ? `${serviceWorkerLocation}?version=${version}`
