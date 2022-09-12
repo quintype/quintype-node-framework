@@ -86,15 +86,23 @@ async function ampStoryPageHandler(
     const seoTags =
       seoInstance && seoInstance.getMetaTags(config, "story-page-amp", { data: { story, timezone }, config }, { url });
 
-    const infiniteScrollAmp = new InfiniteScrollAmp({
-      ampConfig,
-      publisherConfig: config,
-      client,
-    });
-    const infiniteScrollInlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-      itemsToTake: 5,
-      storyId: story["story-content-id"],
-    });
+    const infiniteScroll = get(opts, ["featureConfig", "infiniteScroll"], "");
+    let infiniteScrollInlineConfig = [];
+
+    if (infiniteScroll.source === "custom") {
+      infiniteScrollInlineConfig = await infiniteScroll.inlineConfig();
+    } else {
+      const infiniteScrollAmp = new InfiniteScrollAmp({
+        ampConfig,
+        publisherConfig: config,
+        client,
+        infiniteScroll,
+      });
+      infiniteScrollInlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
+        itemsToTake: 5,
+        story: story,
+      });
+    }
     if (infiniteScrollInlineConfig instanceof Error) return next(infiniteScrollInlineConfig);
     if (infiniteScrollInlineConfig) {
       set(

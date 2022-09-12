@@ -1,9 +1,9 @@
 class InfiniteScrollAmp {
-  constructor({ ampConfig, client, publisherConfig, queryParams }) {
+  constructor({ ampConfig, client, publisherConfig, queryParams, infiniteScroll }) {
     this.client = client;
     this.publisherConfig = publisherConfig;
     this.queryParams = queryParams;
-    this.collSlug = "amp-infinite-scroll"; // this is hardcoded to "amp-infinite-scroll" temporarily. Ideally it should come from ampConfig from platform
+    this.infiniteScroll = infiniteScroll;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -12,6 +12,14 @@ class InfiniteScrollAmp {
       ({ type, story }) =>
         type === "story" &&
         story["story-content-id"] !== storyId &&
+        story.access !== "subscription" &&
+        story["story-template"] !== "visual-story"
+    );
+  }
+
+  getFilteredApiItems(relatedStories) {
+    return relatedStories.filter(
+      (story) =>
         story.access !== "subscription" &&
         story["story-template"] !== "visual-story"
     );
@@ -41,26 +49,39 @@ class InfiniteScrollAmp {
     return `${hostWithProtocol}/${s3Key}?format=webp&w=250`;
   }
 
+  throwError(srcType) {
+    return new Error(`Infinite scroll powered by ${srcType} returned falsy value`);
+  }
+
+  getInfiniteScrollSource = async (story, storyId) => {
+    const sourceType = this.infiniteScroll.source;
+    if (sourceType === "relatedStoriesApi") {
+      const relatedStoriesList = await story.getRelatedStories(this.client);
+      if (!relatedStoriesList)
+        return new Error(`RelatedStories List returned falsy value`);
+      return this.getFilteredApiItems(relatedStoriesList);
+    } else {
+      const collection = await this.client.getCollectionBySlug("amp-infinite-scroll");
+      if (!collection || collection.error)
+        return new Error(`Infinite scroll collection returned falsy value`);
+      return this.getFilteredCollItems(collection, storyId);
+    }
+  };
+
   async getResponse({ itemsTaken }) {
     const { "story-id": storyId } = this.queryParams;
     if (!storyId) return new Error(`Query param "story-id" missing`);
-
-    const collection = await this.client.getCollectionBySlug(this.collSlug);
-    if (!collection || collection.error)
-      return new Error(`Infinite scroll collection ${this.collSlug} returned falsy value`);
-    const filteredItems = this.getFilteredCollItems(collection, storyId);
+    const story = await this.client.getStoryById(storyId);
+    const filteredItems = await this.getInfiniteScrollSource(story, storyId);
     const slicedItems = filteredItems.slice(itemsTaken);
     const formattedData = this.formatData({ itemsArr: slicedItems });
-
     return JSON.stringify(formattedData);
   }
 
-  async getInitialInlineConfig({ itemsToTake, storyId }) {
+  async getInitialInlineConfig({ itemsToTake, story }) {
+    const storyId = story["story-content-id"];
     if (!itemsToTake || !storyId) return new Error("Required params for getInitialInlineConfig missing");
-
-    const collection = await this.client.getCollectionBySlug(this.collSlug);
-    if (!collection || (collection.items && !collection.items.length) || collection.error) return null;
-    const filteredItems = this.getFilteredCollItems(collection, storyId);
+    const filteredItems = await this.getInfiniteScrollSource(story, storyId);
     const slicedItems = filteredItems.slice(0, itemsToTake);
     const formattedData = this.formatData({
       itemsArr: slicedItems,
