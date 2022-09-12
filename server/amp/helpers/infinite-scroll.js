@@ -49,11 +49,7 @@ class InfiniteScrollAmp {
     return `${hostWithProtocol}/${s3Key}?format=webp&w=250`;
   }
 
-  throwError(srcType) {
-    return new Error(`Infinite scroll powered by ${srcType} returned falsy value`);
-  }
-
-  getInfiniteScrollSource = async (story, storyId) => {
+  async getInfiniteScrollSource(story, storyId) {
     const sourceType = this.infiniteScroll.source;
     if (sourceType === "relatedStoriesApi") {
       const relatedStoriesList = await story.getRelatedStories(this.client);
