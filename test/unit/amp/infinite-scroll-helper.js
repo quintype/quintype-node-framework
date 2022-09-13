@@ -3,8 +3,17 @@
 
 const assert = require("assert");
 const InfiniteScrollAmp = require("../../../server/amp/helpers/infinite-scroll");
+const { getTextStory } = require("../../data/amp-test-data");
 
 function getClientStub({
+  getStoryById = (id) =>
+    new Promise((resolve) => {
+      if (id === "4444")
+        resolve({
+          story: getTextStory({ "story-content-id": "7f3d5bdb-ec52-4047-ac0d-df4036ec974b" }),
+        });
+      resolve(null);
+    }),
   getCollectionBySlug = (slug) =>
     new Promise((resolve) => {
       if (slug === "amp-infinite-scroll")
@@ -83,6 +92,7 @@ function getClientStub({
 } = {}) {
   return {
     getCollectionBySlug,
+    getStoryById
   };
 }
 const dummyPublisherConfig = {
@@ -118,7 +128,13 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
       itemsToTake: 5,
-      storyId: 2222,
+      story: {
+        "story-template": "text",
+        headline: "aaa",
+        "story-content-id": 1111,
+        slug: "sports/aa",
+        "hero-image-s3-key": "aa/a.jpg",
+      },
     });
     assert.strictEqual(inlineConfig, null);
   });
@@ -138,7 +154,13 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
       itemsToTake: 5,
-      storyId: 2222,
+      story: {
+        "story-template": "text",
+        headline: "aaa",
+        "story-content-id": 1111,
+        slug: "sports/aa",
+        "hero-image-s3-key": "aa/a.jpg",
+      },
     });
     assert.strictEqual(inlineConfig, null);
   });
@@ -151,7 +173,13 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
       itemsToTake: 5,
-      storyId: 2222,
+      story: {
+        "story-template": "text",
+        headline: "aaa",
+        "story-content-id": 1111,
+        slug: "sports/aa",
+        "hero-image-s3-key": "aa/a.jpg",
+      },
     });
     assert.strictEqual(false, /sports\/bb/.test(inlineConfig));
     assert.strictEqual(false, /bb\/b.jpg/.test(inlineConfig));
@@ -165,7 +193,13 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
       itemsToTake: 5,
-      storyId: 3333,
+      story: {
+        "story-template": "text",
+        headline: "aaa",
+        "story-content-id": 1111,
+        slug: "sports/aa",
+        "hero-image-s3-key": "aa/a.jpg",
+      },
     });
     assert.strictEqual(false, /sports\/bb/.test(inlineConfig));
     assert.strictEqual(false, /bb\/b.jpg/.test(inlineConfig));
@@ -180,7 +214,13 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
       itemsToTake: 5,
-      storyId: 2222,
+      story: {
+        "story-template": "text",
+        headline: "aaa",
+        "story-content-id": 1111,
+        slug: "sports/aa",
+        "hero-image-s3-key": "aa/a.jpg",
+      },
     });
     function isInlineConfigStructureValid(jsonStr) {
       const stories = JSON.parse(jsonStr);
@@ -225,6 +265,7 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
       client: clientStub,
       publisherConfig: dummyPublisherConfig,
       queryParams: { "story-id": 2222 },
+      infiniteScroll: { "source": "" }
     });
     const jsonResponse = await infiniteScrollAmp.getResponse({ itemsTaken: 2 });
     assert.strictEqual(jsonResponse instanceof Error, true);

@@ -50,7 +50,7 @@ class InfiniteScrollAmp {
   }
 
   async getInfiniteScrollSource(story, storyId) {
-    const sourceType = this.infiniteScroll.source;
+    const sourceType = this.infiniteScroll && this.infiniteScroll.source;
     if (sourceType === "relatedStoriesApi") {
       const relatedStoriesList = await story.getRelatedStories(this.client);
       if (!relatedStoriesList)
@@ -58,7 +58,7 @@ class InfiniteScrollAmp {
       return this.getFilteredApiItems(relatedStoriesList);
     } else {
       const collection = await this.client.getCollectionBySlug("amp-infinite-scroll");
-      if (!collection || collection.error)
+      if (!collection || (collection.items && !collection.items.length) || collection.error)
         return new Error(`Infinite scroll collection returned falsy value`);
       return this.getFilteredCollItems(collection, storyId);
     }
@@ -69,23 +69,27 @@ class InfiniteScrollAmp {
     if (!storyId) return new Error(`Query param "story-id" missing`);
     const story = await this.client.getStoryById(storyId);
     const filteredItems = await this.getInfiniteScrollSource(story, storyId);
-    const slicedItems = filteredItems.slice(itemsTaken);
-    const formattedData = this.formatData({ itemsArr: slicedItems });
-    return JSON.stringify(formattedData);
+    if (filteredItems.length > 0) {
+      const slicedItems = filteredItems.slice(itemsTaken);
+      const formattedData = this.formatData({ itemsArr: slicedItems });
+      return JSON.stringify(formattedData);
+    }
+    return new Error(`Infinite scroll collection returned falsy value`);
   }
 
   async getInitialInlineConfig({ itemsToTake, story }) {
-    const storyId = story["story-content-id"];
+    const storyId = story && story["story-content-id"];
     if (!itemsToTake || !storyId) return new Error("Required params for getInitialInlineConfig missing");
     const filteredItems = await this.getInfiniteScrollSource(story, storyId);
-    const slicedItems = filteredItems.slice(0, itemsToTake);
-    const formattedData = this.formatData({
-      itemsArr: slicedItems,
-      type: "inline",
-    });
-
-    return JSON.stringify(formattedData);
+    if (filteredItems.length > 0) {
+      const slicedItems = filteredItems.slice(0, itemsToTake);
+      const formattedData = this.formatData({
+        itemsArr: slicedItems,
+        type: "inline",
+      });
+      return JSON.stringify(formattedData);
+    }
+    return null;
   }
 }
-
 module.exports = InfiniteScrollAmp;
