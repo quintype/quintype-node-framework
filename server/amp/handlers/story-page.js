@@ -96,7 +96,7 @@ async function ampStoryPageHandler(
     if (infiniteScrollSource === "custom") {
       if (!inlineConfig || !remoteConfigEndpoint)
         throw new Error("Required params of 'custom' source (inlineConfig /remoteConfigEndpoint) is missing!!");
-      infiniteScrollInlineConfig = await infiniteScroll.inlineConfig();
+      infiniteScrollInlineConfig = await inlineConfig();
     } else {
       const infiniteScrollAmp = new InfiniteScrollAmp({
         story,
