@@ -93,6 +93,7 @@ async function ampStoryPageHandler(
       infiniteScrollInlineConfig = await infiniteScroll.inlineConfig({ offset: 0, limit: 5 });
     } else {
       const infiniteScrollAmp = new InfiniteScrollAmp({
+        story,
         ampConfig,
         publisherConfig: config,
         client,
@@ -100,7 +101,7 @@ async function ampStoryPageHandler(
       });
       infiniteScrollInlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
         itemsToTake: 5,
-        story: story,
+        storyId: story["story-content-id"],
       });
     }
     if (infiniteScrollInlineConfig instanceof Error) return next(infiniteScrollInlineConfig);

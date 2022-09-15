@@ -128,13 +128,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
       itemsToTake: 5,
-      story: {
-        "story-template": "text",
-        headline: "aaa",
-        "story-content-id": 1111,
-        slug: "sports/aa",
-        "hero-image-s3-key": "aa/a.jpg",
-      },
+      storyId: 1111,
     });
     assert.strictEqual(inlineConfig, null);
   });
@@ -154,13 +148,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
       itemsToTake: 5,
-      story: {
-        "story-template": "text",
-        headline: "aaa",
-        "story-content-id": 1111,
-        slug: "sports/aa",
-        "hero-image-s3-key": "aa/a.jpg",
-      },
+      storyId: 1111,
     });
     assert.strictEqual(inlineConfig, null);
   });
@@ -173,13 +161,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
       itemsToTake: 5,
-      story: {
-        "story-template": "text",
-        headline: "aaa",
-        "story-content-id": 1111,
-        slug: "sports/aa",
-        "hero-image-s3-key": "aa/a.jpg",
-      },
+      storyId: 1111,
     });
     assert.strictEqual(false, /sports\/bb/.test(inlineConfig));
     assert.strictEqual(false, /bb\/b.jpg/.test(inlineConfig));
@@ -193,13 +175,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
       itemsToTake: 5,
-      story: {
-        "story-template": "text",
-        headline: "aaa",
-        "story-content-id": 1111,
-        slug: "sports/aa",
-        "hero-image-s3-key": "aa/a.jpg",
-      },
+      storyId: 1111,
     });
     assert.strictEqual(false, /sports\/bb/.test(inlineConfig));
     assert.strictEqual(false, /bb\/b.jpg/.test(inlineConfig));
@@ -214,13 +190,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
       itemsToTake: 5,
-      story: {
-        "story-template": "text",
-        headline: "aaa",
-        "story-content-id": 1111,
-        slug: "sports/aa",
-        "hero-image-s3-key": "aa/a.jpg",
-      },
+      storyId: 1111,
     });
     function isInlineConfigStructureValid(jsonStr) {
       const stories = JSON.parse(jsonStr);
@@ -265,7 +235,7 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
       client: clientStub,
       publisherConfig: dummyPublisherConfig,
       queryParams: { "story-id": 2222 },
-      infiniteScroll: { "source": "" }
+      // infiniteScroll: { "source": "" }
     });
     const jsonResponse = await infiniteScrollAmp.getResponse({ itemsTaken: 2 });
     assert.strictEqual(jsonResponse instanceof Error, true);
