@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.7.8-custom-inifinite-scroller.3",
+  "version": "7.7.8-custom-inifinite-scroller.4",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
@@ -31,7 +31,7 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
-    "@quintype/amp": "^2.4.29-custom-infinite-scroll.1",
+    "@quintype/amp": "2.4.29-custom-infinite-scroll.1",
     "@quintype/backend": "^2.3.1",
     "@quintype/components": "^3.0.0",
     "@quintype/prerender-node": "^3.2.26",
