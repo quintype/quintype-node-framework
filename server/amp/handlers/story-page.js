@@ -86,21 +86,26 @@ async function ampStoryPageHandler(
     const seoTags =
       seoInstance && seoInstance.getMetaTags(config, "story-page-amp", { data: { story, timezone }, config }, { url });
 
-    const infiniteScroll = get(opts, ["featureConfig", "infiniteScroll"], "");
+    const infiniteScrollConfig = get(opts, ["featureConfig", "infiniteScroll"], "");
+    const infiniteScrollSource = get(infiniteScrollConfig, ["source"], "collection");
+    const inlineConfig = get(infiniteScrollConfig, ["inlineConfig"], "");
+    const remoteConfigEndpoint = get(infiniteScrollConfig, ["remoteConfigEndpoint"], "");
+
     let infiniteScrollInlineConfig = [];
 
-    if (infiniteScroll.source === "custom") {
-      infiniteScrollInlineConfig = await infiniteScroll.inlineConfig({ offset: 0, limit: 5 });
+    if (infiniteScrollSource === "custom") {
+      if (!inlineConfig || !remoteConfigEndpoint)
+        throw new Error("Required params of 'custom' source (inlineConfig /remoteConfigEndpoint) is missing!!");
+      infiniteScrollInlineConfig = await infiniteScroll.inlineConfig();
     } else {
       const infiniteScrollAmp = new InfiniteScrollAmp({
         story,
         ampConfig,
         publisherConfig: config,
         client,
-        infiniteScroll,
+        infiniteScrollSource,
       });
       infiniteScrollInlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-        itemsToTake: 5,
         storyId: story["story-content-id"],
       });
     }

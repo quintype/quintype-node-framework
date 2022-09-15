@@ -12,7 +12,7 @@ async function storyPageInfiniteScrollHandler(req, res, next, { client, config }
     client,
     queryParams: req.query,
   });
-  const jsonResponse = await infiniteScrollAmp.getResponse({ itemsTaken: 5 }); // itemsTaken has to match with itemsToTake in ampStoryPageHandler
+  const jsonResponse = await infiniteScrollAmp.getResponse();
   if (jsonResponse instanceof Error) return next(jsonResponse);
   res.set("Content-Type", "application/json; charset=utf-8");
   setCorsHeaders({ req, res, next, publisherConfig: config });
