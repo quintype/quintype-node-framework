@@ -50,10 +50,11 @@ class InfiniteScrollAmp {
     return `${hostWithProtocol}/${s3Key}?format=webp&w=250`;
   }
 
-  async getInfiniteScrollList(storyId, offset = 0, limit = 5) {
+  async getInfiniteScrollList(storyId, offset, limit) {
     let filteredItems = [];
+    const params = { offset, limit };
     if (this.infiniteScrollSource === "relatedStoriesApi") {
-      const relatedStoriesList = await this.story.getRelatedStories(this.client, { offset, limit });
+      const relatedStoriesList = await this.story.getRelatedStories(this.client, params);
       if (!relatedStoriesList)
         return new Error();
       return filteredItems = this.getFilteredApiItems(relatedStoriesList);
