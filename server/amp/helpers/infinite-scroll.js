@@ -1,6 +1,5 @@
 class InfiniteScrollAmp {
-  constructor({ story, ampConfig, client, publisherConfig, queryParams, infiniteScrollSource }) {
-    this.story = story;
+  constructor({ ampConfig, client, publisherConfig, queryParams, infiniteScrollSource }) {
     this.client = client;
     this.publisherConfig = publisherConfig;
     this.queryParams = queryParams;
@@ -30,8 +29,8 @@ class InfiniteScrollAmp {
     // formats configuration as per need of amp infinite scroll
     const arr = itemsArr.map((item) => ({
       image: this.getImagePath(item),
-      title: item.story.headline,
-      url: `/amp/story/${item.story.slug}`,
+      title: item.headline,
+      url: `/amp/story/${item.slug}`,
     }));
     switch (type) {
       case "inline":
@@ -45,44 +44,48 @@ class InfiniteScrollAmp {
 
   getImagePath(item) {
     const cdnImage = this.publisherConfig["cdn-image"];
-    const s3Key = item.story["hero-image-s3-key"];
+    const s3Key = item["hero-image-s3-key"];
     const hostWithProtocol = /^https:\/\//.test(cdnImage) ? cdnImage : `https://${cdnImage}`;
     return `${hostWithProtocol}/${s3Key}?format=webp&w=250`;
   }
 
-  async getInfiniteScrollList(storyId, offset, limit) {
+  async getInfiniteScrollList({ storyId, type, offset = 0, limit = null }) {
     let filteredItems = [];
     const params = { offset, limit };
     if (this.infiniteScrollSource === "relatedStoriesApi") {
-      const relatedStoriesList = await this.story.getRelatedStories(this.client, params);
+      const relatedStoriesList = await this.client.getRelatedStories(storyId, null, params);
       if (!relatedStoriesList)
         return new Error();
-      return filteredItems = this.getFilteredApiItems(relatedStoriesList);
+      return filteredItems = this.getFilteredApiItems(relatedStoriesList["related-stories"]);
     } else {
       const collection = await this.client.getCollectionBySlug("amp-infinite-scroll");
       if (!collection || (collection.items && !collection.items.length) || collection.error || collection === null)
         return new Error();
-      return filteredItems = this.getFilteredCollItems(collection, storyId);
+      const collectionItems = this.getFilteredCollItems(collection, storyId).map(items => items.story);
+      return filteredItems = type === "inlineConfig"
+        ? collectionItems.slice(0, 5)
+        : collectionItems.slice(5);
     }
   }
 
   async getResponse() {
     const { "story-id": storyId } = this.queryParams;
     if (!storyId) return new Error(`Query param "story-id" missing`);
-    const filteredItems = await this.getInfiniteScrollList(storyId, 5);
+    const filteredItems =
+      await this.getInfiniteScrollList({ storyId, type: "remoteConfig", offset: 5 });
     if (filteredItems instanceof Error) return new Error(`Infinite scroll collection amp-infinite-scroll returned falsy value`);
-    const slicedItems = filteredItems.slice(5);
     const formattedData = this.formatData({ itemsArr: slicedItems });
     return JSON.stringify(formattedData);
   }
 
   async getInitialInlineConfig(storyId) {
     if (!storyId) return new Error("Required params for getInitialInlineConfig missing");
-    const filteredItems = await this.getInfiniteScrollList(storyId, 0, 5);
+    const filteredItems =
+      await this.getInfiniteScrollList({ storyId, type: "inlineConfig", offset: 0, limit: 5 });
+
     if (filteredItems instanceof Error) return null;
-    const slicedItems = filteredItems.slice(0, 5);
-    const formattedData = slicedItems.length > 0 && this.formatData({
-      itemsArr: slicedItems,
+    const formattedData = filteredItems.length > 0 && this.formatData({
+      itemsArr: filteredItems,
       type: "inline",
     });
     return JSON.stringify(formattedData);

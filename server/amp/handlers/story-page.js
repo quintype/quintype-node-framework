@@ -99,7 +99,6 @@ async function ampStoryPageHandler(
       infiniteScrollInlineConfig = await inlineConfig();
     } else {
       const infiniteScrollAmp = new InfiniteScrollAmp({
-        story,
         ampConfig,
         publisherConfig: config,
         client,
