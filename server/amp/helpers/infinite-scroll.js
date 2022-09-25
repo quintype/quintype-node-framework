@@ -74,7 +74,7 @@ class InfiniteScrollAmp {
     const filteredItems =
       await this.getInfiniteScrollList({ storyId, type: "remoteConfig", offset: 5 });
     if (filteredItems instanceof Error) return new Error(`Infinite scroll collection amp-infinite-scroll returned falsy value`);
-    const formattedData = this.formatData({ itemsArr: slicedItems });
+    const formattedData = this.formatData({ itemsArr: filteredItems });
     return JSON.stringify(formattedData);
   }
 

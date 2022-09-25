@@ -5,7 +5,7 @@ const get = require("lodash/get");
 const cloneDeep = require("lodash/cloneDeep");
 
 // eslint-disable-next-line consistent-return
-async function storyPageInfiniteScrollHandler(req, res, next, { client, config }) {
+async function storyPageInfiniteScrollHandler(req, res, next, { client, config, ...rest }) {
   const ampConfig = await config.memoizeAsync("amp-config", async () => await AmpConfig.getAmpConfig(client));
   const opts = cloneDeep(rest);
   const infiniteScrollSource = get(opts, ["featureConfig", "infiniteScroll", "source"], "collection");
