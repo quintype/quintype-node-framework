@@ -181,10 +181,17 @@ export function maybeSetUrl(path, title) {
 export function renderComponent(clazz, container, store, props = {}, callback) {
   const component = React.createElement(Provider, { store }, React.createElement(clazz, props || {}));
 
-  if (props.hydrate) {
-    return ReactDOM.hydrate(component, document.getElementById(container), callback);
+  const containerEle = document.getElementById(container);
+
+  if(!containerEle){
+    console && console.log(`Rendering component on DOM id ${container} FAILED, node not available`);
+    return null;
   }
-  return ReactDOM.render(component, document.getElementById(container), callback);
+
+  if (props.hydrate) {
+    return ReactDOM.hydrate(component, containerEle, callback);
+  }
+  return ReactDOM.render(component, containerEle, callback);
 }
 
 /**
