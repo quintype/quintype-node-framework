@@ -31,8 +31,8 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
-    "@quintype/amp": "2.6.0-custom-infinite-scroll.1",
-    "@quintype/backend": "2.3.2-related-stories-inf-scroll.3",
+    "@quintype/amp": "^2.6.0",
+    "@quintype/backend": "^2.3.2",
     "@quintype/components": "^3.0.0",
     "@quintype/prerender-node": "^3.2.26",
     "@quintype/seo": "^1.39.0",

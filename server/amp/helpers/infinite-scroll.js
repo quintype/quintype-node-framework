@@ -51,7 +51,10 @@ class InfiniteScrollAmp {
 
   async getInfiniteScrollList({ storyId, type, offset = 0, limit = null }) {
     let filteredItems = [];
-    const params = { offset, limit };
+    const params = {
+      ...(offset && { offset }),
+      ...(limit && { limit }),
+    };
     if (this.infiniteScrollSource === "relatedStoriesApi") {
       const relatedStoriesList = await this.client.getRelatedStories(storyId, null, params);
       if (!relatedStoriesList)
