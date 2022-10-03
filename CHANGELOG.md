@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.9.0](https://github.com/quintype/quintype-node-framework/compare/v7.8.0...v7.9.0) (2022-10-03)
+
+
+### Features
+
+* **SW:** Disable sw shell  ([#321](https://github.com/quintype/quintype-node-framework/issues/321)) ([6d04bc8](https://github.com/quintype/quintype-node-framework/commit/6d04bc87dd42c647ec9763eca430ada2f4a4d8ea))
+
 ## [7.8.0](https://github.com/quintype/quintype-node-framework/compare/v7.7.7...v7.8.0) (2022-09-19)
 
 
