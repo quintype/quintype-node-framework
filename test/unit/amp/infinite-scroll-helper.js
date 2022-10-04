@@ -136,7 +136,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
       client: getClientStub(),
       publisherConfig: dummyPublisherConfig,
     });
-    const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig();
+    const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({ storyId: "" });
     assert.strictEqual(inlineConfig instanceof Error, true);
     assert.throws(() => {
       throw new Error("Required params for getInitialInlineConfig missing");

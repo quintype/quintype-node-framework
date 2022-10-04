@@ -81,7 +81,7 @@ class InfiniteScrollAmp {
     return JSON.stringify(formattedData);
   }
 
-  async getInitialInlineConfig(storyId) {
+  async getInitialInlineConfig({ storyId }) {
     if (!storyId) return new Error("Required params for getInitialInlineConfig missing");
     const filteredItems =
       await this.getInfiniteScrollList({ storyId, type: "inlineConfig", offset: 0, limit: 5 });
