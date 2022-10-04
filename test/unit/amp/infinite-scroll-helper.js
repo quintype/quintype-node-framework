@@ -3,8 +3,17 @@
 
 const assert = require("assert");
 const InfiniteScrollAmp = require("../../../server/amp/helpers/infinite-scroll");
+const { getTextStory } = require("../../data/amp-test-data");
 
 function getClientStub({
+  getStoryById = (id) =>
+    new Promise((resolve) => {
+      if (id === "4444")
+        resolve({
+          story: getTextStory({ "story-content-id": "7f3d5bdb-ec52-4047-ac0d-df4036ec974b" }),
+        });
+      resolve(null);
+    }),
   getCollectionBySlug = (slug) =>
     new Promise((resolve) => {
       if (slug === "amp-infinite-scroll")
@@ -19,6 +28,7 @@ function getClientStub({
                 "story-content-id": 1111,
                 slug: "sports/aa",
                 "hero-image-s3-key": "aa/a.jpg",
+                access: "public",
               },
             },
             {
@@ -30,6 +40,7 @@ function getClientStub({
                 "story-content-id": 2222,
                 slug: "sports/bb",
                 "hero-image-s3-key": "bb/b.jpg",
+                access: "public",
               },
             },
             {
@@ -41,6 +52,7 @@ function getClientStub({
                 "story-content-id": 3333,
                 slug: "sports/cc",
                 "hero-image-s3-key": "cc/c.jpg",
+                access: "public",
               },
             },
             {
@@ -52,6 +64,7 @@ function getClientStub({
                 "story-content-id": 4444,
                 slug: "sports/dd",
                 "hero-image-s3-key": "dd/d.jpg",
+                access: "public",
               },
             },
             {
@@ -63,6 +76,7 @@ function getClientStub({
                 "story-content-id": 5555,
                 slug: "sports/ee",
                 "hero-image-s3-key": "ee/e.jpg",
+                access: "public",
               },
             },
             {
@@ -74,6 +88,31 @@ function getClientStub({
                 "story-content-id": 6666,
                 slug: "sports/ff",
                 "hero-image-s3-key": "ff/f.jpg",
+                access: "public",
+              },
+            },
+            {
+              type: "story",
+              id: 7777,
+              story: {
+                "story-template": "text",
+                headline: "ggg",
+                "story-content-id": 7777,
+                slug: "sports/gg",
+                "hero-image-s3-key": "gg/g.jpg",
+                access: "public",
+              },
+            },
+            {
+              type: "story",
+              id: 8888,
+              story: {
+                "story-template": "text",
+                headline: "hhh",
+                "story-content-id": 8888,
+                slug: "sports/hh",
+                "hero-image-s3-key": "hh/h.jpg",
+                access: "public",
               },
             },
           ],
@@ -83,6 +122,7 @@ function getClientStub({
 } = {}) {
   return {
     getCollectionBySlug,
+    getStoryById,
   };
 }
 const dummyPublisherConfig = {
@@ -96,9 +136,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
       client: getClientStub(),
       publisherConfig: dummyPublisherConfig,
     });
-    const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-      itemsToTake: 5,
-    });
+    const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({ storyId: "" });
     assert.strictEqual(inlineConfig instanceof Error, true);
     assert.throws(() => {
       throw new Error("Required params for getInitialInlineConfig missing");
@@ -117,7 +155,6 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
       publisherConfig: dummyPublisherConfig,
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-      itemsToTake: 5,
       storyId: 2222,
     });
     assert.strictEqual(inlineConfig, null);
@@ -137,7 +174,6 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
       publisherConfig: dummyPublisherConfig,
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-      itemsToTake: 5,
       storyId: 2222,
     });
     assert.strictEqual(inlineConfig, null);
@@ -150,7 +186,6 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
       publisherConfig: dummyPublisherConfig,
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-      itemsToTake: 5,
       storyId: 2222,
     });
     assert.strictEqual(false, /sports\/bb/.test(inlineConfig));
@@ -164,7 +199,6 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
       publisherConfig: dummyPublisherConfig,
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-      itemsToTake: 5,
       storyId: 3333,
     });
     assert.strictEqual(false, /sports\/bb/.test(inlineConfig));
@@ -179,7 +213,6 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
       publisherConfig: dummyPublisherConfig,
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-      itemsToTake: 5,
       storyId: 2222,
     });
     function isInlineConfigStructureValid(jsonStr) {
