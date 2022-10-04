@@ -122,7 +122,7 @@ function getClientStub({
 } = {}) {
   return {
     getCollectionBySlug,
-    getStoryById
+    getStoryById,
   };
 }
 const dummyPublisherConfig = {
@@ -155,7 +155,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
       publisherConfig: dummyPublisherConfig,
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-      storyId: 1111,
+      storyId: 2222,
     });
     assert.strictEqual(inlineConfig, null);
   });
@@ -174,7 +174,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
       publisherConfig: dummyPublisherConfig,
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-      storyId: 1111,
+      storyId: 2222,
     });
     assert.strictEqual(inlineConfig, null);
   });
@@ -186,7 +186,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
       publisherConfig: dummyPublisherConfig,
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-      storyId: 1111,
+      storyId: 2222,
     });
     assert.strictEqual(false, /sports\/bb/.test(inlineConfig));
     assert.strictEqual(false, /bb\/b.jpg/.test(inlineConfig));
@@ -199,7 +199,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
       publisherConfig: dummyPublisherConfig,
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-      storyId: 1111,
+      storyId: 3333,
     });
     assert.strictEqual(false, /sports\/bb/.test(inlineConfig));
     assert.strictEqual(false, /bb\/b.jpg/.test(inlineConfig));
@@ -213,7 +213,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
       publisherConfig: dummyPublisherConfig,
     });
     const inlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-      storyId: 1111,
+      storyId: 2222,
     });
     function isInlineConfigStructureValid(jsonStr) {
       const stories = JSON.parse(jsonStr);
