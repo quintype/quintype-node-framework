@@ -57,7 +57,7 @@ class InfiniteScrollAmp {
     };
     if (this.infiniteScrollSource === "relatedStoriesApi") {
       const relatedStoriesList = await this.client.getRelatedStories(storyId, null, params);
-      if (!relatedStoriesList)
+      if (!relatedStoriesList || (relatedStoriesList["related-stories"] && !relatedStoriesList["related-stories"].length) || relatedStoriesList["related-stories"].error || relatedStoriesList === null)
         return new Error();
       return filteredItems = this.getFilteredApiItems(relatedStoriesList["related-stories"]);
     } else {
