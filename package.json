@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.10.4",
+  "version": "7.11.0-react-upgrade.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
@@ -35,7 +35,7 @@
     "@quintype/backend": "^2.3.1",
     "@quintype/components": "^3.0.0",
     "@quintype/prerender-node": "^3.2.26",
-    "@quintype/seo": "^1.39.0",
+    "@quintype/seo": "1.40.12-react-upgrade.0",
     "atob": "^2.1.2",
     "babel-plugin-react-css-modules": "^5.2.6",
     "chalk": "^4.1.2",
@@ -52,8 +52,8 @@
     "mocha-snapshots": "^4.2.0",
     "morgan": "^1.10.0",
     "path-to-regexp": "^6.2.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-redux": "^7.2.5",
     "react-router": "^5.2.1",
     "redux": "^4.1.1",
@@ -99,7 +99,7 @@
     "supertest": "^6.1.6"
   },
   "peerDependencies": {
-    "@quintype/seo": "^1.39.0"
+    "@quintype/seo": "1.40.12-react-upgrade.0"
   },
   "nyc": {
     "exclude": [
