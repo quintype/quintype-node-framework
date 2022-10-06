@@ -115,6 +115,7 @@ function getClientStub({
     getCollectionBySlug,
   };
 }
+
 function getRelatedStoriesClientStub({
   getRelatedStories = () =>
     new Promise((resolve) => {
@@ -192,11 +193,84 @@ function getRelatedStoriesClientStub({
     getRelatedStories,
   };
 }
+
+function getCustomApiStoriesClientStub({
+  getCustomApiStories = () =>
+    new Promise((resolve) => {
+      resolve(
+        [
+          {
+            title: "aaa",
+            url: "sports/aa",
+            image: "aa/a.jpg",
+          },
+          {
+            title: "bbb",
+            url: "sports/bb",
+            image: "bb/b.jpg",
+          },
+          {
+            title: "ccc",
+            url: "sports/cc",
+            image: "cc/c.jpg",
+          },
+          {
+            title: "ddd",
+            url: "sports/dd",
+            image: "dd/d.jpg",
+          },
+          {
+            title: "eee",
+            url: "politics/ee",
+            image: "ee/e.jpg",
+          },
+          {
+            title: "fff",
+            url: "politics/ff",
+            image: "ff/f.jpg",
+          },
+          {
+            title: "ggg",
+            url: "politics/gg",
+            image: "gg/g.jpg",
+          },
+          {
+            title: "hhh",
+            url: "politics/hh",
+            image: "hh/h.jpg",
+          },
+        ]
+      );
+    }),
+} = {}) {
+  return {
+    getCustomApiStories,
+  };
+}
+class CustomInfiniteScrollAmp {
+  constructor({ client, publisherConfig, queryParams, infiniteScrollSource }) {
+    this.client = client;
+    this.publisherConfig = publisherConfig;
+    this.queryParams = queryParams;
+    this.infiniteScrollSource = infiniteScrollSource;
+  }
+
+  async getCustomStoryList({ type = "inlineConfig" }) {
+    const customStories = await this.client.getCustomApiStories();
+    if (!customStories || customStories === null || customStories.length === 0)
+      return new Error();
+    if (type === "remoteConfig") {
+      return JSON.stringify({ pages: customStories });
+    }
+    return JSON.stringify(customStories);
+  };
+}
 const dummyPublisherConfig = {
   "cdn-image": "gumlet.assettype.com",
 };
 
 describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", function () {
+  // collection
   it("should throw err if storyId isn't passed", async function () {
     const infiniteScrollAmp = new InfiniteScrollAmp({
       ampConfig: {},
@@ -298,7 +372,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
   //   // this test needs to be written after https://github.com/quintype/quintype-node-framework/pull/202 is merged
   // })
   /// related-stories
-  it("should throw err if storyId isn't passed for Related Stories", async function () {
+  it("should throw err if storyId isn't passed for relatedStoriesApi", async function () {
     const infiniteScrollAmp = new InfiniteScrollAmp({
       ampConfig: {},
       client: getRelatedStoriesClientStub(),
@@ -312,7 +386,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     }, inlineConfig);
   });
 
-  it("should return null if Related Stories infinite scroll collection doesn't exist", async function () {
+  it("should return null if relatedStoriesApi infinite scroll collection doesn't exist", async function () {
     const clientStub = getRelatedStoriesClientStub({
       getRelatedStories: () =>
         new Promise((resolve) => {
@@ -331,7 +405,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     assert.strictEqual(inlineConfig, null);
   });
 
-  it("should return null if Related Stories infinite scroll collection contains no stories", async function () {
+  it("should return null if relatedStoriesApi infinite scroll collection contains no stories", async function () {
     const clientStub = getRelatedStoriesClientStub({
       getRelatedStories: () =>
         new Promise((resolve) => {
@@ -352,7 +426,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     assert.strictEqual(inlineConfig, null);
   });
 
-  it("should remove visual stories from Related Stories infinite scroll", async function () {
+  it("should remove visual stories from relatedStoriesApi infinite scroll", async function () {
     const clientStub = getRelatedStoriesClientStub();
     const infiniteScrollAmp = new InfiniteScrollAmp({
       ampConfig: {},
@@ -392,9 +466,71 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
     }
     assert.strictEqual(isInlineConfigStructureValid(inlineConfig), true);
   });
+
+  /// custom-stories
+  it("should return null if CustomApi Stories infinite scroll collection doesn't exist", async function () {
+    const clientStub = getCustomApiStoriesClientStub({
+      getCustomApiStories: () =>
+        new Promise((resolve) => {
+          resolve(null);
+        }),
+    });
+    const customInfiniteScrollAmp = new CustomInfiniteScrollAmp({
+      client: clientStub,
+      publisherConfig: dummyPublisherConfig,
+      infiniteScrollSource: "custom",
+    });
+    const inlineConfig = await customInfiniteScrollAmp.getCustomStoryList({
+      type: "inlineConfig",
+    });
+    assert.strictEqual(inlineConfig instanceof Error, true);
+  });
+
+  it("should return null if CustomApi Stories infinite scroll collection contains no stories", async function () {
+    const clientStub = getCustomApiStoriesClientStub({
+      getCustomApiStories: () =>
+        new Promise((resolve) => {
+          resolve([]);
+        }),
+    });
+    const customInfiniteScrollAmp = new CustomInfiniteScrollAmp({
+      client: clientStub,
+      publisherConfig: dummyPublisherConfig,
+      infiniteScrollSource: "custom",
+    });
+    const inlineConfig = await customInfiniteScrollAmp.getCustomStoryList({
+      type: "inlineConfig",
+    });
+    assert.strictEqual(inlineConfig instanceof Error, true);
+  });
+
+  it("CustomApi Stories Response should be in JSON format as per AMP spec", async function () {
+    // https://amp.dev/documentation/components/amp-next-page/
+    const clientStub = getCustomApiStoriesClientStub();
+    const customInfiniteScrollAmp = new CustomInfiniteScrollAmp({
+      client: clientStub,
+      publisherConfig: dummyPublisherConfig,
+      infiniteScrollSource: "custom",
+    });
+    const inlineConfig = await customInfiniteScrollAmp.getCustomStoryList({
+      type: "inlineConfig",
+    });
+    function isInlineConfigStructureValid(jsonStr) {
+      const stories = JSON.parse(jsonStr);
+      if (!stories.length) throw new Error("Can't verify empty array!");
+      stories.forEach((story) => {
+        const keys = Object.keys(story);
+        if (keys.includes("image") && keys.includes("url") && keys.includes("title") && keys.length === 3) return;
+        throw new Error("Invalid InlineConfigStructure");
+      });
+      return true;
+    }
+    assert.strictEqual(isInlineConfigStructureValid(inlineConfig), true);
+  });
 });
 
 describe("getResponse method of InfiniteScrollAmp helper function", function () {
+  // collection
   it("should throw an error if 'story-id' isn't passed as query param", async function () {
     const infiniteScrollAmp = new InfiniteScrollAmp({
       ampConfig: {},
@@ -475,7 +611,7 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
   //   // this test needs to be written after https://github.com/quintype/quintype-node-framework/pull/202 is merged
   // })
   // related-stories
-  it("should throw an error if 'story-id' isn't passed as query param", async function () {
+  it("should throw an error if 'story-id' isn't passed as query param in relatedStoriesApi", async function () {
     const infiniteScrollAmp = new InfiniteScrollAmp({
       ampConfig: {},
       client: getRelatedStoriesClientStub(),
@@ -490,7 +626,7 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
     }, jsonResponse);
   });
 
-  it("should throw an error if infinite scroll collection doesn't exist", async function () {
+  it("should throw an error if relatedStoriesApi infinite scroll collection doesn't exist", async function () {
     const clientStub = getRelatedStoriesClientStub({
       getRelatedStories: () =>
         new Promise((resolve) => {
@@ -508,7 +644,7 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
     assert.strictEqual(jsonResponse instanceof Error, true);
   });
 
-  it("should remove visual stories from response", async function () {
+  it("should remove visual stories from relatedStoriesApi response", async function () {
     const clientStub = getRelatedStoriesClientStub();
     const infiniteScrollAmp = new InfiniteScrollAmp({
       ampConfig: {},
@@ -522,7 +658,7 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
     assert.strictEqual(false, /bb\/b.jpg/.test(jsonResponse));
   });
 
-  it("should format JSON as per AMP spec", async function () {
+  it("should format JSON as per AMP spec in relatedStoriesApi", async function () {
     // https://amp.dev/documentation/components/amp-next-page/
     const clientStub = getRelatedStoriesClientStub();
     const infiniteScrollAmp = new InfiniteScrollAmp({
@@ -533,6 +669,50 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
       infiniteScrollSource: "relatedStoriesApi",
     });
     const jsonResponse = await infiniteScrollAmp.getResponse();
+    function isJsonConfigStructureValid(jsonStr) {
+      const parsed = JSON.parse(jsonStr);
+      const stories = parsed.pages;
+      if (!stories.length) throw new Error("Can't verify empty array!");
+      stories.forEach((story) => {
+        const keys = Object.keys(story);
+        if (keys.includes("image") && keys.includes("url") && keys.includes("title") && keys.length === 3) return;
+        throw new Error("Invalid InlineConfigStructure");
+      });
+      return true;
+    }
+    assert.strictEqual(isJsonConfigStructureValid(jsonResponse), true);
+  });
+
+  // custom-stories
+  it("should throw an error if customApi infinite scroll collection doesn't exist", async function () {
+    const clientStub = getCustomApiStoriesClientStub({
+      getCustomApiStories: () =>
+        new Promise((resolve) => {
+          resolve(null);
+        }),
+    });
+    const customInfiniteScrollAmp = new CustomInfiniteScrollAmp({
+      client: clientStub,
+      publisherConfig: dummyPublisherConfig,
+      infiniteScrollSource: "custom",
+    });
+    const jsonResponse = await customInfiniteScrollAmp.getCustomStoryList({
+      type: "remoteConfig",
+    });
+    assert.strictEqual(jsonResponse instanceof Error, true);
+  });
+
+  it("should format JSON as per AMP spec in customApi list", async function () {
+    // https://amp.dev/documentation/components/amp-next-page/
+    const clientStub = getCustomApiStoriesClientStub();
+    const customInfiniteScrollAmp = new CustomInfiniteScrollAmp({
+      client: clientStub,
+      publisherConfig: dummyPublisherConfig,
+      infiniteScrollSource: "custom",
+    });
+    const jsonResponse = await customInfiniteScrollAmp.getCustomStoryList({
+      type: "remoteConfig",
+    });
     function isJsonConfigStructureValid(jsonStr) {
       const parsed = JSON.parse(jsonStr);
       const stories = parsed.pages;
