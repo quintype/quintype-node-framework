@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.8.0",
+  "version": "7.8.1-image-cropped-bug.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
