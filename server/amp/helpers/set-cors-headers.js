@@ -7,7 +7,9 @@ function getCacheUrls(url) {
 }
 
 function setCorsHeaders({ req, res, publisherConfig }) {
+  console.log(">>> 3. setCorsHeaders:", req.headers.origin);
   // https://amp.dev/documentation/guides-and-tutorials/learn/amp-caches-and-cors/amp-cors-requests/
+
   const subdomains = get(publisherConfig, ["domains"], []).map(
     (domain) => domain["host-url"]
   );
@@ -20,6 +22,8 @@ function setCorsHeaders({ req, res, publisherConfig }) {
     ...cachedSubdomains,
     getCacheUrls(publisherConfig["sketches-host"]),
   ]);
+  console.log(">>> 4. whiteList:", whiteList, origin, !origin && ampSameOrigin, whiteList.includes(origin));
+
   if (!origin && ampSameOrigin) {
     // allow same origin
     return;
@@ -29,7 +33,7 @@ function setCorsHeaders({ req, res, publisherConfig }) {
     res.set("Access-Control-Allow-Origin", origin);
     return;
   }
-  res.status(401).json(`Unauthorized`);
+  res.status(401).json(`Unauthorized VVV`);
 }
 
 module.exports = { setCorsHeaders };
