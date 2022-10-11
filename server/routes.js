@@ -630,8 +630,8 @@ exports.ampRoutes = (app, opts = {}) => {
   const { ampStoryPageHandler, storyPageInfiniteScrollHandler } = require("./amp/handlers");
 
   app.use((req, res, next) => {
-    console.log("HEADERS:", req.headers.origin, req.headers["amp-same-origin"], res.headers);
-    res.header("Access-Control-Allow-Origin", req.headers.origin);
+    console.log("HEADERS:", req.headers, res.headers);
+    res.header("Access-Control-Allow-Origin", "*");
     next();
   });
   getWithConfig(app, "/amp/story/*", ampStoryPageHandler, opts);
