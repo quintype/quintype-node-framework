@@ -631,7 +631,7 @@ exports.ampRoutes = (app, opts = {}) => {
 
   app.use((req, res, next) => {
     console.log("HEADERS:", req.headers.origin);
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
     next();
   });
   getWithConfig(app, "/amp/story/*", ampStoryPageHandler, opts);
