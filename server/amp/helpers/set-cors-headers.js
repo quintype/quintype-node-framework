@@ -33,7 +33,7 @@ function setCorsHeaders({ req, res, publisherConfig }) {
     res.set("Access-Control-Allow-Origin", origin);
     return;
   }
-  res.status(401).json(`Unauthorized VVV`);
+  res.status(401).json(`Unauthorized`);
 }
 
 module.exports = { setCorsHeaders };
