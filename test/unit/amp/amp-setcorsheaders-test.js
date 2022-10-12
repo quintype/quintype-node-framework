@@ -75,18 +75,21 @@ describe("setCorsHeaders helper function", () => {
       .expect("access-control-allow-origin", "https://cinema.vikatan.com")
       .expect(200, done);
   });
-  it("sets a 401 on requests originating from an invalid subdomain", function (done) {
-    const app = createApp();
-    supertest(app)
-      .get("/test/cors/route")
-      .set("origin", "https://foo.vikatan.com")
-      .expect(401)
-      .end((err, res) => {
-        if (err) return done(err);
-        assert.equal(JSON.stringify("Unauthorized"), res.text);
-        return done();
-      });
-  });
+  // This testcase is not valid now, as we are whitelisting the origin
+  /*
+    it("sets a 401 on requests originating from an invalid subdomain", function (done) {
+      const app = createApp();
+      supertest(app)
+        .get("/test/cors/route")
+        .set("origin", "https://foo.vikatan.com")
+        .expect(401)
+        .end((err, res) => {
+          if (err) return done(err);
+          assert.equal(JSON.stringify("Unauthorized"), res.text);
+          return done();
+        });
+    });
+  */
   it("sets CORS headers for requests coming from a cached subdomain (Google)", function (done) {
     const app = createApp();
     supertest(app)
@@ -109,16 +112,26 @@ describe("setCorsHeaders helper function", () => {
       )
       .expect(200, done);
   });
-  it("sets a 401 on requests originating from a non-whitelisted source", function (done) {
+  // This testcase is not valid now, as we are whitelisting the origin
+  /*
+    it("sets a 401 on requests originating from a non-whitelisted source", function (done) {
+      const app = createApp();
+      supertest(app)
+        .get("/test/cors/route")
+        .set("origin", "https://www.facebook.com")
+        .expect(401)
+        .end((err, res) => {
+          if (err) return done(err);
+          assert.equal(JSON.stringify("Unauthorized"), res.text);
+          return done();
+        });
+    });
+  */
+  it("Should return 200 if request is from new origin ( whitelist new origin )", function (done) {
     const app = createApp();
     supertest(app)
       .get("/test/cors/route")
       .set("origin", "https://www.facebook.com")
-      .expect(401)
-      .end((err, res) => {
-        if (err) return done(err);
-        assert.equal(JSON.stringify("Unauthorized"), res.text);
-        return done();
-      });
+      .expect(200, done);
   });
 });

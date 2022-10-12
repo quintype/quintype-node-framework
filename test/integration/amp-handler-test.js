@@ -401,6 +401,8 @@ describe("Amp infinite scroll handler", () => {
         return done();
       });
   });
+  // This testcase is not valid now, as we are whitelisting the origin
+  /*
   it("Should return a 401 if not same origin or origin is not in whitelist", function (done) {
     const app = createApp();
     supertest(app)
@@ -415,6 +417,8 @@ describe("Amp infinite scroll handler", () => {
         return done();
       });
   });
+  */
+
   it("returns infinite scroll json config from story 5 onwards", function (done) {
     const app = createApp();
     const expectedJson = `{"pages":[{"image":"https://gumlet.assettype.com/pqr/heroimage.jpg?format=webp&w=250","title":"headline6","url":"/amp/story/foo.com/story-f"},{"image":"https://gumlet.assettype.com/stu/heroimage.jpg?format=webp&w=250","title":"headline7","url":"/amp/story/foo.com/story-g"}]}`;
