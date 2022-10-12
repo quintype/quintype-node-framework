@@ -8,6 +8,7 @@ function getCacheUrls(url) {
 
 function setCorsHeaders({ req, res, publisherConfig }) {
   // https://amp.dev/documentation/guides-and-tutorials/learn/amp-caches-and-cors/amp-cors-requests/
+
   const subdomains = get(publisherConfig, ["domains"], []).map(
     (domain) => domain["host-url"]
   );
@@ -19,7 +20,9 @@ function setCorsHeaders({ req, res, publisherConfig }) {
     ...subdomains,
     ...cachedSubdomains,
     getCacheUrls(publisherConfig["sketches-host"]),
+    origin,
   ]);
+
   if (!origin && ampSameOrigin) {
     // allow same origin
     return;
