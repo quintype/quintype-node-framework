@@ -21,7 +21,7 @@ function setCorsHeaders({ req, res, publisherConfig }) {
     ...subdomains,
     ...cachedSubdomains,
     getCacheUrls(publisherConfig["sketches-host"]),
-    origin && getCacheUrls(origin),
+    origin,
   ]);
   console.log(">>> 4. whiteList:", whiteList, origin, whiteList.includes(origin));
 
