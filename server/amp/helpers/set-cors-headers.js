@@ -21,8 +21,9 @@ function setCorsHeaders({ req, res, publisherConfig }) {
     ...subdomains,
     ...cachedSubdomains,
     getCacheUrls(publisherConfig["sketches-host"]),
+    origin && getCacheUrls(origin),
   ]);
-  console.log(">>> 4. whiteList:", whiteList, origin, !origin && ampSameOrigin, whiteList.includes(origin));
+  console.log(">>> 4. whiteList:", whiteList, origin, whiteList.includes(origin));
 
   if (!origin && ampSameOrigin) {
     // allow same origin
