@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.10.4",
+  "version": "7.10.5-add-abs-url-revert-origin-whitelist.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
