@@ -57,12 +57,12 @@ class InfiniteScrollAmp {
     };
     if (this.infiniteScrollSource === "relatedStoriesApi") {
       const relatedStoriesList = await this.client.getRelatedStories(storyId, null, params);
-      if (!relatedStoriesList || (relatedStoriesList["related-stories"] && !relatedStoriesList["related-stories"].length) || relatedStoriesList["related-stories"].error || relatedStoriesList === null)
+      if (!relatedStoriesList || !relatedStoriesList["related-stories"].length)
         return new Error();
       return filteredItems = this.getFilteredApiItems(relatedStoriesList["related-stories"]);
     } else {
       const collection = await this.client.getCollectionBySlug("amp-infinite-scroll");
-      if (!collection || (collection.items && !collection.items.length) || collection.error || collection === null)
+      if (!collection || !collection.items.length)
         return new Error();
       const collectionItems = this.getFilteredCollItems(collection, storyId).map(items => items.story);
       return filteredItems = type === "inlineConfig"

@@ -257,7 +257,7 @@ class CustomInfiniteScrollAmp {
 
   async getCustomStoryList({ type = "inlineConfig" }) {
     const customStories = await this.client.getCustomApiStories();
-    if (!customStories || customStories === null || customStories.length === 0)
+    if (!customStories || !customStories.length)
       return new Error();
     if (type === "remoteConfig") {
       return JSON.stringify({ pages: customStories });
