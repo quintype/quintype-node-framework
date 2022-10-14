@@ -3,7 +3,6 @@
 
 const assert = require("assert");
 const InfiniteScrollAmp = require("../../../server/amp/helpers/infinite-scroll");
-const { getTextStory } = require("../../data/amp-test-data");
 
 function getClientStub({
   getCollectionBySlug = (slug) =>
@@ -111,12 +110,6 @@ function getClientStub({
         });
       resolve(null);
     }),
-} = {}) {
-  return {
-    getCollectionBySlug,
-  };
-}
-function getRelatedStoriesClientStub({
   getRelatedStories = () =>
     new Promise((resolve) => {
       resolve({
@@ -190,6 +183,7 @@ function getRelatedStoriesClientStub({
     }),
 } = {}) {
   return {
+    getCollectionBySlug,
     getRelatedStories,
   };
 }
@@ -374,7 +368,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
   it("should throw err if storyId isn't passed for relatedStoriesApi", async function () {
     const infiniteScrollAmp = new InfiniteScrollAmp({
       ampConfig: {},
-      client: getRelatedStoriesClientStub(),
+      client: getClientStub(),
       publisherConfig: dummyPublisherConfig,
       infiniteScrollSource: "relatedStoriesApi",
     });
@@ -386,7 +380,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
   });
 
   it("should return null if relatedStoriesApi infinite scroll collection doesn't exist", async function () {
-    const clientStub = getRelatedStoriesClientStub({
+    const clientStub = getClientStub({
       getRelatedStories: () =>
         new Promise((resolve) => {
           resolve(null);
@@ -405,7 +399,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
   });
 
   it("should return null if relatedStoriesApi infinite scroll collection contains no stories", async function () {
-    const clientStub = getRelatedStoriesClientStub({
+    const clientStub = getClientStub({
       getRelatedStories: () =>
         new Promise((resolve) => {
           resolve({
@@ -426,7 +420,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
   });
 
   it("should remove visual stories from relatedStoriesApi infinite scroll", async function () {
-    const clientStub = getRelatedStoriesClientStub();
+    const clientStub = getClientStub();
     const infiniteScrollAmp = new InfiniteScrollAmp({
       ampConfig: {},
       client: clientStub,
@@ -443,7 +437,7 @@ describe("getInitialInlineConfig method of InfiniteScrollAmp helper function", f
 
   it("relatedStoriesApi Response should be in JSON format as per AMP spec", async function () {
     // https://amp.dev/documentation/components/amp-next-page/
-    const clientStub = getRelatedStoriesClientStub();
+    const clientStub = getClientStub();
     const infiniteScrollAmp = new InfiniteScrollAmp({
       ampConfig: {},
       client: clientStub,
@@ -612,7 +606,7 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
   it("should throw an error in relatedStoriesApi if 'story-id' isn't passed as query param", async function () {
     const infiniteScrollAmp = new InfiniteScrollAmp({
       ampConfig: {},
-      client: getRelatedStoriesClientStub(),
+      client: getClientStub(),
       publisherConfig: dummyPublisherConfig,
       queryParams: { foo: "bar" },
       infiniteScrollSource: "relatedStoriesApi",
@@ -625,7 +619,7 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
   });
 
   it("should throw an error if relatedStoriesApi scroll collection doesn't exist", async function () {
-    const clientStub = getRelatedStoriesClientStub({
+    const clientStub = getClientStub({
       getRelatedStories: () =>
         new Promise((resolve) => {
           resolve(null);
@@ -643,7 +637,7 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
   });
 
   it("should remove visual stories from relatedStoriesApi response", async function () {
-    const clientStub = getRelatedStoriesClientStub();
+    const clientStub = getClientStub();
     const infiniteScrollAmp = new InfiniteScrollAmp({
       ampConfig: {},
       client: clientStub,
@@ -658,7 +652,7 @@ describe("getResponse method of InfiniteScrollAmp helper function", function () 
 
   it("should format relatedStoriesApi JSON as per AMP spec", async function () {
     // https://amp.dev/documentation/components/amp-next-page/
-    const clientStub = getRelatedStoriesClientStub();
+    const clientStub = getClientStub();
     const infiniteScrollAmp = new InfiniteScrollAmp({
       ampConfig: {},
       client: clientStub,
