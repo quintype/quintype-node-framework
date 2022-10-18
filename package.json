@@ -31,11 +31,11 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
-    "@quintype/amp": "^2.5.0",
+    "@quintype/amp": "^2.6.1-test-react18.0",
     "@quintype/backend": "^2.3.1",
     "@quintype/components": "^3.0.0",
     "@quintype/prerender-node": "^3.2.26",
-    "@quintype/seo": "^1.39.0",
+    "@quintype/seo": "^1.40.12-test-react18.0",
     "atob": "^2.1.2",
     "babel-plugin-react-css-modules": "^5.2.6",
     "chalk": "^4.1.2",
@@ -49,13 +49,13 @@
     "http-proxy": "^1.18.1",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "mocha-snapshots": "^4.2.0",
+    "mocha-snapshots": "shraddha-kesari/mocha-snapshots#test-react18",
     "morgan": "^1.10.0",
     "path-to-regexp": "^6.2.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-redux": "^7.2.5",
-    "react-router": "^5.2.1",
+    "react-router": "^6.4.2",
     "redux": "^4.1.1",
     "request-promise": "^4.2.6",
     "sleep-promise": "^9.1.0",
@@ -73,7 +73,7 @@
     "babel-preset-es2015-tree-shaking": "^1.0.1",
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.26.0",
-    "better-docs": "^2.3.2",
+    "better-docs": "shraddha-kesari/better-docs#teat-react18",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.3",
@@ -97,9 +97,6 @@
     "prettier": "^2.4.1",
     "standard-version": "^9.3.1",
     "supertest": "^6.1.6"
-  },
-  "peerDependencies": {
-    "@quintype/seo": "^1.39.0"
   },
   "nyc": {
     "exclude": [
