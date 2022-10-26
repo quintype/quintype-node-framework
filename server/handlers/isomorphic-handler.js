@@ -365,11 +365,12 @@ exports.notFoundHandler = function notFoundHandler(
     })
     .then((result) => {
       const statusCode = result.httpStatusCode || 404;
-
       const store = createStoreFromResult(url, result, {
         disableIsomorphicComponent: false,
         defaultPageType: "not-found",
       });
+      const seoInstance = getSeoInstance(seo, config, result.pageType);
+      const seoTags = seoInstance && seoInstance.getMetaTags(config, result.pageType || "not-found", result, { url });
 
       res.status(statusCode);
       res.setHeader("Cache-Control", "public,max-age=15,s-maxage=60, stale-while-revalidate=150,stale-if-error=3600");
@@ -378,7 +379,8 @@ exports.notFoundHandler = function notFoundHandler(
       return pickComponent.preloadComponent(store.getState().qt.pageType, store.getState().qt.subPageType).then(() =>
         renderLayout(res, {
           config,
-          title: result.title,
+          seoTags,
+          title: seoInstance ? seoInstance.getTitle(config, result.pageType, result) : result.title,
           content: renderReduxComponent(IsomorphicComponent, store, {
             pickComponent,
           }),
