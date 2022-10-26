@@ -33,11 +33,17 @@ function processRedirects(req, res, next, sourceUrlArray, urls) {
           });
         }
         const dynamicKeys = extractedSourceUrl(req.path);
-        const compiledPath =
-          dynamicKeys && extractedDestinationUrl(dynamicKeys.params);
+        const compiledPath = dynamicKeys && extractedDestinationUrl(dynamicKeys.params);
         if (compiledPath) {
+          const validStatusCodes = [301, 302];
+          const statusCode = parseInt(urls[sourceUrl].statusCode, 10);
+          if (validStatusCodes.includes(statusCode)) {
+            const cacheValue = statusCode === 301 ? "max-age=604800" : "max-age=86400";
+            res.set("cache-control", `public,${cacheValue}`);
+          }
+
           res.redirect(
-            urls[sourceUrl].statusCode,
+            statusCode,
             destinationUrl
               ? `${destinationUrl.protocol}//${destinationUrl.hostname}${compiledPath}${search}`
               : `${compiledPath}${search}`
@@ -49,12 +55,7 @@ function processRedirects(req, res, next, sourceUrlArray, urls) {
   });
 }
 
-exports.getRedirectUrl = async function getRedirectUrl(
-  req,
-  res,
-  next,
-  { redirectUrls, config }
-) {
+exports.getRedirectUrl = async function getRedirectUrl(req, res, next, { redirectUrls, config }) {
   let sourceUrls;
   if (typeof redirectUrls === "function") {
     const redirectUrlsList = await redirectUrls(config);
@@ -64,7 +65,6 @@ exports.getRedirectUrl = async function getRedirectUrl(
     }
   } else if (redirectUrls) {
     sourceUrls = Object.keys(redirectUrls);
-    sourceUrls.length > 0 &&
-      processRedirects(req, res, next, sourceUrls, redirectUrls);
+    sourceUrls.length > 0 && processRedirects(req, res, next, sourceUrls, redirectUrls);
   }
 };
