@@ -369,9 +369,7 @@ exports.notFoundHandler = function notFoundHandler(
         disableIsomorphicComponent: false,
         defaultPageType: "not-found",
       });
-      console.log("seo-----------", seo);
       const seoInstance = getSeoInstance(seo, config, result.pageType);
-      console.log("seoInstance---------");
       const seoTags = seoInstance && seoInstance.getMetaTags(config, result.pageType || "not-found", result, { url });
 
       res.status(statusCode);
