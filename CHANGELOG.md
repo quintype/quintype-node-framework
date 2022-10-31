@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.11.0](https://github.com/quintype/quintype-node-framework/compare/v7.10.5...v7.11.0) (2022-10-31)
+
+
+### Features
+
+* remove powered by quintype from the footer  ([#334](https://github.com/quintype/quintype-node-framework/issues/334)) ([3dbc1f3](https://github.com/quintype/quintype-node-framework/commit/3dbc1f3144536a439ad0ecaacd2313cb6bb528e1))
+
 ### [7.10.5](https://github.com/quintype/quintype-node-framework/compare/v7.10.4...v7.10.5) (2022-10-17)
 
 ### [7.10.4](https://github.com/quintype/quintype-node-framework/compare/v7.10.3...v7.10.4) (2022-10-04)
