@@ -35,7 +35,7 @@ function processRedirects(req, res, next, sourceUrlArray, urls) {
         const dynamicKeys = extractedSourceUrl(req.path);
         const compiledPath = dynamicKeys && extractedDestinationUrl(dynamicKeys.params);
         if (compiledPath) {
-          const validStatusCodes = { 301: "max-age=604800", 302: "max-age=86400" };
+          const validStatusCodes = { 301: "max-age=240", 302: "max-age=60" };
           const statusCode = parseInt(urls[sourceUrl].statusCode, 10);
           const cacheValue = validStatusCodes[statusCode];
           if (cacheValue) {
