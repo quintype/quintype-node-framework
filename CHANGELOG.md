@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.13.0](https://github.com/quintype/quintype-node-framework/compare/v7.4.1...v7.13.0) (2022-11-07)
+
+
+### Features
+
+* add video support to web stories ([#322](https://github.com/quintype/quintype-node-framework/issues/322)) ([f41b82b](https://github.com/quintype/quintype-node-framework/commit/f41b82be8285b555970527204ec6478f21c47782))
+* **api-client:** Implement wildcard_to_api_host ⚡  ([#308](https://github.com/quintype/quintype-node-framework/issues/308)) ([9c585f4](https://github.com/quintype/quintype-node-framework/commit/9c585f49fece1cba7271a47465633ca9c40034ff))
+* remove powered by quintype from the footer  ([#334](https://github.com/quintype/quintype-node-framework/issues/334)) ([3dbc1f3](https://github.com/quintype/quintype-node-framework/commit/3dbc1f3144536a439ad0ecaacd2313cb6bb528e1))
+* **SW:** Disable sw shell  ([#321](https://github.com/quintype/quintype-node-framework/issues/321)) ([6d04bc8](https://github.com/quintype/quintype-node-framework/commit/6d04bc87dd42c647ec9763eca430ada2f4a4d8ea))
+
+
+### Bug Fixes
+
+* **redirects:** cache redirects ([#332](https://github.com/quintype/quintype-node-framework/issues/332)) ([ae820eb](https://github.com/quintype/quintype-node-framework/commit/ae820eb5fb205d3ae4ec4771ded953690705a3b9))
+* remove prerender query param after the prerender check ([#314](https://github.com/quintype/quintype-node-framework/issues/314)) ([94eac28](https://github.com/quintype/quintype-node-framework/commit/94eac28bfd04483cc665c5ce4d2fc8768c84a31b))
+* remove prerender query param after the prerender check [#314](https://github.com/quintype/quintype-node-framework/issues/314) ([#317](https://github.com/quintype/quintype-node-framework/issues/317)) ([0067d81](https://github.com/quintype/quintype-node-framework/commit/0067d81fe545a726948db14a44768876b41f6ba8))
+
 ## [7.12.0](https://github.com/quintype/quintype-node-framework/compare/v7.11.0...v7.12.0) (2022-11-02)
 
 ## [7.11.0](https://github.com/quintype/quintype-node-framework/compare/v7.10.5...v7.11.0) (2022-10-31)
