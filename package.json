@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.14.0",
+  "version": "7.14.1-comscore-new.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
