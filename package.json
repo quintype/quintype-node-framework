@@ -31,7 +31,7 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
-    "@quintype/amp": "^2.5.0",
+    "@quintype/amp": "^2.9.0-atob-utf-8.4",
     "@quintype/backend": "^2.3.1",
     "@quintype/components": "^3.0.0",
     "@quintype/prerender-node": "^3.2.26",
