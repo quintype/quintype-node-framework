@@ -536,6 +536,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
         pickComponent,
         loadErrorData,
         logError,
+        seo,
         assetHelper,
       })
     );
