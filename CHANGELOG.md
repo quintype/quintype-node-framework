@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.17.0](https://github.com/quintype/quintype-node-framework/compare/v7.16.1...v7.17.0) (2022-12-21)
+
+
+### Bug Fixes
+
+* Amp chartbeat domain ([#344](https://github.com/quintype/quintype-node-framework/issues/344)) ([cbfd2f1](https://github.com/quintype/quintype-node-framework/commit/cbfd2f1a439fffbd4b9ba619d59df0165005a64a))
+
 ### [7.16.1](https://github.com/quintype/quintype-node-framework/compare/v7.16.0...v7.16.1) (2022-12-19)
 
 ## [7.16.0](https://github.com/quintype/quintype-node-framework/compare/v7.15.2...v7.16.0) (2022-12-13)
