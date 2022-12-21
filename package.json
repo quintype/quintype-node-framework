@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.16.1",
+  "version": "7.16.2-amp-chartbeat-domain.1",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
@@ -31,11 +31,7 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
-<<<<<<< HEAD
-    "@quintype/amp": "^2.8.3-chartbeat-domain.3",
-=======
-    "@quintype/amp": "^2.9.0",
->>>>>>> 4899d99b7a9827051dadcd1c2ffc08374984b8ba
+    "@quintype/amp": "^2.9.1-chartbeat-domain.4",
     "@quintype/backend": "^2.3.3",
     "@quintype/components": "^3.1.4",
     "@quintype/prerender-node": "^3.2.26",
