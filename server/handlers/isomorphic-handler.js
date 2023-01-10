@@ -37,6 +37,10 @@ function loadDataForIsomorphicRoute(
   async function loadDataForEachRoute() {
     const redirectToLowercaseSlugsValue =
       typeof redirectToLowercaseSlugs === "function" ? redirectToLowercaseSlugs(config) : redirectToLowercaseSlugs;
+
+      // headline-sequence-no ------- This is picked up from the config
+    const redirectionUrl = "/food/dosa/qa-all-story-elements-for-amp-test";
+
     for (const match of matchAllRoutes(url.pathname, routes)) {
       const params = Object.assign({}, url.query, otherParams, match.params);
       /* On story pages, if the slug contains any capital letters (latin), we want to
@@ -56,6 +60,18 @@ function loadDataForIsomorphicRoute(
           },
         };
       }
+
+      if (
+        match.pageType === "story-page" && url.pathname !== redirectionUrl
+      ) {
+        return {
+          httpStatusCode: 301,
+          data: {
+            location: `${redirectionUrl}`,
+          },
+        };
+      }
+
       const result = await loadData(match.pageType, params, config, client, {
         host,
         next: abortHandler,
