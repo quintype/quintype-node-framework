@@ -55,20 +55,20 @@ function getRouteData(path, { location = global.location, existingFetch, mountAt
   const [routeDataPath, relativePath] = getRouteDataAndPath(path, mountAt);
   const url = new URL(relativePath, location.origin);
   return (
-      existingFetch ||
-      fetch(`${routeDataPath}?path=${encodeURIComponent(url.pathname)}${url.search ? `&${url.search.slice(1)}` : ""}`, {
-        credentials: "same-origin",
-      })
+    existingFetch ||
+    fetch(`${routeDataPath}?path=${encodeURIComponent(url.pathname)}${url.search ? `&${url.search.slice(1)}` : ""}`, {
+      credentials: "same-origin",
+    })
   )
-      .then((response) => {
-        if (response.status == 404) {
-          // There is a chance this might abort
-          maybeBypassServiceWorker();
-        }
+    .then((response) => {
+      if (response.status == 404) {
+        // There is a chance this might abort
+        maybeBypassServiceWorker();
+      }
 
-        return response.json();
-      })
-      .then(maybeRedirect);
+      return response.json();
+    })
+    .then(maybeRedirect);
 
   function maybeRedirect(page) {
     // This next line aborts the entire load
@@ -123,7 +123,7 @@ export function navigateToPage(dispatch, path, doNotPushPath) {
     }
 
     Promise.resolve(
-        pickComponentWrapper && pickComponentWrapper.preloadComponent(page.pageType, page.subPageType)
+      pickComponentWrapper && pickComponentWrapper.preloadComponent(page.pageType, page.subPageType)
     ).then(() => {
       dispatch({
         type: NAVIGATE_TO_PAGE,
@@ -165,8 +165,10 @@ export function maybeNavigateTo(path, store) {
  */
 export function maybeSetUrl(path, title) {
   if (global.location.pathname === path) return;
-  global.history.pushState && global.history.pushState(null, title, path);
-  global.document.title = title;
+  if (global.history.pushState) {
+    global.document.title = title;
+    global.history.pushState(null, title, path);
+  }
 }
 
 /**
@@ -183,7 +185,7 @@ export function renderComponent(clazz, container, store, props = {}, callback) {
 
   const containerEle = document.getElementById(container);
 
-  if(!containerEle){
+  if (!containerEle) {
     console && console.log(`Rendering component on DOM id ${container} FAILED, node not available`);
     return null;
   }
@@ -206,16 +208,16 @@ export function renderIsomorphicComponent(container, store, pickComponent, props
   if (!store.getState().qt.disableIsomorphicComponent) {
     pickComponentWrapper = makePickComponentSync(pickComponent);
     return pickComponentWrapper
-        .preloadComponent(store.getState().qt.pageType, store.getState().qt.subPageType)
-        .then(() =>
-            renderComponent(
-                IsomorphicComponent,
-                container,
-                store,
-                Object.assign({ pickComponent: pickComponentWrapper }, props),
-                () => store.dispatch({ type: CLIENT_SIDE_RENDERED })
-            )
-        );
+      .preloadComponent(store.getState().qt.pageType, store.getState().qt.subPageType)
+      .then(() =>
+        renderComponent(
+          IsomorphicComponent,
+          container,
+          store,
+          Object.assign({ pickComponent: pickComponentWrapper }, props),
+          () => store.dispatch({ type: CLIENT_SIDE_RENDERED })
+        )
+      );
   }
   console && console.log("IsomorphicComponent is disabled");
 }
@@ -264,15 +266,15 @@ export function startApp(renderApplication, reducers, opts) {
   const path = `${location.pathname}${location.search || ""}`;
   const staticData = global.staticPageStoreContent || getJsonContent("static-page");
   const dataPromise = staticData
-      ? Promise.resolve(staticData.qt)
-      : getRouteData(path, { existingFetch: global.initialFetch });
+    ? Promise.resolve(staticData.qt)
+    : getRouteData(path, { existingFetch: global.initialFetch });
 
   startAnalytics();
 
   const store = createQtStore(
-      reducers,
-      (staticData && staticData.qt) || global.initialPage || getJsonContent("initial-page") || {},
-      {}
+    reducers,
+    (staticData && staticData.qt) || global.initialPage || getJsonContent("initial-page") || {},
+    {}
   );
 
   if (opts.preRenderApplication) {
@@ -314,9 +316,9 @@ export function startApp(renderApplication, reducers, opts) {
 
     if (page.title) {
       global.document.title = get(
-          page,
-          ["data", "customSeo", "title"],
-          get(page, ["data", "story", "seo", "meta-title"], page.title)
+        page,
+        ["data", "customSeo", "title"],
+        get(page, ["data", "story", "seo", "meta-title"], page.title)
       );
     }
     return store;
