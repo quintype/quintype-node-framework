@@ -132,6 +132,16 @@ export function navigateToPage(dispatch, path, doNotPushPath) {
       });
 
       if (!doNotPushPath) {
+        const title = get(
+          page,
+          ["data", "customSeo", "title"],
+          get(page, ["data", "story", "seo", "meta-title"], page.title)
+        );
+
+        if (title) {
+          global.document.title = title;
+        }
+
         history.push({
           pathname,
           search: "",
