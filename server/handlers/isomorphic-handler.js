@@ -471,6 +471,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     const oneSignalScript = oneSignalServiceWorkers ? getOneSignalScript({ config, publisherConfig }) : null;
     return pickComponent.preloadComponent(store.getState().qt.pageType, store.getState().qt.subPageType).then(() =>
       renderLayout(res, {
+        req,
         config,
         title: result.title,
         content: renderReduxComponent(IsomorphicComponent, store, {
