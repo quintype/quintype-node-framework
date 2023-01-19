@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.17.0",
+  "version": "7.17.1-pass-on-req.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
