@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.17.0",
+  "version": "7.18.0-framework-update.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
@@ -33,7 +33,7 @@
     "@ampproject/toolbox-optimizer": "2.8.3",
     "@quintype/amp": "^2.9.1",
     "@quintype/backend": "^2.3.3",
-    "@quintype/components": "^3.1.4",
+    "@quintype/components": "^3.3.0",
     "@quintype/prerender-node": "^3.2.26",
     "@quintype/seo": "^1.39.0",
     "atob": "^2.1.2",
