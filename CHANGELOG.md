@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.18.0](https://github.com/quintype/quintype-node-framework/compare/v7.15.2...v7.18.0) (2023-01-25)
+
+
+### Features
+
+* **amp:** Decode embed using utf 8 ([#345](https://github.com/quintype/quintype-node-framework/issues/345)) ([4e8a3b3](https://github.com/quintype/quintype-node-framework/commit/4e8a3b38b9be62571f96e69e8b976ff610daf068))
+
+
+### Bug Fixes
+
+* Amp chartbeat domain ([#344](https://github.com/quintype/quintype-node-framework/issues/344)) ([cbfd2f1](https://github.com/quintype/quintype-node-framework/commit/cbfd2f1a439fffbd4b9ba619d59df0165005a64a))
+
 ## [7.17.0](https://github.com/quintype/quintype-node-framework/compare/v7.16.1...v7.17.0) (2022-12-21)
 
 
