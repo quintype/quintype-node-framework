@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.18.0",
+  "version": "7.18.1-test-ga.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
