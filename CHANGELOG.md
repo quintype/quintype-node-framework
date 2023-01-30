@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.18.1](https://github.com/quintype/quintype-node-framework/compare/v7.18.0...v7.18.1) (2023-01-30)
+
+
+### Bug Fixes
+
+* **ga:** update title before history push for ga tracking issue ([#347](https://github.com/quintype/quintype-node-framework/issues/347)) ([adb6dc8](https://github.com/quintype/quintype-node-framework/commit/adb6dc8425b097bf9717ea8ba745e69609ccbbb2))
+
 ## [7.18.0](https://github.com/quintype/quintype-node-framework/compare/v7.15.2...v7.18.0) (2023-01-25)
 
 
