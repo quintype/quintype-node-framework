@@ -311,6 +311,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     handleNotFound = true,
     redirectRootLevelStories = false,
     mobileApiEnabled = true,
+    feEnabled = true,
     mobileConfigFields = {},
     templateOptions = false,
     lightPages = false,
@@ -425,6 +426,10 @@ exports.isomorphicRoutes = function isomorphicRoutes(
   );
 
   app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }));
+
+  app.post("/push-notification", (req, res) => {
+    res.json({ status: "webengage-notified" });
+  });
 
   if (manifestFn) {
     app.get("/manifest.json", withConfig(handleManifest, { manifestFn, logError }));
