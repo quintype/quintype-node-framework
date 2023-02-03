@@ -428,7 +428,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
   app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }));
 
   app.post("/webengage-api", bodyParser.json(), (req, res) => {
-    console.log("hit /webengage-api");
+    console.log("hit /webengage-api", req.body);
     res.json({ status: "webengage-notified", data: req.body });
   });
 
