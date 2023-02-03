@@ -28,6 +28,7 @@ const bodyParser = require("body-parser");
 const get = require("lodash/get");
 const { URL } = require("url");
 const prerender = require("@quintype/prerender-node");
+const request = require("request-promise");
 
 /**
  * *upstreamQuintypeRoutes* connects various routes directly to the upstream API server.
@@ -333,6 +334,8 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     sMaxAge = 900,
     appLoadingPlaceholder = "",
     fcmServerKey = "",
+    webengageLicenseCode,
+    webengageApiKey,
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
@@ -427,9 +430,28 @@ exports.isomorphicRoutes = function isomorphicRoutes(
 
   app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }));
 
-  app.post("/webengage-api", bodyParser.json(), (req, res) => {
-    console.log("hit /webengage-api", req.body);
-    res.json({ status: "webengage-notified", data: req.body });
+  app.post("/webengage-api", bodyParser.json(), async (req, res) => {
+    const { headline, subheadline, slug } = req.body;
+    console.log("hit /webengage-api", webengageLicenseCode, webengageApiKey, headline, subheadline, slug);
+    const url = `https://api.webengage.com/v2/accounts/${webengageLicenseCode}/business/save-event`;
+    try {
+      await request({
+        uri: url,
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${webengageApiKey}`,
+          "content-type": "application/json",
+        },
+        body: { eventName: "Story Created", eventData: { app: "malibu" } },
+        json: true,
+      });
+      res.status(200).send("webengage event triggered successfully");
+      return;
+    } catch (error) {
+      console.log("The error is -->", error);
+      res.status(500).send("webengage event Failed");
+      return;
+    }
   });
 
   if (manifestFn) {
