@@ -312,6 +312,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     handleNotFound = true,
     redirectRootLevelStories = false,
     mobileApiEnabled = true,
+    feEnabled = true,
     mobileConfigFields = {},
     templateOptions = false,
     lightPages = false,
@@ -333,7 +334,6 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     sMaxAge = 900,
     appLoadingPlaceholder = "",
     fcmServerKey = "",
-    enableWebengage = false,
     webengageLicenseCode,
     webengageApiKey,
   }
@@ -430,32 +430,29 @@ exports.isomorphicRoutes = function isomorphicRoutes(
 
   app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }));
 
-  if (enableWebengage) {
-    app.post("/webengage-api", bodyParser.json(), async (req, res) => {
-      const { headline } = req.body;
-      console.log("hit /webengage-api", webengageLicenseCode, webengageApiKey, req.body);
-      const url = `https://api.webengage.com/v2/accounts/${webengageLicenseCode}/business/save-event`;
-      try {
-        await request({
-          uri: url,
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${webengageApiKey}`,
-            "content-type": "application/json",
-          },
-          body: { eventName: "story_published", eventData: { author_name: headline, story_id: 123 } },
-          json: true,
-        });
-        console.log("inside the try block before return", eventName);
-        res.status(200).send("webengage event triggered successfully");
-        return;
-      } catch (error) {
-        console.log("The error is -->", error);
-        res.status(500).send("webengage event Failed");
-        return;
-      }
-    });
-  }
+  app.post("/webengage-api", bodyParser.json(), async (req, res) => {
+    const { headline, subheadline, slug } = req.body;
+    console.log("hit /webengage-api", webengageLicenseCode, webengageApiKey, req.body);
+    const url = `https://api.webengage.com/v2/accounts/${webengageLicenseCode}/business/save-event`;
+    try {
+      await request({
+        uri: url,
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${webengageApiKey}`,
+          "content-type": "application/json",
+        },
+        body: { eventName: "story_published", eventData: { author_name: "malibu", story_id: 123 } },
+        json: true,
+      });
+      res.status(200).send("webengage event triggered successfully");
+      return;
+    } catch (error) {
+      console.log("The error is -->", error);
+      res.status(500).send("webengage event Failed");
+      return;
+    }
+  });
 
   if (manifestFn) {
     app.get("/manifest.json", withConfig(handleManifest, { manifestFn, logError }));
