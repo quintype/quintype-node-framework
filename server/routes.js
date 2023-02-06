@@ -432,9 +432,8 @@ exports.isomorphicRoutes = function isomorphicRoutes(
 
   if (enableWebengage) {
     app.post("/webengage-api", bodyParser.json(), async (req, res) => {
-      const eventName = req.body.v1.event.name;
-      const { headline, subheadline, slug } = req.body;
-      console.log("hit /webengage-api", webengageLicenseCode, webengageApiKey, headline, subheadline, slug, eventName);
+      const { headline } = req.body;
+      console.log("hit /webengage-api", webengageLicenseCode, webengageApiKey, req.body);
       const url = `https://api.webengage.com/v2/accounts/${webengageLicenseCode}/business/save-event`;
       try {
         await request({
@@ -444,7 +443,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
             Authorization: `Bearer ${webengageApiKey}`,
             "content-type": "application/json",
           },
-          body: { eventName: "Story Created", eventData: { app: "malibu" } },
+          body: { eventName: "story_published", eventData: { author_name: headline, story_id: 123 } },
           json: true,
         });
         console.log("inside the try block before return", eventName);
