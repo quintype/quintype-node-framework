@@ -15,6 +15,7 @@ const { customUrlToCacheKey } = require("../caching");
 const { addLightPageHeaders } = require("../impl/light-page-impl");
 const { getOneSignalScript } = require("./onesignal-script");
 const { getRedirectUrl } = require("../redirect-url-helper");
+const { Story } = require("../impl/api-client-impl");
 
 const ABORT_HANDLER = "__ABORT__";
 function abortHandler() {
@@ -38,9 +39,6 @@ function loadDataForIsomorphicRoute(
     const redirectToLowercaseSlugsValue =
       typeof redirectToLowercaseSlugs === "function" ? redirectToLowercaseSlugs(config) : redirectToLowercaseSlugs;
 
-      // headline-sequence-no ------- This is picked up from the config
-    const redirectionUrl = "/food/dosa/qa-all-story-elements-for-amp-test";
-
     for (const match of matchAllRoutes(url.pathname, routes)) {
       const params = Object.assign({}, url.query, otherParams, match.params);
       /* On story pages, if the slug contains any capital letters (latin), we want to
@@ -61,15 +59,23 @@ function loadDataForIsomorphicRoute(
         };
       }
 
-      if (
-        match.pageType === "story-page" && url.pathname !== redirectionUrl
-      ) {
-        return {
-          httpStatusCode: 301,
-          data: {
-            location: `${redirectionUrl}`,
-          },
-        };
+      // Multiple url redirection
+      if (match.pageType === "story-page") {
+        const storySlug = params.storySlug.toLowerCase() || "";
+        return Story.getStoryBySlug(client, storySlug)
+          .then((story) => {
+            if (url.pathname !== story.slug) {
+              return {
+                httpStatusCode: 301,
+                data: {
+                  location: `/${story.slug}`,
+                },
+              };
+            } else {
+              return next();
+            }
+          })
+          .catch((e) => console.log(e, "err"));
       }
 
       const result = await loadData(match.pageType, params, config, client, {

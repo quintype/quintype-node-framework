@@ -13,6 +13,10 @@ function getClientStub(hostname) {
         foo: "bar",
         "sketches-host": "https://www.foo.com",
       }),
+      getStoryBySlug: (slug) =>
+      Promise.resolve({
+        story: { slug: slug, id: "123" },
+      }),
     baseUrl: "https://www.foo.com",
   };
 }
@@ -51,6 +55,18 @@ function createApp(loadData, routes, opts = {}, app = express()) {
 }
 
 describe("Isomorphic Handler", function () {
+  it("when the story headline is changed, it redirects story to updated story url", (done) => {
+    const app = createApp(
+      (pageType, params, config, client, { host }) =>
+        Promise.resolve({
+          pageType,
+          data: { text: "foobar", host, location: "/foobar" },
+        }),
+      [{ pageType: "story-page", path: "/foobar", params: { storySlug: "foo-bar" } }]
+    );
+    supertest(app).get("/foobar").expect("Location", "/foo-bar").expect(301, done);
+  });
+
   it("Renders the page if the route matches", function (done) {
     const app = createApp(
       (pageType, params, config, client, { host }) =>
