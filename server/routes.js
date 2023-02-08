@@ -23,12 +23,12 @@ const { redirectStory } = require("./handlers/story-redirect");
 const { simpleJsonHandler } = require("./handlers/simple-json-handler");
 const { makePickComponentSync } = require("../isomorphic/impl/make-pick-component-sync");
 const { registerFCMTopic } = require("./handlers/fcm-registration-handler");
+const { webengageApi } = require("./handlers/webengage");
 const rp = require("request-promise");
 const bodyParser = require("body-parser");
 const get = require("lodash/get");
 const { URL } = require("url");
 const prerender = require("@quintype/prerender-node");
-const request = require("request-promise");
 
 /**
  * *upstreamQuintypeRoutes* connects various routes directly to the upstream API server.
@@ -430,29 +430,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
 
   app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }));
 
-  app.post("/webengage-api", bodyParser.json(), async (req, res) => {
-    const { headline, subheadline, slug } = req.body;
-    console.log("hit /webengage-api", webengageLicenseCode, webengageApiKey, req.body);
-    const url = `https://api.webengage.com/v2/accounts/${webengageLicenseCode}/business/save-event`;
-    try {
-      await request({
-        uri: url,
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${webengageApiKey}`,
-          "content-type": "application/json",
-        },
-        body: { eventName: "story_published", eventData: { author_name: "malibu", story_id: 123 } },
-        json: true,
-      });
-      res.status(200).send("webengage event triggered successfully");
-      return;
-    } catch (error) {
-      console.log("The error is -->", error);
-      res.status(500).send("webengage event Failed");
-      return;
-    }
-  });
+  app.post("/webengage-api", bodyParser.json(), webengageApi);
 
   if (manifestFn) {
     app.get("/manifest.json", withConfig(handleManifest, { manifestFn, logError }));

@@ -14,7 +14,7 @@
     "coverage": "nyc --all npm test",
     "coverage-html": "nyc --all --reporter=html npm test",
     "docs": "rimraf docs && jsdoc -c jsdoc.json",
-    "sync-files-to": "npx onchange --verbose --wait --await-write-finish 'client/**/*' 'server/**/*' 'isomorphic/**/*' -- ./bin-dev-scripts/sync-to.sh "
+    "sync-files-to": "npx onchange --verbose --await-write-finish=2000 'client/**/*' 'server/**/*' 'isomorphic/**/*' -- ./bin-dev-scripts/sync-to.sh "
   },
   "repository": {
     "type": "git",
