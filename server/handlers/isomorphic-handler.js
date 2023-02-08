@@ -64,7 +64,7 @@ function loadDataForIsomorphicRoute(
         const storySlug = params.storySlug.toLowerCase() || "";
         return Story.getStoryBySlug(client, storySlug)
           .then((story) => {
-            if (url.pathname !== story.slug) {
+            if (story.redirect) {
               return {
                 httpStatusCode: 301,
                 data: {
