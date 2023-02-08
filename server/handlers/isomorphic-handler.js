@@ -71,8 +71,6 @@ function loadDataForIsomorphicRoute(
                   location: `/${story.slug}`,
                 },
               };
-            } else {
-              return next();
             }
           })
           .catch((e) => console.log(e, "err"));

@@ -13,9 +13,9 @@ function getClientStub(hostname) {
         foo: "bar",
         "sketches-host": "https://www.foo.com",
       }),
-      getStoryBySlug: (slug) =>
+    getStoryBySlug: (slug) =>
       Promise.resolve({
-        story: { slug: slug, id: "123" },
+        story: { slug: slug, id: "123", redirect: true },
       }),
     baseUrl: "https://www.foo.com",
   };
