@@ -15,7 +15,7 @@ function getClientStub(hostname) {
       }),
     getStoryBySlug: (slug) =>
       Promise.resolve({
-        story: { slug: slug, id: "123", redirect: true },
+        story: { slug: slug, id: "123", redirect: slug === "foo-bar" ? true : false },
       }),
     baseUrl: "https://www.foo.com",
   };

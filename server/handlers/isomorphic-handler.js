@@ -62,18 +62,15 @@ function loadDataForIsomorphicRoute(
       // Multiple url redirection
       if (match.pageType === "story-page" && params.storySlug) {
         const storySlug = params.storySlug.toLowerCase() || "";
-        Story.getStoryBySlug(client, storySlug)
-          .then((story) => {
-            if (story.redirect) {
-              return {
-                httpStatusCode: 301,
-                data: {
-                  location: `/${story.slug}`,
-                },
-              };
-            }
-          })
-          .catch((e) => console.log(e, "err"));
+        const story = await Story.getStoryBySlug(client, storySlug);
+        if (story.redirect) {
+          return {
+            httpStatusCode: 301,
+            data: {
+              location: `/${story.slug}`,
+            },
+          };
+        }
       }
 
       const result = await loadData(match.pageType, params, config, client, {
