@@ -60,9 +60,9 @@ function loadDataForIsomorphicRoute(
       }
 
       // Multiple url redirection
-      if (match.pageType === "story-page") {
+      if (match.pageType === "story-page" && params.storySlug) {
         const storySlug = params.storySlug.toLowerCase() || "";
-        return Story.getStoryBySlug(client, storySlug)
+        Story.getStoryBySlug(client, storySlug)
           .then((story) => {
             if (story.redirect) {
               return {
