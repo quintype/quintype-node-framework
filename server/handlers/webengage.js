@@ -1,26 +1,23 @@
+const get = require("lodash/get");
 const request = require("request-promise");
 
-exports.webengageApi = async function webengageApi(req, res) {
-  const webengageLicenseCode = "311c5229";
-  const webengageApiKey = "2d5cb58e-7160-4f2a-b423-0c0d8007dd9c";
+exports.webengageApi = async function webengageApi(req, res, next, { webengageApiKey, webengageLicenseCode }) {
+  const eventName = get(req, ["body", "v1", "event", "name"], "");
   let eventData = {};
-  const eventName = req.body.v1.event.name;
 
   switch (eventName) {
     case "story-publish":
-      const { "author-name": author, headline } = req.body;
+      const { "author-name": author, headline } = data;
       eventData = { author, headline };
       break;
     case "push-notification-triggered":
-      const { title, message } = req.body;
+      const { title, message } = data;
       eventData = { title, message };
       break;
     default:
       break;
   }
-
-  console.log("hit /webengage-api by syncing ---->", eventName, eventData);
-  const url = `https://api.webengage.com/v1/accounts/${webengageLicenseCode}/events`;
+  const url = `https://api.webengage.com/v2/accounts/${webengageLicenseCode}/business/save-event`;
   try {
     await request({
       uri: url,
@@ -29,7 +26,7 @@ exports.webengageApi = async function webengageApi(req, res) {
         Authorization: `Bearer ${webengageApiKey}`,
         "content-type": "application/json",
       },
-      body: { eventName: eventName, eventData: { eventData }, userId: eventName },
+      body: { eventName: eventName, eventData: { eventData } },
       json: true,
     });
     res.status(200).send("webengage event triggered successfully");
