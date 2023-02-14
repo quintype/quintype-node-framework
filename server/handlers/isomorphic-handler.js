@@ -61,7 +61,7 @@ function loadDataForIsomorphicRoute(
 
       // Multiple url redirection
       if (match.pageType === "story-page" && params.storySlug) {
-        const storySlug = params.storySlug.toLowerCase() || "";
+        const storySlug = params.storySlug.toLowerCase();
         const story = await Story.getStoryBySlug(client, storySlug);
         if (story.redirect && url.pathname !== `/${story.slug}`) {
           return {
