@@ -8,6 +8,7 @@
     "npm": "^8.5.0"
   },
   "scripts": {
+    "prepublishOnly": "npm test && ./bin-dev-scripts/standard-version-release.sh",
     "test": "NODE_ENV=test npx mocha --recursive --require ./test/babel",
     "watch-test": "NODE_ENV=test npx mocha --recursive --watch --require ./test/babel",
     "coverage": "nyc --all npm test",
