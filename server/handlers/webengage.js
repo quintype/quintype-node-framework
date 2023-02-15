@@ -29,9 +29,11 @@ exports.webengageApi = async function webengageApi(req, res, next, { webengageAp
       body: { eventName: eventName, eventData: { eventData } },
       json: true,
     });
+    console.log("webengage event triggered successfully", new Date(req.body.v1.event.time));
     res.status(200).send("webengage event triggered successfully");
     return;
   } catch (error) {
+    console.error("webengage event failed", new Date(req.body.v1.event.time));
     res.status(500).send("webengage event failed");
     return;
   }

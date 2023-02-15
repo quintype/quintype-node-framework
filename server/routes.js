@@ -312,7 +312,6 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     handleNotFound = true,
     redirectRootLevelStories = false,
     mobileApiEnabled = true,
-    feEnabled = true,
     mobileConfigFields = {},
     templateOptions = false,
     lightPages = false,
@@ -334,6 +333,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     sMaxAge = 900,
     appLoadingPlaceholder = "",
     fcmServerKey = "",
+    enableWebengage = false,
     webengageLicenseCode,
     webengageApiKey,
   }
@@ -430,7 +430,9 @@ exports.isomorphicRoutes = function isomorphicRoutes(
 
   app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }));
 
-  app.post("/webengage-api", bodyParser.json(), withConfig(webengageApi, { webengageLicenseCode, webengageApiKey }));
+  if (enableWebengage) {
+    app.post("/webengage-api", bodyParser.json(), withConfig(webengageApi, { webengageLicenseCode, webengageApiKey }));
+  }
 
   if (manifestFn) {
     app.get("/manifest.json", withConfig(handleManifest, { manifestFn, logError }));
