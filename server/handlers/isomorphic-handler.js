@@ -59,20 +59,6 @@ function loadDataForIsomorphicRoute(
         };
       }
 
-      // Multiple url redirection
-      if (match.pageType === "story-page" && params.storySlug) {
-        const storySlug = params.storySlug.toLowerCase();
-        const story = await Story.getStoryBySlug(client, storySlug);
-        if (story.redirect && url.pathname !== `/${story.slug}`) {
-          return {
-            httpStatusCode: 301,
-            data: {
-              location: `/${story.slug}`,
-            },
-          };
-        }
-      }
-
       const result = await loadData(match.pageType, params, config, client, {
         host,
         next: abortHandler,
@@ -84,6 +70,16 @@ function loadDataForIsomorphicRoute(
       if (result && result[ABORT_HANDLER]) continue;
 
       if (result && result.data && result.data[ABORT_HANDLER]) continue;
+
+      // Multiple url redirection
+      if (result.redirect) {
+        return {
+          httpStatusCode: 301,
+          data: {
+            location: `/${result.slug}`,
+          },
+        };
+      }
 
       return result;
     }
