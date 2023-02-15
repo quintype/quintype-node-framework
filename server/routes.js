@@ -430,7 +430,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
 
   app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }));
 
-  app.post("/webengage-api", bodyParser.json(), webengageApi);
+  app.post("/webengage-api", bodyParser.json(), withConfig(webengageApi, { webengageLicenseCode, webengageApiKey }));
 
   if (manifestFn) {
     app.get("/manifest.json", withConfig(handleManifest, { manifestFn, logError }));

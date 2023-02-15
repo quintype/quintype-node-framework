@@ -7,11 +7,11 @@ exports.webengageApi = async function webengageApi(req, res, next, { webengageAp
 
   switch (eventName) {
     case "story-publish":
-      const { "author-name": author, headline } = data;
+      const { "author-name": author, headline } = req.body;
       eventData = { author, headline };
       break;
     case "push-notification-triggered":
-      const { title, message } = data;
+      const { title, message } = req.body;
       eventData = { title, message };
       break;
     default:
