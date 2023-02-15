@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.18.2-webengage.8",
+  "version": "7.18.2-webengage.9",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
