@@ -26,7 +26,7 @@ exports.webengageApi = async function webengageApi(req, res, next, { webengageAp
         Authorization: `Bearer ${webengageApiKey}`,
         "content-type": "application/json",
       },
-      body: { eventName: eventName, eventData: { eventData } },
+      body: { eventName: eventName, eventData: { eventData, user_type: "malibu_user" } },
       json: true,
     });
     console.log("webengage event triggered successfully", new Date(req.body.v1.event.time));
