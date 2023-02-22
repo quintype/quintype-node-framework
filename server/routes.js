@@ -23,7 +23,7 @@ const { redirectStory } = require("./handlers/story-redirect");
 const { simpleJsonHandler } = require("./handlers/simple-json-handler");
 const { makePickComponentSync } = require("../isomorphic/impl/make-pick-component-sync");
 const { registerFCMTopic } = require("./handlers/fcm-registration-handler");
-const { webengageApi } = require("./handlers/webengage");
+const { triggerWebengageNotifications } = require("./handlers/webengage");
 const rp = require("request-promise");
 const bodyParser = require("body-parser");
 const get = require("lodash/get");
@@ -333,9 +333,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     sMaxAge = 900,
     appLoadingPlaceholder = "",
     fcmServerKey = "",
-    enableWebengage = false,
-    webengageLicenseCode,
-    webengageApiKey,
+    webengageConfig,
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
@@ -430,8 +428,12 @@ exports.isomorphicRoutes = function isomorphicRoutes(
 
   app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }));
 
-  if (enableWebengage) {
-    app.post("/webengage-api", bodyParser.json(), withConfig(webengageApi, { webengageLicenseCode, webengageApiKey }));
+  if (webengageConfig.enableWebengage) {
+    app.post(
+      "/api/webengage/trigger-notification",
+      bodyParser.json(),
+      withConfig(triggerWebengageNotifications, webengageConfig)
+    );
   }
 
   if (manifestFn) {
