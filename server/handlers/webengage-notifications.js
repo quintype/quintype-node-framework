@@ -24,7 +24,6 @@ exports.triggerWebengageNotifications = async function triggerWebengageNotificat
     res.status(200).send("webengage event triggered successfully");
     return;
   } catch (error) {
-    console.log("webengage event failed");
     res.status(500).send("webengage event failed");
     return;
   }

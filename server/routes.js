@@ -23,7 +23,7 @@ const { redirectStory } = require("./handlers/story-redirect");
 const { simpleJsonHandler } = require("./handlers/simple-json-handler");
 const { makePickComponentSync } = require("../isomorphic/impl/make-pick-component-sync");
 const { registerFCMTopic } = require("./handlers/fcm-registration-handler");
-const { triggerWebengageNotifications } = require("./handlers/webengage");
+const { triggerWebengageNotifications } = require("./handlers/webengage-notifications");
 const rp = require("request-promise");
 const bodyParser = require("body-parser");
 const get = require("lodash/get");
@@ -430,7 +430,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
 
   if (webengageConfig.enableWebengage) {
     app.post(
-      "/webengage/trigger-notification",
+      "/integrations/webengage/trigger-notification",
       bodyParser.json(),
       withConfig(triggerWebengageNotifications, webengageConfig)
     );
