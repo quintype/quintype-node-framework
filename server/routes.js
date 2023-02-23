@@ -430,7 +430,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
 
   if (webengageConfig.enableWebengage) {
     app.post(
-      "/api/webengage/trigger-notification",
+      "/webengage/trigger-notification",
       bodyParser.json(),
       withConfig(triggerWebengageNotifications, webengageConfig)
     );
