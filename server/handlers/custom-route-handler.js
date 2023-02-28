@@ -42,6 +42,8 @@ function writeStaticPageResponse(res, url, page, result, { config, renderLayout,
     store,
     seoTags,
     disableAjaxNavigation: true,
+    enableHeader: page.metadata.header,
+    enableFooter: page.metadata.footer,
   });
 }
 
@@ -91,20 +93,17 @@ exports.customRouteHandler = function customRouteHandler(
         });
         addStaticPageMimeType({ res, page });
 
-        if (page.metadata.header || page.metadata.footer) {
-          return loadData("custom-static-page", {}, config, client, {
-            host: req.hostname,
-            domainSlug,
-            cookies: req.cookies,
-          }).then((response) => {
-            return writeStaticPageResponse(res, url, page.page, response, {
-              config,
-              renderLayout,
-              seo,
-            });
+        return loadData("custom-static-page", {}, config, client, {
+          host: req.hostname,
+          domainSlug,
+          cookies: req.cookies,
+        }).then((response) => {
+          return writeStaticPageResponse(res, url, page.page, response, {
+            config,
+            renderLayout,
+            seo,
           });
-        }
-        return res.send(page.content);
+        });
       }
 
       return next();
