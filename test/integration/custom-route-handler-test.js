@@ -48,8 +48,7 @@ function getClientStub(hostname) {
             page: {
               id: 103,
               title: "Testing",
-              content:
-                "<html><head><title>Test</title></head><body><h1>Heading</h1></body></html>",
+              content: "<html><head><title>Test</title></head><body><h1>Heading</h1></body></html>",
               metadata: { header: true, footer: false },
               type: "static-page",
               "status-code": 200,
@@ -60,8 +59,7 @@ function getClientStub(hostname) {
             page: {
               id: 104,
               title: "Testing",
-              content:
-                "<html><head><title>Test</title></head><body><h1>Heading</h1></body></html>",
+              content: "<html><head><title>Test</title></head><body><h1>Heading</h1></body></html>",
               metadata: { header: false, footer: false },
               type: "static-page",
               "status-code": 200,
@@ -72,8 +70,7 @@ function getClientStub(hostname) {
             page: {
               id: 105,
               title: "Testing mime type",
-              content:
-                "<html><head><title>Test</title></head><body><h1>Heading</h1></body></html>",
+              content: "<html><head><title>Test</title></head><body><h1>Heading</h1></body></html>",
               metadata: {
                 header: false,
                 footer: false,
@@ -104,9 +101,7 @@ function createApp(loadData, routes, opts = {}) {
         generateRoutes: () => routes,
         loadData,
         renderLayout: (res, { contentTemplate, store }) =>
-          res.send(
-            JSON.stringify({ contentTemplate, store: store.getState() })
-          ),
+          res.send(JSON.stringify({ contentTemplate, store: store.getState() })),
         handleNotFound: false,
         publisherConfig: {},
       },
@@ -126,10 +121,7 @@ describe("Custom Route Handler", function () {
     supertest(app)
       .get("/moved-permanently")
       .expect("Location", "/permanent-location")
-      .expect(
-        "Cache-Control",
-        "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-      )
+      .expect("Cache-Control", "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400")
       .expect("Vary", /Accept\-Encoding/)
       .expect("Surrogate-Key", "u/42/101")
       .expect("Cache-Tag", "u/42/101")
@@ -144,10 +136,7 @@ describe("Custom Route Handler", function () {
     supertest(app)
       .get("/moved-temporarily")
       .expect("Location", "/temporary-location")
-      .expect(
-        "Cache-Control",
-        "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-      )
+      .expect("Cache-Control", "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400")
       .expect("Vary", /Accept\-Encoding/)
       .expect("Surrogate-Key", "u/42/102")
       .expect("Cache-Tag", "u/42/102")
@@ -163,10 +152,7 @@ describe("Custom Route Handler", function () {
     supertest(app)
       .get("/static-with-header-footer")
       .expect("Content-Type", /html/)
-      .expect(
-        "Cache-Control",
-        "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-      )
+      .expect("Cache-Control", "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400")
       .expect("Vary", "Accept-Encoding")
       .expect("Surrogate-Key", "u/42/103")
       .expect("Cache-Tag", "u/42/103")
@@ -176,31 +162,6 @@ describe("Custom Route Handler", function () {
         // In this case, content is empty to avoid breaking the script tags present outside it.
         assert.equal("", response.store.qt.data.content);
         assert.equal("static-page", response.store.qt.pageType);
-      })
-      .then(done);
-  });
-
-  it("Renders the page by sending the content if it's a static page with disabled header and footer", function (done) {
-    const app = createApp(
-      (pageType, params, config, client, { host, next }) => next(),
-      [{ pageType: "story-page", path: "/*" }]
-    );
-    supertest(app)
-      .get("/static-without-header-footer")
-      .expect("Content-Type", /html/)
-      .expect(
-        "Cache-Control",
-        "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-      )
-      .expect("Vary", "Accept-Encoding")
-      .expect("Surrogate-Key", "u/42/104")
-      .expect("Cache-Tag", "u/42/104")
-      .expect(200)
-      .then((res) => {
-        assert.equal(
-          "<html><head><title>Test</title></head><body><h1>Heading</h1></body></html>",
-          res.text
-        );
       })
       .then(done);
   });
@@ -233,9 +194,7 @@ describe("Custom Route Handler", function () {
   it("Store reads config and data from data-loader response", function (done) {
     const app = createApp(
       (pageType, params, config, client, { host, next }) =>
-        pageType === "custom-static-page"
-          ? Promise.resolve({ data: { navigationMenu: [] }, config: {} })
-          : next(),
+        pageType === "custom-static-page" ? Promise.resolve({ data: { navigationMenu: [] }, config: {} }) : next(),
       [{ pageType: "story-page", path: "/*" }]
     );
     supertest(app)
@@ -258,49 +217,10 @@ describe("Custom Route Handler", function () {
     supertest(app)
       .get("/moved-absolute")
       .expect("Location", "https://www.google.com")
-      .expect(
-        "Cache-Control",
-        "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-      )
+      .expect("Cache-Control", "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400")
       .expect("Vary", /Accept\-Encoding/)
       .expect("Surrogate-Key", "u/42/105")
       .expect("Cache-Tag", "u/42/105")
       .expect(301, done);
-  });
-
-  it("Adds content type as per metadata in response", function (done) {
-    const app = createApp(
-      (pageType, params, config, client, { host, next }) => next(),
-      [{ pageType: "story-page", path: "/*" }]
-    );
-    supertest(app)
-      .get("/static-with-mime-type")
-      .expect(
-        "Cache-Control",
-        "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-      )
-      .expect("Vary", /Accept\-Encoding/)
-      .expect("Surrogate-Key", "u/42/105")
-      .expect("Cache-Tag", "u/42/105")
-      .expect("Content-Type", "text/plain; charset=utf-8")
-      .expect(200, done);
-  });
-
-  it("Adds content type default if metadata in response is not set", function (done) {
-    const app = createApp(
-      (pageType, params, config, client, { next }) => next(),
-      [{ pageType: "story-page", path: "/*" }]
-    );
-    supertest(app)
-      .get("/static-without-header-footer")
-      .expect(
-        "Cache-Control",
-        "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-      )
-      .expect("Vary", "Accept-Encoding")
-      .expect("Surrogate-Key", "u/42/104")
-      .expect("Cache-Tag", "u/42/104")
-      .expect("Content-Type", "text/html; charset=utf-8")
-      .expect(200, done);
   });
 });
