@@ -72,7 +72,7 @@ function loadDataForIsomorphicRoute(
       if (result && result.data && result.data[ABORT_HANDLER]) continue;
 
       // Multiple url redirection
-      const story = result.data?.story;
+      const story = result.data.story;
       if (story.redirect && `/${story.slug}` !== url.path) {
         return {
           httpStatusCode: 301,
