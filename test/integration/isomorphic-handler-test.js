@@ -60,7 +60,7 @@ describe("Isomorphic Handler", function () {
       (pageType, params, config, client, { host }) =>
         Promise.resolve({
           pageType,
-          data: { text: "foobar", host, location: "/foobar" },
+          data: { text: "foobar", host, location: "/foobar", story: { redirect: true, slug: "foo-bar" } },
         }),
       [{ pageType: "story-page", path: "/foobar", params: { storySlug: "foo-bar" } }]
     );
