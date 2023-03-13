@@ -313,6 +313,17 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
   function returnJson(result) {
     return new Promise(() => {
       const statusCode = result.httpStatusCode || 200;
+      if (statusCode == 301 && result.data && result.data.location) {
+        console.log("line 317 ! ! ! ");
+        addCacheHeadersToResult({
+          res: res,
+          cacheKeys: [customUrlToCacheKey(config["publisher-id"], "redirect")],
+          cdnProvider: cdnProvider,
+          config: config,
+          sMaxAge,
+        });
+        return res.redirect(301, result.data.location);
+      }
       res.status(statusCode < 500 ? 200 : 500);
       res.setHeader("Content-Type", "application/json");
       addCacheHeadersToResult({
