@@ -73,7 +73,9 @@ function loadDataForIsomorphicRoute(
 
       // Multiple url redirection
       const story = result.data.story;
+      console.log(story, "--STORY--");
       if (story && story.redirect && `/${story.slug}` !== url.path) {
+        console.log("Inside Redirect IF", url.path);
         return {
           httpStatusCode: 301,
           data: {
