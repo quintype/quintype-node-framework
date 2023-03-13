@@ -29,6 +29,7 @@ function loadDataForIsomorphicRoute(
   routes,
   { otherParams, config, client, host, logError, domainSlug, redirectToLowercaseSlugs, cookies, mobileApiEnabled }
 ) {
+  console.log("line 32 ----");
   return loadDataForEachRoute().catch((error) => {
     logError(error);
     return loadErrorData(error, config, client, { host, domainSlug, cookies });
@@ -96,6 +97,7 @@ function loadDataForPageType(
   params,
   { config, client, logError, host, domainSlug, cookies }
 ) {
+  console.log("line 100 ----");
   return new Promise((resolve) =>
     resolve(
       loadData(pageType, params, config, client, {
@@ -141,6 +143,7 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
     appLoadingPlaceholder = "",
   }
 ) {
+  console.log("line 146 ----");
   const url = urlLib.parse(req.url, true);
   const freshRevision = `${assetHelper.assetHash("app.js")}-${await maxConfigVersion(config, domainSlug)}`;
 
@@ -248,6 +251,7 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
     networkOnly,
   }
 ) {
+  console.log("line 254 ----");
   const url = urlLib.parse(req.query.path || "/", true);
   const dataLoader = staticDataLoader() || isomorphicDataLoader();
 
@@ -441,6 +445,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     sMaxAge,
   }
 ) {
+  console.log("line 448 ----");
   const url = urlLib.parse(req.url, true);
 
   function writeResponse(result) {
@@ -557,6 +562,7 @@ exports.handleStaticRoute = function handleStaticRoute(
     sMaxAge,
   }
 ) {
+  console.log("line 565 ----");
   const url = urlLib.parse(path);
   pageType = pageType || "static-page";
 
