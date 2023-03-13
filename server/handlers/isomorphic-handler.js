@@ -447,6 +447,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     const statusCode = result.httpStatusCode || 200;
 
     if (statusCode == 301 && result.data && result.data.location) {
+      console.log("line 452 ! ! ! ");
       addCacheHeadersToResult({
         res: res,
         cacheKeys: [customUrlToCacheKey(config["publisher-id"], "redirect")],
@@ -519,6 +520,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
       return { httpStatusCode: 500, pageType: "error" };
     })
     .then((result) => {
+      console.log(" inside then #524", result);
       if (!result) {
         return next();
       }
@@ -569,6 +571,8 @@ exports.handleStaticRoute = function handleStaticRoute(
       if (!result) {
         return next();
       }
+
+      console.log("----  #576 -----", result);
 
       const statusCode = result.httpStatusCode || 200;
 
