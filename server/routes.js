@@ -23,6 +23,7 @@ const { redirectStory } = require("./handlers/story-redirect");
 const { simpleJsonHandler } = require("./handlers/simple-json-handler");
 const { makePickComponentSync } = require("../isomorphic/impl/make-pick-component-sync");
 const { registerFCMTopic } = require("./handlers/fcm-registration-handler");
+const { triggerWebengageNotifications } = require("./handlers/webengage-notifications");
 const rp = require("request-promise");
 const bodyParser = require("body-parser");
 const get = require("lodash/get");
@@ -332,6 +333,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     sMaxAge = 900,
     appLoadingPlaceholder = "",
     fcmServerKey = "",
+    webengageConfig = {},
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
@@ -425,6 +427,14 @@ exports.isomorphicRoutes = function isomorphicRoutes(
   );
 
   app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }));
+
+  if (webengageConfig.enableWebengage) {
+    app.post(
+      "/integrations/webengage/trigger-notification",
+      bodyParser.json(),
+      withConfig(triggerWebengageNotifications, webengageConfig)
+    );
+  }
 
   if (manifestFn) {
     app.get("/manifest.json", withConfig(handleManifest, { manifestFn, logError }));
