@@ -29,7 +29,6 @@ function loadDataForIsomorphicRoute(
   routes,
   { otherParams, config, client, host, logError, domainSlug, redirectToLowercaseSlugs, cookies, mobileApiEnabled }
 ) {
-  console.log("line 32 ----");
   return loadDataForEachRoute().catch((error) => {
     logError(error);
     return loadErrorData(error, config, client, { host, domainSlug, cookies });
@@ -74,7 +73,6 @@ function loadDataForIsomorphicRoute(
 
       // Multiple url redirection
       const story = result.data.story;
-      console.log(story, "--STORY--");
       if (story && story.redirect && `/${story.slug}` !== url.path) {
         console.log("Inside Redirect IF", url.path);
         return {
@@ -97,7 +95,6 @@ function loadDataForPageType(
   params,
   { config, client, logError, host, domainSlug, cookies }
 ) {
-  console.log("line 100 ----");
   return new Promise((resolve) =>
     resolve(
       loadData(pageType, params, config, client, {
@@ -143,7 +140,6 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
     appLoadingPlaceholder = "",
   }
 ) {
-  console.log("line 146 ----");
   const url = urlLib.parse(req.url, true);
   const freshRevision = `${assetHelper.assetHash("app.js")}-${await maxConfigVersion(config, domainSlug)}`;
 
@@ -251,7 +247,6 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
     networkOnly,
   }
 ) {
-  console.log("line 254 ----");
   const url = urlLib.parse(req.query.path || "/", true);
   const dataLoader = staticDataLoader() || isomorphicDataLoader();
 
@@ -313,7 +308,6 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
   function returnJson(result) {
     const statusCode = result.httpStatusCode || 200;
     if (statusCode == 301 && result.data && result.data.location) {
-      console.log("line 317 ! ! ! ");
       addCacheHeadersToResult({
         res: res,
         cacheKeys: [customUrlToCacheKey(config["publisher-id"], "redirect")],
@@ -456,14 +450,12 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     sMaxAge,
   }
 ) {
-  console.log("line 448 ----");
   const url = urlLib.parse(req.url, true);
 
   function writeResponse(result) {
     const statusCode = result.httpStatusCode || 200;
 
     if (statusCode == 301 && result.data && result.data.location) {
-      console.log("line 452 ! ! ! ");
       addCacheHeadersToResult({
         res: res,
         cacheKeys: [customUrlToCacheKey(config["publisher-id"], "redirect")],
@@ -536,7 +528,6 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
       return { httpStatusCode: 500, pageType: "error" };
     })
     .then((result) => {
-      console.log(" inside then #524", result);
       if (!result) {
         return next();
       }
@@ -573,7 +564,6 @@ exports.handleStaticRoute = function handleStaticRoute(
     sMaxAge,
   }
 ) {
-  console.log("line 565 ----");
   const url = urlLib.parse(path);
   pageType = pageType || "static-page";
 
@@ -588,8 +578,6 @@ exports.handleStaticRoute = function handleStaticRoute(
       if (!result) {
         return next();
       }
-
-      console.log("----  #576 -----", result);
 
       const statusCode = result.httpStatusCode || 200;
 
