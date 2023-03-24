@@ -168,8 +168,8 @@ describe("Custom Route Handler", function () {
         "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
       )
       .expect("Vary", "Accept-Encoding")
-      .expect("Surrogate-Key", "u/42/103")
-      .expect("Cache-Tag", "u/42/103")
+      .expect("Surrogate-Key", "sp/42/103")
+      .expect("Cache-Tag", "sp/42/103")
       .expect(200)
       .then((res) => {
         const response = JSON.parse(res.text);
