@@ -678,7 +678,7 @@ describe("ApiClient", function () {
   describe("Custom urls", function () {
     it("returns cache keys", function () {
       const page = CustomPath.build({ id: 101 });
-      assert.deepStrictEqual(["u/1/101"], page.cacheKeys(1));
+      assert.deepStrictEqual(["sp/1/101"], page.cacheKeys(1));
     });
 
     it("returns cache keys as null if page is invalid", function () {
