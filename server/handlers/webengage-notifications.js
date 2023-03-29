@@ -1,6 +1,6 @@
 const get = require("lodash/get");
 const request = require("request-promise");
-const { user_type } = require("../webengage-user-attributes");
+const userAttributes = require("../webengage-user-attributes");
 
 exports.triggerWebengageNotifications = async function triggerWebengageNotifications(
   req,
@@ -11,6 +11,8 @@ exports.triggerWebengageNotifications = async function triggerWebengageNotificat
   const eventName = get(req, ["body", "v1", "event", "name"], "");
   const url = `https://api.webengage.com/v2/accounts/${licenseCode}/business/save-event`;
 
+  console.log("User Attributes are --->", userAttributes);
+
   try {
     await request({
       uri: url,
@@ -19,7 +21,7 @@ exports.triggerWebengageNotifications = async function triggerWebengageNotificat
         Authorization: `Bearer ${apiKey}`,
         "content-type": "application/json",
       },
-      body: { eventName: eventName, eventData: { ...req.body, user_type } },
+      body: { eventName: eventName, eventData: { ...req.body, ...userAttributes } },
       json: true,
     });
     res.status(200).send("webengage event triggered successfully");
