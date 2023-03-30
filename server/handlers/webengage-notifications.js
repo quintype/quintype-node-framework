@@ -11,8 +11,6 @@ exports.triggerWebengageNotifications = async function triggerWebengageNotificat
   const eventName = get(req, ["body", "v1", "event", "name"], "");
   const url = `https://api.webengage.com/v2/accounts/${licenseCode}/business/save-event`;
 
-  console.log("User Attributes are --->", userAttributes);
-
   try {
     await request({
       uri: url,
