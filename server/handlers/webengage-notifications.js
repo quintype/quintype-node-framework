@@ -1,5 +1,6 @@
 const get = require("lodash/get");
 const request = require("request-promise");
+const userAttributes = require("../webengage-user-attributes");
 
 exports.triggerWebengageNotifications = async function triggerWebengageNotifications(
   req,
@@ -18,7 +19,7 @@ exports.triggerWebengageNotifications = async function triggerWebengageNotificat
         Authorization: `Bearer ${apiKey}`,
         "content-type": "application/json",
       },
-      body: { eventName: eventName, eventData: { ...req.body, user_type: "malibu_user" } },
+      body: { eventName: eventName, eventData: { ...req.body, ...userAttributes } },
       json: true,
     });
     res.status(200).send("webengage event triggered successfully");
