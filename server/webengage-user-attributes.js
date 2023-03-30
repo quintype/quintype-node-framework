@@ -1,3 +1,3 @@
-const user_type = "malibu_user";
+const userAttributes = { user_type: "malibu_user" };
 
-module.exports = { user_type };
+module.exports = userAttributes;
