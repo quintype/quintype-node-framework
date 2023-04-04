@@ -20,7 +20,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
       res.setHeader(
         "Content-Security-Policy",
         `default-src data: 'unsafe-inline' 'unsafe-eval' https: http:;` +
-          `script-src 'self' https://cdnjs.cloudflare.com` +
+          `script-src 'self' https://cdnjs.cloudflare.com;` +
           `style-src data: 'unsafe-inline' https: http: blob:;` +
           `img-src data: https: http: blob:;` +
           `font-src data: https: http:;` +
@@ -60,7 +60,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
       res.setHeader(
         "Content-Security-Policy",
         `default-src data: 'unsafe-inline' 'unsafe-eval' https: http:;` +
-          `script-src 'self' https://cdnjs.cloudflare.com` +
+          `script-src 'self' https://cdnjs.cloudflare.com;` +
           `style-src data: 'unsafe-inline' https: http: blob:;` +
           `img-src data: https: http: blob:;` +
           `font-src data: https: http:;` +
@@ -80,7 +80,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
     res.setHeader(
       "Content-Security-Policy",
       `default-src data: 'unsafe-inline' 'unsafe-eval' https: http:;` +
-        `script-src 'self' https://cdnjs.cloudflare.com` +
+        `script-src 'self' https://cdnjs.cloudflare.com;` +
         `style-src data: 'unsafe-inline' https: http: blob:;` +
         `img-src data: https: http: blob:;` +
         `font-src data: https: http:;` +
