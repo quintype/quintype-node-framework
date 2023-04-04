@@ -10,7 +10,7 @@ exports.triggerWebengageNotifications = async function triggerWebengageNotificat
 ) {
   const eventName = get(req, ["body", "v1", "event", "name"], "");
   const url = `https://api.webengage.com/v2/accounts/${licenseCode}/business/save-event`;
-  console.log("bold-webhook-schema is --->", req.body);
+  console.log("bold-webhook-schema inside framework is --->", req.body);
 
   try {
     await request({
