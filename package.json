@@ -14,7 +14,7 @@
     "coverage": "nyc --all npm test",
     "coverage-html": "nyc --all --reporter=html npm test",
     "docs": "rimraf docs && jsdoc -c jsdoc.json",
-    "sync-files-to": "npx onchange --verbose --wait --await-write-finish 'client/**/*' 'server/**/*' 'isomorphic/**/*' -- ./bin-dev-scripts/sync-to.sh "
+    "sync-files-to": "npx onchange --verbose --await-write-finish=2000 'client/**/*' 'server/**/*' 'isomorphic/**/*' -- ./bin-dev-scripts/sync-to.sh "
   },
   "repository": {
     "type": "git",
@@ -31,7 +31,7 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
-    "@quintype/amp": "^2.9.1",
+    "@quintype/amp": "^2.11.0",
     "@quintype/backend": "^2.3.3",
     "@quintype/components": "^3.3.0",
     "@quintype/prerender-node": "^3.2.26",
@@ -90,7 +90,7 @@
     "jsdom": "^17.0.0",
     "jsdom-global": "3.0.2",
     "lint-staged": "^11.2.0",
-    "mocha": "^10.2.0",
+    "mocha": "^9.1.2",
     "nyc": "^15.1.0",
     "onchange": "^7.1.0",
     "path": "^0.12.7",
