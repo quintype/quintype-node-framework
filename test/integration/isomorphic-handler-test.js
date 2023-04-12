@@ -269,7 +269,6 @@ describe("Isomorphic Handler", function () {
         assert.equal(301, res.statusCode)
         .expect(res.headers.location).toMatch(/^https:\/\/foobar.com/);
        })
-      .then(done, done);
   });
 
   it("it redirects on a 301", function (done) {
