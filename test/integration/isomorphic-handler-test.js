@@ -250,6 +250,28 @@ describe("Isomorphic Handler", function () {
       .expect(200, done);
   });
 
+  it('should set Strict-Transport-Security header and redirect to HTTPS', async () => {
+    const app = createApp(
+      (pageType, params, config, client) =>
+        Promise.resolve({
+          pageType,
+          data: { text: "foobar", cacheKeys: ["foo", "bar"] },
+        }),
+      [{ pageType: "home-page", path: "/" }]
+    );
+
+    supertest(app)
+      .get('/')
+      .set('Host', 'foobar.com')
+      .set('X-Forwarded-Proto', 'http')
+      .then((res) => {
+        assert.equal('Strict-Transport-Security','max-age=31536000; includeSubDomains; preload' )
+        assert.equal(301, res.statusCode)
+        .expect(res.headers.location).toMatch(/^https:\/\/foobar.com/);
+       })
+      .then(done, done);
+  });
+
   it("it redirects on a 301", function (done) {
     const app = createApp(
       (pageType, params, config, client) =>
