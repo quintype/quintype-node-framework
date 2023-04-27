@@ -98,9 +98,7 @@ describe("Isomorphic Data Load", function () {
   });
 
   it("returns an appVersion on every response", function (done) {
-    const app = createApp((pageType, params, config, client) =>
-      Promise.resolve({})
-    );
+    const app = createApp((pageType, params, config, client) => Promise.resolve({ data: { pageType } }));
 
     supertest(app)
       .get("/route-data.json?path=%2F")
