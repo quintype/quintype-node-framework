@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.18.11](https://github.com/quintype/quintype-node-framework/compare/v7.18.10...v7.18.11) (2023-04-27)
+
+
+### Bug Fixes
+
+*  custom pages cache ([#359](https://github.com/quintype/quintype-node-framework/issues/359)) ([b843967](https://github.com/quintype/quintype-node-framework/commit/b843967fb9126cacc5bf524eb1ca1e2c60c58fdc))
+* package lock ([4d8b44a](https://github.com/quintype/quintype-node-framework/commit/4d8b44a28b65c0c15fcebcc2d7cbe4a9a12c27dd))
+* update version ([4d7166e](https://github.com/quintype/quintype-node-framework/commit/4d7166ea9fdac240e1aeb56883b991b50c1e72db))
+
 ### [7.18.10](https://github.com/quintype/quintype-node-framework/compare/v7.18.9...v7.18.10) (2023-04-05)
 
 ### [7.18.9](https://github.com/quintype/quintype-node-framework/compare/v7.18.1...v7.18.9) (2023-03-14)
