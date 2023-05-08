@@ -38,6 +38,7 @@ function writeStaticPageResponse(res, url, page, result, { config, renderLayout,
 
   return renderLayout(res, {
     title: page.title,
+    metadata: page.metadata,
     content: renderStaticPageContent(store, page.content),
     store,
     seoTags,
