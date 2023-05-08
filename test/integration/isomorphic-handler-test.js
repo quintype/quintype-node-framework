@@ -53,8 +53,7 @@ function createApp(loadData, routes, opts = {}, app = express()) {
 describe("Isomorphic Handler", function () {
   it("Renders the page if the route matches", function (done) {
     const app = createApp(
-      (pageType, params, config, client, { host }) =>
-        Promise.resolve({ pageType, data: { text: "foobar", host } }),
+      (pageType, params, config, client, { host }) => Promise.resolve({ pageType, data: { text: "foobar", host } }),
       [{ pageType: "home-page", path: "/", exact: true }]
     );
 
@@ -64,10 +63,7 @@ describe("Isomorphic Handler", function () {
       .expect(200)
       .then((res) => {
         const response = JSON.parse(res.text);
-        assert.equal(
-          '<div data-page-type="home-page">foobar</div>',
-          response.content
-        );
+        assert.equal('<div data-page-type="home-page">foobar</div>', response.content);
         assert.equal("foobar", response.store.qt.data.text);
         assert.equal("127.0.0.1", response.store.qt.data.host);
         assert.equal("home-page", response.store.qt.pageType);
@@ -77,8 +73,7 @@ describe("Isomorphic Handler", function () {
 
   it("Accepts an async pickComponent function", function (done) {
     const app = createApp(
-      (pageType, params, config, client, { host }) =>
-        Promise.resolve({ pageType, data: { text: "foobar" } }),
+      (pageType, params, config, client, { host }) => Promise.resolve({ pageType, data: { text: "foobar" } }),
       [{ pageType: "home-page", path: "/" }],
       {
         pickComponent: (pageType) => Promise.resolve(pickComponent(pageType)),
@@ -91,18 +86,14 @@ describe("Isomorphic Handler", function () {
       .expect(200)
       .then((res) => {
         const response = JSON.parse(res.text);
-        assert.equal(
-          '<div data-page-type="home-page">foobar</div>',
-          response.content
-        );
+        assert.equal('<div data-page-type="home-page">foobar</div>', response.content);
       })
       .then(done);
   });
 
   it("Passes all URL parameters to the load data function", function (done) {
     const app = createApp(
-      (pageType, params, config, client) =>
-        Promise.resolve({ pageType, data: { text: params.text } }),
+      (pageType, params, config, client) => Promise.resolve({ pageType, data: { text: params.text } }),
       [{ pageType: "home-page", path: "/" }]
     );
 
@@ -120,8 +111,7 @@ describe("Isomorphic Handler", function () {
   describe("preloading", function () {
     it("preloads the app.js", function (done) {
       const app = createApp(
-        (pageType, params, config, client) =>
-          Promise.resolve({ pageType, data: { text: "foobar" } }),
+        (pageType, params, config, client) => Promise.resolve({ pageType, data: { text: "foobar" } }),
         [{ pageType: "home-page", path: "/" }],
         {
           preloadJs: true,
@@ -155,10 +145,7 @@ describe("Isomorphic Handler", function () {
       .expect(404)
       .then((res) => {
         const response = JSON.parse(res.text);
-        assert.equal(
-          '<div data-page-type="not-found">foobar</div>',
-          response.content
-        );
+        assert.equal('<div data-page-type="not-found">foobar</div>', response.content);
         assert.equal(false, response.store.qt.disableIsomorphicComponent);
         assert.equal("127.0.0.1", response.store.qt.data.host);
       })
@@ -186,10 +173,7 @@ describe("Isomorphic Handler", function () {
       .expect(500)
       .then((res) => {
         const response = JSON.parse(res.text);
-        assert.equal(
-          '<div data-page-type="not-found">foobar</div>',
-          response.content
-        );
+        assert.equal('<div data-page-type="not-found">foobar</div>', response.content);
         assert.equal(true, response.store.qt.disableIsomorphicComponent);
       })
       .then(done, done);
@@ -224,10 +208,7 @@ describe("Isomorphic Handler", function () {
     supertest(app)
       .get("/")
       .expect("Content-Type", /html/)
-      .expect(
-        "Cache-Control",
-        "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-      )
+      .expect("Cache-Control", "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400")
       .expect("Vary", "Accept-Encoding")
       .expect("Surrogate-Key", "foo bar")
       .expect("Cache-Tag", "foo,bar")
@@ -236,8 +217,7 @@ describe("Isomorphic Handler", function () {
 
   it("it redirects on a 301", function (done) {
     const app = createApp(
-      (pageType, params, config, client) =>
-        Promise.resolve({ httpStatusCode: 301, data: { location: "/foobar" } }),
+      (pageType, params, config, client) => Promise.resolve({ httpStatusCode: 301, data: { location: "/foobar" } }),
       [{ pageType: "home-page", path: "/" }]
     );
 
@@ -246,8 +226,7 @@ describe("Isomorphic Handler", function () {
 
   it("returns a 500 if render layout crashes", function (done) {
     const app = createApp(
-      (pageType, params, config, client) =>
-        Promise.resolve({ pageType, data: { text: "foobar" } }),
+      (pageType, params, config, client) => Promise.resolve({ pageType, data: { text: "foobar" } }),
       [{ pageType: "home-page", path: "/" }],
       {
         renderLayout: () => {
@@ -267,8 +246,7 @@ describe("Isomorphic Handler", function () {
     });
 
     const app = createApp(
-      (pageType, params, config, client) =>
-        Promise.resolve({ pageType, data: { text: "foobar" } }),
+      (pageType, params, config, client) => Promise.resolve({ pageType, data: { text: "foobar" } }),
       [{ pageType: "home-page", path: "/" }],
       {
         prerenderServiceUrl: "http://localhost:4000",
@@ -337,10 +315,7 @@ describe("Isomorphic Handler", function () {
         .expect(404)
         .then((res) => {
           const response = JSON.parse(res.text);
-          assert.equal(
-            '<div data-page-type="not-found">foobar</div>',
-            response.content
-          );
+          assert.equal('<div data-page-type="not-found">foobar</div>', response.content);
           assert.equal(false, response.store.qt.disableIsomorphicComponent);
           assert.equal("127.0.0.1", response.store.qt.data.host);
         })
@@ -349,8 +324,7 @@ describe("Isomorphic Handler", function () {
 
     it("Allows bypassing even data.abort is set", function (done) {
       const app = createApp(
-        (pageType, params, config, client, { next }) =>
-          next().then((n) => ({ data: n })),
+        (pageType, params, config, client, { next }) => next().then((n) => ({ data: n })),
         [{ pageType: "home-page", path: "/skip", exact: true }],
         {
           loadErrorData: (err, config, client, { host }) => ({
@@ -367,10 +341,7 @@ describe("Isomorphic Handler", function () {
         .expect(404)
         .then((res) => {
           const response = JSON.parse(res.text);
-          assert.equal(
-            '<div data-page-type="not-found">foobar</div>',
-            response.content
-          );
+          assert.equal('<div data-page-type="not-found">foobar</div>', response.content);
           assert.equal(false, response.store.qt.disableIsomorphicComponent);
           assert.equal("127.0.0.1", response.store.qt.data.host);
         })
@@ -383,9 +354,7 @@ describe("Isomorphic Handler", function () {
         { pageType: "home-page", path: "/" },
       ];
       const dataLoader = (pageType, _1, _2, _3, { host, next }) =>
-        pageType === "skip"
-          ? next()
-          : Promise.resolve({ pageType, data: { text: "foobar", host } });
+        pageType === "skip" ? next() : Promise.resolve({ pageType, data: { text: "foobar", host } });
 
       const app = createApp(dataLoader, overlappingRoutes);
 
@@ -395,10 +364,7 @@ describe("Isomorphic Handler", function () {
         .expect(200)
         .then((res) => {
           const response = JSON.parse(res.text);
-          assert.equal(
-            '<div data-page-type="home-page">foobar</div>',
-            response.content
-          );
+          assert.equal('<div data-page-type="home-page">foobar</div>', response.content);
           assert.equal("foobar", response.store.qt.data.text);
           assert.equal("127.0.0.1", response.store.qt.data.host);
           assert.equal("home-page", response.store.qt.pageType);
@@ -409,8 +375,7 @@ describe("Isomorphic Handler", function () {
 
   it("Passes the primaryHostUrl and currentHostUrl to the render", function (done) {
     const app = createApp(
-      (pageType, params, config, client, { host }) =>
-        Promise.resolve({ pageType, data: { text: "foobar", host } }),
+      (pageType, params, config, client, { host }) => Promise.resolve({ pageType, data: { text: "foobar", host } }),
       [{ pageType: "home-page", path: "/" }]
     );
 
@@ -445,10 +410,7 @@ describe("Isomorphic Handler", function () {
         .expect("Content-Type", /html/)
         .expect(200)
         .then((res) => {
-          assert.equal(
-            `http://127.0.0.1/amp/story/%2Ffoo%2Fbar`,
-            res.get("X-QT-Light-Pages-Url")
-          );
+          assert.equal(`http://127.0.0.1/amp/story/%2Ffoo%2Fbar`, res.get("X-QT-Light-Pages-Url"));
         })
         .then(done);
     });
@@ -471,10 +433,7 @@ describe("Isomorphic Handler", function () {
         .expect("Content-Type", /html/)
         .expect(200)
         .then((res) => {
-          assert.equal(
-            `http://127.0.0.1/amp/story/%2Ffoo%2Fbar`,
-            res.get("X-QT-Light-Pages-Url")
-          );
+          assert.equal(`http://127.0.0.1/amp/story/%2Ffoo%2Fbar`, res.get("X-QT-Light-Pages-Url"));
         })
         .then(done);
     });
@@ -489,8 +448,7 @@ describe("Isomorphic Handler", function () {
         [{ pageType: "story-page", path: "/*/:storySlug" }],
         {
           lightPages: () => false,
-          renderLightPage: (req, res, result) =>
-            res.send("<h1> Amp Page </h1>"),
+          renderLightPage: (req, res, result) => res.send("<h1> Amp Page </h1>"),
           shouldEncodeAmpUri: true,
         }
       );
@@ -553,10 +511,7 @@ describe("Isomorphic Handler", function () {
         .then((res) => {
           const cacheControl = res.header["cache-control"];
           const cacheTag = res.header["cache-tag"];
-          assert.equal(
-            cacheControl,
-            "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-          );
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
           assert.equal(cacheTag, "c/1/abcdefgh");
         })
         .then(done);
@@ -579,10 +534,7 @@ describe("Isomorphic Handler", function () {
         .then((res) => {
           const cacheControl = res.header["cache-control"];
           const cacheTag = res.header["cache-tag"];
-          assert.equal(
-            cacheControl,
-            "public,max-age=15,s-maxage=60,stale-while-revalidate=150,stale-if-error=3600"
-          );
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=60,stale-while-revalidate=150,stale-if-error=3600");
           assert.equal(cacheTag, undefined);
         })
         .then(done);
@@ -616,7 +568,7 @@ describe("Isomorphic Handler", function () {
           assert.equal(
             contentSecurityPolicy,
             `default-src data: 'unsafe-inline' 'unsafe-eval' https: http:;` +
-              `script-src data: 'unsafe-inline' 'unsafe-eval' https: http: blob:;` +
+              `script-src 'self' https://cdnjs.cloudflare.com;` +
               `style-src data: 'unsafe-inline' https: http: blob:;` +
               `img-src data: https: http: blob:;` +
               `font-src data: https: http:;` +
@@ -651,19 +603,13 @@ describe("Isomorphic Handler", function () {
           const edgeCacheControl = res.header["edge-control"];
           const edgeCacheTag = res.header["edge-cache-tag"];
           const contentSecurityPolicy = res.header["content-security-policy"];
-          assert.equal(
-            cacheControl,
-            "public,max-age=15,s-maxage=60,stale-while-revalidate=150,stale-if-error=3600"
-          );
-          assert.equal(
-            edgeCacheControl,
-            "public,maxage=60,stale-while-revalidate=150,stale-if-error=3600"
-          );
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=60,stale-while-revalidate=150,stale-if-error=3600");
+          assert.equal(edgeCacheControl, "public,maxage=60,stale-while-revalidate=150,stale-if-error=3600");
           assert.equal(edgeCacheTag, undefined);
           assert.equal(
             contentSecurityPolicy,
             `default-src data: 'unsafe-inline' 'unsafe-eval' https: http:;` +
-              `script-src data: 'unsafe-inline' 'unsafe-eval' https: http: blob:;` +
+              `script-src 'self' https://cdnjs.cloudflare.com;` +
               `style-src data: 'unsafe-inline' https: http: blob:;` +
               `img-src data: https: http: blob:;` +
               `font-src data: https: http:;` +
@@ -698,19 +644,13 @@ describe("Isomorphic Handler", function () {
           const edgeCacheControl = res.header["edge-control"];
           const edgeCacheTag = res.header["edge-cache-tag"];
           const contentSecurityPolicy = res.header["content-security-policy"];
-          assert.equal(
-            cacheControl,
-            "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-          );
-          assert.equal(
-            edgeCacheControl,
-            "public,maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-          );
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
+          assert.equal(edgeCacheControl, "public,maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
           assert.equal(edgeCacheTag, "c/1/abcdefgh");
           assert.equal(
             contentSecurityPolicy,
             `default-src data: 'unsafe-inline' 'unsafe-eval' https: http:;` +
-              `script-src data: 'unsafe-inline' 'unsafe-eval' https: http: blob:;` +
+              `script-src 'self' https://cdnjs.cloudflare.com;` +
               `style-src data: 'unsafe-inline' https: http: blob:;` +
               `img-src data: https: http: blob:;` +
               `font-src data: https: http:;` +
@@ -745,19 +685,13 @@ describe("Isomorphic Handler", function () {
           const edgeCacheControl = res.header["edge-control"];
           const edgeCacheTag = res.header["edge-cache-tag"];
           const contentSecurityPolicy = res.header["content-security-policy"];
-          assert.equal(
-            cacheControl,
-            "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-          );
-          assert.equal(
-            edgeCacheControl,
-            "public,maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-          );
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
+          assert.equal(edgeCacheControl, "public,maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
           assert.equal(edgeCacheTag, "c/1/abcdefgh");
           assert.equal(
             contentSecurityPolicy,
             `default-src data: 'unsafe-inline' 'unsafe-eval' https: http:;` +
-              `script-src data: 'unsafe-inline' 'unsafe-eval' https: http: blob:;` +
+              `script-src 'self' https://cdnjs.cloudflare.com;` +
               `style-src data: 'unsafe-inline' https: http: blob:;` +
               `img-src data: https: http: blob:;` +
               `font-src data: https: http:;` +
@@ -812,10 +746,7 @@ describe("Isomorphic Handler", function () {
         .expect(200)
         .then((res) => {
           const cacheControl = res.header["cache-control"];
-          assert.equal(
-            cacheControl,
-            "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-          );
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
         })
         .then(done);
     });
@@ -917,8 +848,7 @@ describe("Isomorphic Handler", function () {
       const app = express();
       mountQuintypeAt(app, "/foo");
       createApp(
-        (pageType, params, config, client, { host }) =>
-          Promise.resolve({ pageType, data: { text: "foobar", host } }),
+        (pageType, params, config, client, { host }) => Promise.resolve({ pageType, data: { text: "foobar", host } }),
         [{ pageType: "home-page", path: "/", exact: true }],
         {},
         app
@@ -930,10 +860,7 @@ describe("Isomorphic Handler", function () {
         .expect(200)
         .then((res) => {
           const response = JSON.parse(res.text);
-          assert.equal(
-            '<div data-page-type="home-page">foobar</div>',
-            response.content
-          );
+          assert.equal('<div data-page-type="home-page">foobar</div>', response.content);
           assert.equal("foobar", response.store.qt.data.text);
           assert.equal("127.0.0.1", response.store.qt.data.host);
           assert.equal("home-page", response.store.qt.pageType);
@@ -944,8 +871,7 @@ describe("Isomorphic Handler", function () {
       const app = express();
       mountQuintypeAt(app, "/foo");
       createApp(
-        (pageType, params, config, client, { host }) =>
-          Promise.resolve({ pageType, data: { text: "foobar", host } }),
+        (pageType, params, config, client, { host }) => Promise.resolve({ pageType, data: { text: "foobar", host } }),
         [{ pageType: "home-page", path: "/", exact: true }],
         {},
         app
@@ -958,8 +884,7 @@ describe("Isomorphic Handler", function () {
       const app = express();
       mountQuintypeAt(app, (hostname) => `/${hostname}`);
       createApp(
-        (pageType, params, config, client, { host }) =>
-          Promise.resolve({ pageType, data: { text: "foobar", host } }),
+        (pageType, params, config, client, { host }) => Promise.resolve({ pageType, data: { text: "foobar", host } }),
         [{ pageType: "home-page", path: "/", exact: true }],
         {},
         app
@@ -971,10 +896,7 @@ describe("Isomorphic Handler", function () {
         .expect(200)
         .then((res) => {
           const response = JSON.parse(res.text);
-          assert.equal(
-            '<div data-page-type="home-page">foobar</div>',
-            response.content
-          );
+          assert.equal('<div data-page-type="home-page">foobar</div>', response.content);
           assert.equal("foobar", response.store.qt.data.text);
           assert.equal("127.0.0.1", response.store.qt.data.host);
           assert.equal("home-page", response.store.qt.pageType);
@@ -985,8 +907,7 @@ describe("Isomorphic Handler", function () {
       const app = express();
       mountQuintypeAt(app, (hostname) => undefined);
       createApp(
-        (pageType, params, config, client, { host }) =>
-          Promise.resolve({ pageType, data: { text: "foobar", host } }),
+        (pageType, params, config, client, { host }) => Promise.resolve({ pageType, data: { text: "foobar", host } }),
         [{ pageType: "home-page", path: "/", exact: true }],
         {},
         app
@@ -998,10 +919,7 @@ describe("Isomorphic Handler", function () {
         .expect(200)
         .then((res) => {
           const response = JSON.parse(res.text);
-          assert.equal(
-            '<div data-page-type="home-page">foobar</div>',
-            response.content
-          );
+          assert.equal('<div data-page-type="home-page">foobar</div>', response.content);
           assert.equal("foobar", response.store.qt.data.text);
           assert.equal("127.0.0.1", response.store.qt.data.host);
           assert.equal("home-page", response.store.qt.pageType);
