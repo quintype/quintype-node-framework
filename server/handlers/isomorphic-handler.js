@@ -15,7 +15,6 @@ const { customUrlToCacheKey } = require("../caching");
 const { addLightPageHeaders } = require("../impl/light-page-impl");
 const { getOneSignalScript } = require("./onesignal-script");
 const { getRedirectUrl } = require("../redirect-url-helper");
-const { Story } = require("../impl/api-client-impl");
 
 const ABORT_HANDLER = "__ABORT__";
 function abortHandler() {
@@ -38,7 +37,6 @@ function loadDataForIsomorphicRoute(
   async function loadDataForEachRoute() {
     const redirectToLowercaseSlugsValue =
       typeof redirectToLowercaseSlugs === "function" ? redirectToLowercaseSlugs(config) : redirectToLowercaseSlugs;
-
     for (const match of matchAllRoutes(url.pathname, routes)) {
       const params = Object.assign({}, url.query, otherParams, match.params);
       /* On story pages, if the slug contains any capital letters (latin), we want to
@@ -58,7 +56,6 @@ function loadDataForIsomorphicRoute(
           },
         };
       }
-
       const result = await loadData(match.pageType, params, config, client, {
         host,
         next: abortHandler,
@@ -70,18 +67,6 @@ function loadDataForIsomorphicRoute(
       if (result && result[ABORT_HANDLER]) continue;
 
       if (result && result.data && result.data[ABORT_HANDLER]) continue;
-
-      // Multiple url redirection
-      const story = result.data.story;
-      if (story && story.redirect && `/${story.slug}` !== url.path) {
-        console.log("Inside Redirect IF", url.path);
-        return {
-          httpStatusCode: 301,
-          data: {
-            location: `/${story.slug}`,
-          },
-        };
-      }
 
       return result;
     }
@@ -306,18 +291,8 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
   }
 
   function returnJson(result) {
-    const statusCode = result.httpStatusCode || 200;
-    if (statusCode == 301 && result.data && result.data.location) {
-      addCacheHeadersToResult({
-        res: res,
-        cacheKeys: [customUrlToCacheKey(config["publisher-id"], "redirect")],
-        cdnProvider: cdnProvider,
-        config: config,
-        sMaxAge,
-      });
-      return res.redirect(301, result.data.location);
-    }
     return new Promise(() => {
+      const statusCode = result.httpStatusCode || 200;
       res.status(statusCode < 500 ? 200 : 500);
       res.setHeader("Content-Type", "application/json");
       addCacheHeadersToResult({
