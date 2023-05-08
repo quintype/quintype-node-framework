@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.19.1](https://github.com/quintype/quintype-node-framework/compare/v7.19.0...v7.19.1) (2023-05-08)
+
 ## [7.19.0](https://github.com/quintype/quintype-node-framework/compare/v7.10.5...v7.19.0) (2023-05-08)
 
 
