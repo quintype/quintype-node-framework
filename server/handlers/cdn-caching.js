@@ -2,6 +2,7 @@ const { cache } = require("ejs");
 const _ = require("lodash");
 
 exports.addCacheHeadersToResult = function addCacheHeadersToResult({
+  req,
   res,
   cacheKeys,
   cdnProvider = "cloudflare",
@@ -91,6 +92,12 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
         `form-action https: http:;` +
         `block-all-mixed-content;`
     );
+  }
+  if (req.path.startsWith("/topic")) {
+    // as of now, platform doesn't provide cache tags to purge tag pages so hardcoding a ttl of 10 min
+    res.setHeader("Cache-Control", `public,max-age=15,s-maxage=600,stale-while-revalidate=1000,stale-if-error=14400`);
+    if (cdnProviderVal === "akamai")
+      res.setHeader("Edge-Control", `public,maxage=600,stale-while-revalidate=1000,stale-if-error=14400`);
   }
   return res;
 };

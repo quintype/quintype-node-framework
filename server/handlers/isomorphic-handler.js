@@ -458,6 +458,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
 
     res.status(statusCode);
     addCacheHeadersToResult({
+      req,
       res: res,
       cacheKeys: _.get(result, ["data", "cacheKeys"]),
       cdnProvider: cdnProvider,
