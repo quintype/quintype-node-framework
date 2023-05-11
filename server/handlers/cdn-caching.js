@@ -47,6 +47,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
         );
         cdnProviderVal === "akamai" &&
           res.setHeader("Edge-Control", `public,maxage=${sMaxAge},stale-while-revalidate=1000,stale-if-error=14400`);
+        addCacheHeadersForTopicPages(req, res);
       }
 
       res.setHeader("Vary", "Accept-Encoding");
@@ -93,11 +94,15 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
         `block-all-mixed-content;`
     );
   }
-  if (req.path.startsWith("/topic")) {
-    // as of now, platform doesn't provide cache tags to purge tag pages so hardcoding a ttl of 10 min
+  return res;
+};
+
+function addCacheHeadersForTopicPages(req, res) {
+  const path = req ? req.path : "";
+  // as of now, platform doesn't provide cache tags to purge tag pages so hardcoding a ttl of 10 min
+  if (path.startsWith("/topic")) {
     res.setHeader("Cache-Control", `public,max-age=15,s-maxage=600,stale-while-revalidate=1000,stale-if-error=14400`);
     if (cdnProviderVal === "akamai")
       res.setHeader("Edge-Control", `public,maxage=600,stale-while-revalidate=1000,stale-if-error=14400`);
   }
-  return res;
-};
+}
