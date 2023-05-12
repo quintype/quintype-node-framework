@@ -432,6 +432,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
 
     if (statusCode == 301 && result.data && result.data.location) {
       addCacheHeadersToResult({
+        pageType: store.getState().qt.pageType,
         res: res,
         cacheKeys: [customUrlToCacheKey(config["publisher-id"], "redirect")],
         cdnProvider: cdnProvider,
@@ -458,7 +459,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
 
     res.status(statusCode);
     addCacheHeadersToResult({
-      req,
+      pageType: store.getState().qt.pageType,
       res: res,
       cacheKeys: _.get(result, ["data", "cacheKeys"]),
       cdnProvider: cdnProvider,
