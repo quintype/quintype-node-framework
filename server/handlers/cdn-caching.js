@@ -8,7 +8,6 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
   config,
   sMaxAge = "900",
   networkOnly = false,
-  pageType = "",
 }) {
   let cdnProviderVal = null;
   cdnProviderVal =
