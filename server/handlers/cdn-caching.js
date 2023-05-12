@@ -47,7 +47,6 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
         );
         cdnProviderVal === "akamai" &&
           res.setHeader("Edge-Control", `public,maxage=${sMaxAge},stale-while-revalidate=1000,stale-if-error=14400`);
-        addCacheHeadersForTagPages({ pageType, res });
       }
 
       res.setHeader("Vary", "Accept-Encoding");
@@ -96,9 +95,3 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
   }
   return res;
 };
-
-function addCacheHeadersForTagPages({ pageType, res }) {
-  // platform doesn't provide cache tags to purge tag pages at the time of writing this, so hardcoding a ttl of 10 min
-  if (pageType === "tag-page")
-    res.setHeader("Cache-Control", `public,max-age=15,s-maxage=600,stale-while-revalidate=1000,stale-if-error=14400`);
-}

@@ -432,12 +432,11 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
 
     if (statusCode == 301 && result.data && result.data.location) {
       addCacheHeadersToResult({
-        pageType: store.getState().qt.pageType,
         res: res,
         cacheKeys: [customUrlToCacheKey(config["publisher-id"], "redirect")],
         cdnProvider: cdnProvider,
         config: config,
-        sMaxAge,
+        sMaxAge: result.pageType === "tag-page" ? 600 : sMaxAge,
       });
       return res.redirect(301, result.data.location);
     }
@@ -459,12 +458,11 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
 
     res.status(statusCode);
     addCacheHeadersToResult({
-      pageType: store.getState().qt.pageType,
       res: res,
       cacheKeys: _.get(result, ["data", "cacheKeys"]),
       cdnProvider: cdnProvider,
       config: config,
-      sMaxAge,
+      sMaxAge: result.pageType === "tag-page" ? 600 : sMaxAge,
     });
 
     if (preloadJs) {
