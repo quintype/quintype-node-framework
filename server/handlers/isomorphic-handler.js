@@ -436,7 +436,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
         cacheKeys: [customUrlToCacheKey(config["publisher-id"], "redirect")],
         cdnProvider: cdnProvider,
         config: config,
-        sMaxAge,
+        sMaxAge: result.pageType === "tag-page" ? 600 : sMaxAge,
       });
       return res.redirect(301, result.data.location);
     }
@@ -462,7 +462,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
       cacheKeys: _.get(result, ["data", "cacheKeys"]),
       cdnProvider: cdnProvider,
       config: config,
-      sMaxAge,
+      sMaxAge: result.pageType === "tag-page" ? 600 : sMaxAge,
     });
 
     if (preloadJs) {
