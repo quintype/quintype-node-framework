@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.19.3",
+  "version": "7.19.4-custom-fonts.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
