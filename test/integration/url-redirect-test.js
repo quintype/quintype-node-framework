@@ -651,8 +651,8 @@ describe("Redirect Routes Handler", function () {
         "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
       )
       .expect("Vary", /Accept\-Encoding/)
-      .expect("Surrogate-Key", "u/42/102")
-      .expect("Cache-Tag", "u/42/102")
+      .expect("Surrogate-Key", "sp/42/102")
+      .expect("Cache-Tag", "sp/42/102")
       .expect(302, done);
   });
 

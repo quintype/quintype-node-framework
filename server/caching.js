@@ -61,5 +61,5 @@ exports.sorterToCacheKey = function sorterToCacheKey(
  * @returns {string} The cache key
  */
 exports.customUrlToCacheKey = function customUrlToCacheKey(publisherId, page) {
-  return `u/${publisherId}/${page.id}`;
+  return `sp/${publisherId}/${page.id}`;
 };
