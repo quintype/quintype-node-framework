@@ -34,7 +34,6 @@
     "@quintype/amp": "^2.15.2",
     "@quintype/backend": "^2.3.3",
     "@quintype/components": "^3.3.0",
-    "@quintype/framework": "^2.17.0",
     "@quintype/prerender-node": "^3.2.26",
     "@quintype/seo": "^1.39.0",
     "atob": "^2.1.2",
