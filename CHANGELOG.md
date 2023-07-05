@@ -2,6 +2,53 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.19.14](https://github.com/quintype/quintype-node-framework/compare/v7.19.6...v7.19.14) (2023-07-04)
+
+### [7.19.13](https://github.com/quintype/quintype-node-framework/compare/v7.19.12...v7.19.13) (2023-07-03)
+
+### [7.19.12](https://github.com/quintype/quintype-node-framework/compare/v7.19.11...v7.19.12) (2023-06-28)
+
+### [7.19.11](https://github.com/quintype/quintype-node-framework/compare/v7.19.10...v7.19.11) (2023-06-19)
+
+### [7.19.10](https://github.com/quintype/quintype-node-framework/compare/v7.19.9...v7.19.10) (2023-06-14)
+
+### [7.19.9](https://github.com/quintype/quintype-node-framework/compare/v7.19.8...v7.19.9) (2023-06-14)
+
+### [7.19.8](https://github.com/quintype/quintype-node-framework/compare/v7.19.7...v7.19.8) (2023-06-07)
+
+### [7.19.7](https://github.com/quintype/quintype-node-framework/compare/v7.19.6...v7.19.7) (2023-06-02)
+
+### [7.19.6](https://github.com/quintype/quintype-node-framework/compare/v7.19.5...v7.19.6) (2023-05-19)
+
+### [7.19.5](https://github.com/quintype/quintype-node-framework/compare/v7.19.0...v7.19.5) (2023-05-19)
+
+### [7.19.4](https://github.com/quintype/quintype-node-framework/compare/v7.19.3...v7.19.4) (2023-05-17)
+
+### [7.19.3](https://github.com/quintype/quintype-node-framework/compare/v7.19.2...v7.19.3) (2023-05-12)
+
+### [7.19.2](https://github.com/quintype/quintype-node-framework/compare/v7.19.1...v7.19.2) (2023-05-09)
+
+### [7.19.1](https://github.com/quintype/quintype-node-framework/compare/v7.19.0...v7.19.1) (2023-05-08)
+
+## [7.19.0](https://github.com/quintype/quintype-node-framework/compare/v7.10.5...v7.19.0) (2023-05-08)
+
+
+### Features
+
+* **amp:** Decode embed using utf 8 ([#345](https://github.com/quintype/quintype-node-framework/issues/345)) ([4e8a3b3](https://github.com/quintype/quintype-node-framework/commit/4e8a3b38b9be62571f96e69e8b976ff610daf068))
+* remove powered by quintype from the footer  ([#334](https://github.com/quintype/quintype-node-framework/issues/334)) ([3dbc1f3](https://github.com/quintype/quintype-node-framework/commit/3dbc1f3144536a439ad0ecaacd2313cb6bb528e1))
+
+
+### Bug Fixes
+
+*  custom pages cache ([#359](https://github.com/quintype/quintype-node-framework/issues/359)) ([b843967](https://github.com/quintype/quintype-node-framework/commit/b843967fb9126cacc5bf524eb1ca1e2c60c58fdc))
+* Amp chartbeat domain ([#344](https://github.com/quintype/quintype-node-framework/issues/344)) ([cbfd2f1](https://github.com/quintype/quintype-node-framework/commit/cbfd2f1a439fffbd4b9ba619d59df0165005a64a))
+* **amp:** Use correct dates for amp stories ([#338](https://github.com/quintype/quintype-node-framework/issues/338)) ([2182c50](https://github.com/quintype/quintype-node-framework/commit/2182c50fbeb5cc9003d766315bd518bbc287c8ee))
+* **ga:** update title before history push for ga tracking issue ([#347](https://github.com/quintype/quintype-node-framework/issues/347)) ([adb6dc8](https://github.com/quintype/quintype-node-framework/commit/adb6dc8425b097bf9717ea8ba745e69609ccbbb2))
+* package lock ([4d8b44a](https://github.com/quintype/quintype-node-framework/commit/4d8b44a28b65c0c15fcebcc2d7cbe4a9a12c27dd))
+* **redirects:** cache redirects ([#332](https://github.com/quintype/quintype-node-framework/issues/332)) ([ae820eb](https://github.com/quintype/quintype-node-framework/commit/ae820eb5fb205d3ae4ec4771ded953690705a3b9))
+* update version ([4d7166e](https://github.com/quintype/quintype-node-framework/commit/4d7166ea9fdac240e1aeb56883b991b50c1e72db))
+
 ### [7.18.11](https://github.com/quintype/quintype-node-framework/compare/v7.18.10...v7.18.11) (2023-04-27)
 
 
