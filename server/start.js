@@ -16,6 +16,7 @@ const process = require("process");
 const { initializeAllClients } = require("./api-client");
 const logger = require("./logger");
 const logSuccess = chalk.bold.cyanBright;
+const { REQUEST_TIMEOUT } = require("../constants/timeout");
 
 function startMaster({ workers = 4 }) {
   let terminating = false;
@@ -77,7 +78,7 @@ async function startWorker(appThunk, opts) {
       console.log(logSuccess(`||=============================||`));
       console.log(logSuccess(`|| App listening on port ${opts.port || 3000}! ||`))
       console.log(logSuccess(`||=============================||`));
-    });
+    }).setTimeout(REQUEST_TIMEOUT);
 
     process.on("SIGTERM", () => {
       server.close(() => {
@@ -85,7 +86,7 @@ async function startWorker(appThunk, opts) {
         process.exit();
       });
     });
-    process.on("SIGHUP", () => {});
+    process.on("SIGHUP", () => { });
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e.stack);
