@@ -18,7 +18,7 @@ function renderStaticPageContent(store, content) {
   return renderedContent;
 }
 
-function writeStaticPageResponse(res, url, page, result, { config, renderLayout, seo }) {
+function writeStaticPageResponse(res, url, page, result, { config, renderLayout, seo }, req) {
   const qt = {
     pageType: page.type,
     // remove content from data to avoid the script tag inside json breaking the page
@@ -36,14 +36,18 @@ function writeStaticPageResponse(res, url, page, result, { config, renderLayout,
 
   res.status(page["status-code"] || 200);
 
-  return renderLayout(res, {
-    title: page.title,
-    metadata: page.metadata,
-    content: renderStaticPageContent(store, page.content),
-    store,
-    seoTags,
-    disableAjaxNavigation: true,
-  });
+  return renderLayout(
+    res,
+    {
+      title: page.title,
+      metadata: page.metadata,
+      content: renderStaticPageContent(store, page.content),
+      store,
+      seoTags,
+      disableAjaxNavigation: true,
+    },
+    req
+  );
 }
 
 exports.customRouteHandler = function customRouteHandler(
@@ -98,11 +102,18 @@ exports.customRouteHandler = function customRouteHandler(
             domainSlug,
             cookies: req.cookies,
           }).then((response) => {
-            return writeStaticPageResponse(res, url, page.page, response, {
-              config,
-              renderLayout,
-              seo,
-            });
+            return writeStaticPageResponse(
+              res,
+              url,
+              page.page,
+              response,
+              {
+                config,
+                renderLayout,
+                seo,
+              },
+              req
+            );
           });
         }
         return res.send(page.content);
