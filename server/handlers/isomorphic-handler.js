@@ -149,13 +149,17 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
     const seoInstance = getSeoInstance(seo, config, "shell");
     const seoTags = seoInstance && seoInstance.getMetaTags(config, "shell", result, { url });
 
-    return renderLayout(res, {
-      config,
-      seoTags,
-      content: `<div class="app-loading">${appLoadingPlaceholder}<script type="text/javascript">window.qtLoadedFromShell = true</script></div>`,
-      store: createStore((state) => state, getDefaultState(result)),
-      shell: true,
-    });
+    return renderLayout(
+      res,
+      {
+        config,
+        seoTags,
+        content: `<div class="app-loading">${appLoadingPlaceholder}<script type="text/javascript">window.qtLoadedFromShell = true</script></div>`,
+        store: createStore((state) => state, getDefaultState(result)),
+        shell: true,
+      },
+      req
+    );
   });
 };
 
@@ -377,17 +381,21 @@ exports.notFoundHandler = function notFoundHandler(
       res.setHeader("Vary", "Accept-Encoding");
       res.setHeader("Content-Type", "text/html; charset=utf-8");
       return pickComponent.preloadComponent(store.getState().qt.pageType, store.getState().qt.subPageType).then(() =>
-        renderLayout(res, {
-          config,
-          seoTags,
-          title: seoInstance ? seoInstance.getTitle(config, result.pageType, result) : result.title,
-          content: renderReduxComponent(IsomorphicComponent, store, {
-            pickComponent,
-          }),
-          store,
-          pageType: store.getState().qt.pageType,
-          subPageType: store.getState().qt.subPageType,
-        })
+        renderLayout(
+          res,
+          {
+            config,
+            seoTags,
+            title: seoInstance ? seoInstance.getTitle(config, result.pageType, result) : result.title,
+            content: renderReduxComponent(IsomorphicComponent, store, {
+              pickComponent,
+            }),
+            store,
+            pageType: store.getState().qt.pageType,
+            subPageType: store.getState().qt.subPageType,
+          },
+          req
+        )
       );
     })
     .catch((e) => {
@@ -470,18 +478,22 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     }
     const oneSignalScript = oneSignalServiceWorkers ? getOneSignalScript({ config, publisherConfig }) : null;
     return pickComponent.preloadComponent(store.getState().qt.pageType, store.getState().qt.subPageType).then(() =>
-      renderLayout(res, {
-        config,
-        title: result.title,
-        content: renderReduxComponent(IsomorphicComponent, store, {
-          pickComponent,
-        }),
-        store,
-        seoTags,
-        pageType: store.getState().qt.pageType,
-        subPageType: store.getState().qt.subPageType,
-        oneSignalScript,
-      })
+      renderLayout(
+        res,
+        {
+          config,
+          title: result.title,
+          content: renderReduxComponent(IsomorphicComponent, store, {
+            pickComponent,
+          }),
+          store,
+          seoTags,
+          pageType: store.getState().qt.pageType,
+          subPageType: store.getState().qt.subPageType,
+          oneSignalScript,
+        },
+        req
+      )
     );
   }
 
@@ -595,7 +607,8 @@ exports.handleStaticRoute = function handleStaticRoute(
             oneSignalScript,
           },
           renderParams
-        )
+        ),
+        req
       );
     })
     .catch((e) => {
