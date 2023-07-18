@@ -53,7 +53,7 @@ function processRedirects(req, res, next, sourceUrlArray, urls) {
         }
       }
     } catch (err) {
-      console.log(`Redirection error on ${req.url}-----`, err);
+      console.log(`Redirection error on ${req.host}-----`, err);
     }
   });
 }
