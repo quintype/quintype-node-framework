@@ -19,6 +19,8 @@ function renderStaticPageContent(store, content) {
 }
 
 function writeStaticPageResponse(res, url, page, result, { config, renderLayout, seo }) {
+  const hideHeader = !page.metadata.header;
+  const hideFooter = !page.metadata.footer;
   const qt = {
     pageType: page.type,
     // remove content from data to avoid the script tag inside json breaking the page
@@ -37,6 +39,8 @@ function writeStaticPageResponse(res, url, page, result, { config, renderLayout,
   res.status(page["status-code"] || 200);
 
   return renderLayout(res, {
+    hideHeader,
+    hideFooter,
     title: page.title,
     metadata: page.metadata,
     content: renderStaticPageContent(store, page.content),
