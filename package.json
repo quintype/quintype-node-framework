@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.19.21",
+  "version": "7.19.22-logger-edit.1",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
@@ -59,7 +59,7 @@
     "redux": "^4.1.1",
     "request-promise": "^4.2.6",
     "sleep-promise": "^9.1.0",
-    "winston": "3.3.3"
+    "winston": "3.10.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.15.7",

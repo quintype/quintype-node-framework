@@ -19,7 +19,7 @@ const { combine, timestamp } = winston.format;
 function trimNewline() {
   return {
     transform: (msg) => {
-      if (msg.message) msg.message = msg.message.trim();
+      if (msg.message && typeof message === "string" ) msg.message = msg.message.trim();
       return msg;
     },
   };
