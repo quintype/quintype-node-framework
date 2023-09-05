@@ -230,6 +230,7 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
     redirectToLowercaseSlugs,
     sMaxAge,
     networkOnly,
+    maxAge,
   }
 ) {
   const url = urlLib.parse(req.query.path || "/", true);
@@ -302,6 +303,7 @@ exports.handleIsomorphicDataLoad = function handleIsomorphicDataLoad(
         config: config,
         sMaxAge,
         networkOnly,
+        maxAge,
       });
       const seoInstance = getSeoInstance(seo, config, result.pageType);
       res.json(
@@ -423,6 +425,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     shouldEncodeAmpUri,
     publisherConfig,
     sMaxAge,
+    maxAge,
   }
 ) {
   const url = urlLib.parse(req.url, true);
@@ -437,6 +440,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
         cdnProvider: cdnProvider,
         config: config,
         sMaxAge: result.pageType === "tag-page" ? 600 : sMaxAge,
+        maxAge: maxAge,
       });
       return res.redirect(301, result.data.location);
     }
@@ -463,6 +467,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
       cdnProvider: cdnProvider,
       config: config,
       sMaxAge: result.pageType === "tag-page" ? 600 : sMaxAge,
+      maxAge: maxAge,
     });
 
     if (preloadJs) {
@@ -537,6 +542,7 @@ exports.handleStaticRoute = function handleStaticRoute(
     oneSignalServiceWorkers,
     publisherConfig,
     sMaxAge,
+    maxAge,
   }
 ) {
   const url = urlLib.parse(path);
@@ -577,6 +583,7 @@ exports.handleStaticRoute = function handleStaticRoute(
         cdnProvider: cdnProvider,
         config: config,
         sMaxAge,
+        maxAge,
       });
 
       const oneSignalScript = oneSignalServiceWorkers ? getOneSignalScript({ config, publisherConfig }) : null;
