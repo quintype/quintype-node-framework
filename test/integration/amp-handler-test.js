@@ -205,6 +205,9 @@ function createApp({ clientStub = getClientStub, ampLibrary = dummyAmpLib, enabl
     additionalConfig: {},
     enableAmp,
     redirectUrls,
+    featureConfig: {
+      optimizeAmpHtml: false,
+    },
   });
   return app;
 }
