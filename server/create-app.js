@@ -25,6 +25,7 @@ function createApp({
   publicFolder = "public",
   mountAt,
   app = express(),
+  customLogger = false
 } = {}) {
   if (mountAt) {
     mountQuintypeAt(app, mountAt);
@@ -32,7 +33,9 @@ function createApp({
 
   app.set("view engine", "ejs");
 
-  app.use(morgan("short", { stream: { write: (msg) => logger.info(msg) } }));
+  if(!customLogger){
+    app.use(morgan("short", { stream: { write: (msg) => logger.info(msg) } }));
+  }
 
   const assetFiles = assetHelper.assetFiles();
 
