@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.20.0](https://github.com/quintype/quintype-node-framework/compare/v7.19.22...v7.20.0) (2023-10-06)
+
+
+### Features
+
+* Add support for custom max-age value ([#394](https://github.com/quintype/quintype-node-framework/issues/394)) ([62665f8](https://github.com/quintype/quintype-node-framework/commit/62665f813ebf601547c30000518cd480d07b5abe))
+
 ### [7.19.22](https://github.com/quintype/quintype-node-framework/compare/v7.19.21...v7.19.22) (2023-09-05)
 
 ### [7.19.21](https://github.com/quintype/quintype-node-framework/compare/v7.19.20...v7.19.21) (2023-08-16)
