@@ -547,7 +547,7 @@ GET - &quot;/amp/api/v1/amp-infinite-scroll&quot; returns the infinite scroll co
         <p class="tag-source">
             <a href="server_routes.js.html" class="button">View Source</a>
             <span>
-                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line640">line 640</a>
+                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line665">line 665</a>
             </span>
         </p>
     
@@ -588,7 +588,7 @@ GET - &quot;/amp/api/v1/amp-infinite-scroll&quot; returns the infinite scroll co
         
         <span class="code-name">
             
-                isomorphicRoutes<span class="signature">(app, opts, redirectToLowercaseSlugs, shouldEncodeAmpUri, sMaxAge, fcmServerKey, appLoadingPlaceholder)</span><span class="type-signature"></span>
+                isomorphicRoutes<span class="signature">(app, opts, redirectToLowercaseSlugs, shouldEncodeAmpUri, sMaxAge, maxAge, fcmServerKey, appLoadingPlaceholder)</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -1332,6 +1332,31 @@ It accepts all the pieces needed, and implements all the plumbing to make these 
             
 <tr class="deep-level-0">
   
+      <td class="name"><code>maxAge</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>Overrides the max-age value, the default value is set to 15 seconds. We can set <code>isomorphicRoutesMaxage: 15</code> under <code>publisher</code> in publisher.yml config file that comes from BlackKnight or pass maxAge as a param.</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
       <td class="name"><code>fcmServerKey</code></td>
   
 
@@ -1424,7 +1449,7 @@ It accepts all the pieces needed, and implements all the plumbing to make these 
         <p class="tag-source">
             <a href="server_routes.js.html" class="button">View Source</a>
             <span>
-                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line294">line 294</a>
+                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line311">line 311</a>
             </span>
         </p>
     
@@ -1675,7 +1700,7 @@ It accepts all the pieces needed, and implements all the plumbing to make these 
         <p class="tag-source">
             <a href="server_routes.js.html" class="button">View Source</a>
             <span>
-                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line575">line 575</a>
+                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line600">line 600</a>
             </span>
         </p>
     
@@ -1882,6 +1907,29 @@ It accepts all the pieces needed, and implements all the plumbing to make these 
     
 <tr class="deep-level-1">
   
+      <td class="name"><code>maxAge</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>Support overriding of proxied response cache header <code>maxage</code> from Sketches. For Breaking News and if the cacheability is Private, it is not overwritten instead the cache control will be the same as how it's set in sketches. We can set <code>upstreamRoutesMaxage: 15</code> under <code>publisher</code> in publisher.yml config file that comes from BlackKnight or pass maxAge as a param.</p></td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
       <td class="name"><code>forwardFavicon</code></td>
   
 
@@ -1971,7 +2019,7 @@ It accepts all the pieces needed, and implements all the plumbing to make these 
         <p class="tag-source">
             <a href="server_routes.js.html" class="button">View Source</a>
             <span>
-                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line45">line 45</a>
+                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line46">line 46</a>
             </span>
         </p>
     
@@ -2199,7 +2247,7 @@ handler, but already has a <em>client</em> initialized, and the <em>config</em> 
         <p class="tag-source">
             <a href="server_routes.js.html" class="button">View Source</a>
             <span>
-                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line245">line 245</a>
+                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line261">line 261</a>
             </span>
         </p>
     
@@ -2297,7 +2345,7 @@ handler, but already has a <em>client</em> initialized, and the <em>config</em> 
         <p class="tag-source">
             <a href="server_routes.js.html" class="button">View Source</a>
             <span>
-                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line226">line 226</a>
+                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line242">line 242</a>
             </span>
         </p>
     
