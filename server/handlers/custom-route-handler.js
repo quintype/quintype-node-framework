@@ -54,7 +54,7 @@ exports.customRouteHandler = function customRouteHandler(
   req,
   res,
   next,
-  { config, client, loadData, loadErrorData, renderLayout, logError, seo, domainSlug, cdnProvider = null, sMaxAge }
+  { config, client, loadData, loadErrorData, renderLayout, logError, seo, domainSlug, cdnProvider = null, sMaxAge, maxAge }
 ) {
   const url = urlLib.parse(req.url, true);
   const path = req.params[0].endsWith("/") ? req.params[0].slice(0, -1) : req.params[0];
@@ -74,6 +74,7 @@ exports.customRouteHandler = function customRouteHandler(
           cdnProvider: cdnProvider,
           config: config,
           sMaxAge,
+          maxAge,
         });
 
         let destination = page["destination-path"] || "/";
@@ -93,6 +94,7 @@ exports.customRouteHandler = function customRouteHandler(
           cdnProvider: cdnProvider,
           config: config,
           sMaxAge,
+          maxAge,
         });
         addStaticPageMimeType({ res, page });
 
