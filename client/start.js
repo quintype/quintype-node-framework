@@ -23,6 +23,7 @@ import {
   registerServiceWorker,
   setupServiceWorkerUpdates,
 } from "./impl/load-service-worker";
+import atob from "atob";
 
 require("../assetify/client")();
 
@@ -245,7 +246,15 @@ export function renderBreakingNews(container, store, view, props) {
 
 function getJsonContent(id) {
   const element = global.document.getElementById(id);
-  if (element) return JSON.parse(element.textContent);
+  if (element) {
+    try {
+      if (atob(element.textContent)) {
+        return JSON.parse(atob(element.textContent));
+      }
+    } catch {}
+
+    return JSON.parse(element.textContent);
+  }
 }
 
 const performance = window.performance || { mark: () => {}, measure: () => {} };
