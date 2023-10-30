@@ -189,6 +189,79 @@ describe("Sketches Proxy", function () {
     });
   });
 
+  describe("Override the max-age cache header", function () {
+    function getClientStub(hostname) {
+      return {
+        getHostname: () => "demo.quintype.io",
+        getConfig: () =>
+          Promise.resolve({
+            foo: "bar",
+            "sketches-host": "https://www.foo.com",
+          }),
+        baseUrl: "https://www.foo.com",
+      };
+    }
+    function buildApp(maxAge, { app = express() } = {}) {
+      upstreamQuintypeRoutes(app, {
+        config: {
+          sketches_host: `https://demo.quintype.io`,
+        },
+        getClient: getClientStub,
+        extraRoutes: ["/custom-route"],
+        forwardAmp: true,
+        forwardFavicon: true,
+        publisherConfig: {},
+        maxAge: maxAge,
+      });
+      return app;
+    }
+
+    it("Override the max-age cache header when maxAge value is present", function (done) {
+      const maxAge = 3600;
+      supertest(buildApp(maxAge))
+        .get("/api/v1/config")
+        .expect(200)
+        .then((res) => {
+          const cacheControl = res.headers["cache-control"];
+          assert.equal(cacheControl, "public,max-age=3600,s-maxage=240,stale-while-revalidate=300,stale-if-error=7200");
+        })
+        .then(done);
+    });
+
+    it("Does not override the max-age cache header if cacheability is Private", function (done) {
+      const maxAge = 15;
+      supertest(buildApp(maxAge))
+        .get("/api/auth/v1/users/me")
+        .then((res) => {
+          const cacheControl = res.headers["cache-control"];
+          assert.equal(cacheControl, "private,no-cache,no-store");
+        })
+        .then(done);
+    });
+
+    it("Does not override the max-age cache header for Breaking News", function (done) {
+      const maxAge = 3600;
+      supertest(buildApp(maxAge))
+        .get("/api/v1/breaking-news")
+        .then((res) => {
+          const cacheControl = res.headers["cache-control"];
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=7200");
+        })
+        .then(done);
+    });
+
+    it("if maxAge value is not present, do not override cache headers", function (done) {
+      supertest(buildApp())
+        .get("/api/v1/config")
+        .expect(200)
+        .then((res) => {
+          const cacheControl = res.headers["cache-control"];
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=7200");
+        })
+        .then(done);
+    });
+  });
+
   describe("sitemap requests", function () {
     function buildApp({ isSitemapUrlEnabled }) {
       const app = express();
