@@ -511,6 +511,13 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
       if (!result) {
         return next();
       }
+      const pageType = result.pageType;
+      const subPageType = result.subPageType;
+      if (pageType === "story-page" && subPageType === "visual-story") {
+        const storySlug = _.get(result, ["data", "story", "slug"]);
+        if (storySlug && (storySlug.startsWith("ampstories") || storySlug.startsWith("/ampstories")))
+          return res.redirect(301, storySlug);
+      }
       return new Promise((resolve) => resolve(writeResponse(result)))
         .catch((e) => {
           logError(e);
