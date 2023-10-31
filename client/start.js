@@ -247,13 +247,16 @@ export function renderBreakingNews(container, store, view, props) {
 function getJsonContent(id) {
   const element = global.document.getElementById(id);
   if (element) {
+    const content = element.textContent;
     try {
-      if (atob(element.textContent)) {
-        return JSON.parse(atob(element.textContent));
+      if (atob(content)) {
+        return JSON.parse(atob(content));
       }
-    } catch {}
+    } catch {
+      console.log('Looks like the content is not encrypted. Parsing regular content.');
+    }
 
-    return JSON.parse(element.textContent);
+    return JSON.parse(content);
   }
 }
 
