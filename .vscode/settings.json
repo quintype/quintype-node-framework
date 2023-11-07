@@ -9,5 +9,6 @@
   "files.trimTrailingWhitespace": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
-  }
+  },
+  "editor.acceptSuggestionOnEnter": "on"
 }
