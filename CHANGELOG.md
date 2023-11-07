@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.21.0](https://github.com/quintype/quintype-node-framework/compare/v7.20.1...v7.21.0) (2023-11-07)
+
+
+### Bug Fixes
+
+* **amp:** Redesign HeroImage caption and attribution  ([#397](https://github.com/quintype/quintype-node-framework/issues/397)) ([8ad07d8](https://github.com/quintype/quintype-node-framework/commit/8ad07d8fe7bbc84662edff4d65ddb022584fbaf6))
+
 ### [7.20.1](https://github.com/quintype/quintype-node-framework/compare/v7.20.0...v7.20.1) (2023-10-09)
 
 ## [7.20.0](https://github.com/quintype/quintype-node-framework/compare/v7.19.22...v7.20.0) (2023-10-06)
