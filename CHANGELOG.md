@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.21.2](https://github.com/quintype/quintype-node-framework/compare/v7.21.1...v7.21.2) (2023-11-15)
+
+
+### Bug Fixes
+
+* **images:** Impose size restriction to 640 across images ([#401](https://github.com/quintype/quintype-node-framework/issues/401)) ([f0f06b0](https://github.com/quintype/quintype-node-framework/commit/f0f06b04c992cc4360a8bdd4badbeb3c0a6715c5))
+
 ### [7.21.1](https://github.com/quintype/quintype-node-framework/compare/v7.21.0...v7.21.1) (2023-11-14)
 
 ## [7.21.0](https://github.com/quintype/quintype-node-framework/compare/v7.20.1...v7.21.0) (2023-11-07)
