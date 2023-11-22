@@ -47,8 +47,10 @@ async function ampStoryPageHandler(
     if (typeof redirectUrls === "function" || (redirectUrls && Object.keys(redirectUrls).length > 0)) {
       await getRedirectUrl(req, res, next, { redirectUrls, config });
     }
+    const story = await Story.getStoryBySlug(client, req.params["0"]);
+    const isAmpDisabled = get(story, ["metadata", "story-attributes", "disable-amp-for-single-story", "0"], "false");
 
-    if (!isVisualStory && !enableAmp) {
+    if ((!isVisualStory && !enableAmp) || isAmpDisabled === "true") {
       return res.redirect(301, `/${req.params[0]}`);
     }
 
@@ -57,7 +59,6 @@ async function ampStoryPageHandler(
     const { ampifyStory, unsupportedStoryElementsPresent } = ampLibrary;
     // eslint-disable-next-line no-return-await
     const ampConfig = await config.memoizeAsync("amp-config", async () => await AmpConfig.getAmpConfig(client));
-    const story = await Story.getStoryBySlug(client, req.params["0"]);
     let relatedStoriesCollection;
     let relatedStories = [];
 
