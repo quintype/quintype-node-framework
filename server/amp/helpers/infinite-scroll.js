@@ -29,7 +29,6 @@ class InfiniteScrollAmp {
   formatData({ itemsArr, type }) {
     // formats configuration as per need of amp infinite scroll
     const ampPageBasePath = getAmpPageBasePath(this.opts);
-    console.log("ampPageBasePath in format data --->", ampPageBasePath);
     const arr = itemsArr.map((item) => ({
       image: this.getImagePath(item),
       title: item.headline,
