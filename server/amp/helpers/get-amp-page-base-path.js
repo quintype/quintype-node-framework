@@ -1,12 +1,8 @@
+const get = require("lodash/get");
+
 function getAmpPageBasePath(opts = {}) {
-  let ampPageBasePath = "/amp/story";
-  if (opts.featureConfig) {
-    const configAmpPath =
-      typeof opts.featureConfig.ampPageBasePath === "function"
-        ? opts.featureConfig.ampPageBasePath()
-        : opts.featureConfig.ampPageBasePath;
-    ampPageBasePath = configAmpPath || ampPageBasePath;
-  }
+  let ampPageBasePath = get(opts, ["featureConfig", "ampPageBasePath"], "/amp/story");
+  ampPageBasePath = typeof ampPageBasePath === "function" ? ampPageBasePath() : ampPageBasePath;
 
   return ampPageBasePath;
 }
