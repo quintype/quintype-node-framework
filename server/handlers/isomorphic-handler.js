@@ -426,6 +426,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     publisherConfig,
     sMaxAge,
     maxAge,
+    ampPageBasePath,
   }
 ) {
   const url = urlLib.parse(req.url, true);
@@ -457,6 +458,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
         client,
         req,
         shouldEncodeAmpUri,
+        ampPageBasePath,
       });
     }
 

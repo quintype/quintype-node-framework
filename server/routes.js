@@ -318,6 +318,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     seo,
     manifestFn,
     assetLinkFn,
+    ampPageBasePath = "/amp/story",
 
     oneSignalServiceWorkers = false,
     staticRoutes = [],
@@ -540,6 +541,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       publisherConfig,
       sMaxAge: _sMaxAge,
       maxAge: _maxAge,
+      ampPageBasePath,
     })
   );
 
