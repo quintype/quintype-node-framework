@@ -29,6 +29,7 @@ const bodyParser = require("body-parser");
 const get = require("lodash/get");
 const { URL } = require("url");
 const prerender = require("@quintype/prerender-node");
+const { getAmpPageBasePath } = require("./amp/helpers/get-amp-page-base-path");
 
 /**
  * *upstreamQuintypeRoutes* connects various routes directly to the upstream API server.
@@ -646,7 +647,7 @@ exports.mountQuintypeAt = function (app, mountAt) {
 /**
  * *ampRoutes* handles all the amp page routes using the *[@quintype/amp](https://developers.quintype.com/quintype-node-amp)* library
  * routes matched:
- * GET - "/amp/story/:slug"* returns amp story page
+ * GET - "{ampPageBasePath}/:slug"* returns amp story page. ampPageBasePath can be configured through feature config. default is "/amp/story"
  * GET - "/amp/api/v1/amp-infinite-scroll" returns the infinite scroll config JSON. Passed to <amp-next-page> component's `src` attribute
  *
  * @param {Express} app Express app to add the routes to
@@ -662,16 +663,8 @@ exports.mountQuintypeAt = function (app, mountAt) {
  */
 exports.ampRoutes = (app, opts = {}) => {
   const { ampStoryPageHandler, storyPageInfiniteScrollHandler } = require("./amp/handlers");
-
-  let ampPageBasePath = "/amp/story";
-  if (opts.featureConfig) {
-    const configAmpPath =
-      typeof opts.featureConfig.ampPageBasePath === "function"
-        ? opts.featureConfig.ampPageBasePath()
-        : opts.featureConfig.ampPageBasePath;
-    ampPageBasePath = configAmpPath || ampPageBasePath;
-  }
-
+  const ampPageBasePath = getAmpPageBasePath(opts);
+  console.log("ampPageBasePath from getAmpPageBasePath is --->", ampPageBasePath);
   getWithConfig(app, `${ampPageBasePath}/*`, ampStoryPageHandler, opts);
   getWithConfig(app, "/amp/api/v1/amp-infinite-scroll", storyPageInfiniteScrollHandler, opts);
   getWithConfig(app, "/ampstories/*", ampStoryPageHandler, { ...opts, isVisualStory: true });
