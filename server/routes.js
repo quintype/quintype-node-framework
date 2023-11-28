@@ -70,7 +70,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   const _sMaxAge = get(config, ["publisher", "upstreamRoutesSmaxage"], sMaxAge);
   const _maxAge = get(config, ["publisher", "upstreamRoutesMaxage"], maxAge);
 
-  parseInt(_sMaxAge) > 0  &&
+  parseInt(_sMaxAge) > 0 &&
     apiProxy.on("proxyRes", function (proxyRes, req) {
       const pathName = get(req, ["originalUrl"], "").split("?")[0];
       const checkForExcludeRoutes = excludeRoutes.some((path) => {
@@ -79,8 +79,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
       });
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
       if (!checkForExcludeRoutes && getCacheControl.includes("public")) {
-        proxyRes.headers["cache-control"] = getCacheControl
-        .replace(/s-maxage=\d*/g, `s-maxage=${_sMaxAge}`);
+        proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${_sMaxAge}`);
       }
     });
   parseInt(_maxAge) > 0 &&
@@ -92,8 +91,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
       });
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
       if (!checkForExcludeRoutes && getCacheControl.includes("public")) {
-        proxyRes.headers["cache-control"] = getCacheControl
-        .replace(/max-age=\d*/g, `max-age=${_maxAge}`);
+        proxyRes.headers["cache-control"] = getCacheControl.replace(/max-age=\d*/g, `max-age=${_maxAge}`);
       }
     });
 
@@ -665,7 +663,16 @@ exports.mountQuintypeAt = function (app, mountAt) {
 exports.ampRoutes = (app, opts = {}) => {
   const { ampStoryPageHandler, storyPageInfiniteScrollHandler } = require("./amp/handlers");
 
-  getWithConfig(app, "/amp/story/*", ampStoryPageHandler, opts);
+  let ampPageBasePath = "/amp/story";
+  if (opts.featureConfig) {
+    const configAmpPath =
+      typeof opts.featureConfig.ampPageBasePath === "function"
+        ? opts.featureConfig.ampPageBasePath()
+        : opts.featureConfig.ampPageBasePath;
+    ampPageBasePath = configAmpPath || ampPageBasePath;
+  }
+
+  getWithConfig(app, `${ampPageBasePath}/*`, ampStoryPageHandler, opts);
   getWithConfig(app, "/amp/api/v1/amp-infinite-scroll", storyPageInfiniteScrollHandler, opts);
   getWithConfig(app, "/ampstories/*", ampStoryPageHandler, { ...opts, isVisualStory: true });
 };
