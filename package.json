@@ -35,7 +35,7 @@
     "@quintype/backend": "^2.3.3",
     "@quintype/components": "^3.3.0",
     "@quintype/prerender-node": "^3.2.26",
-    "@quintype/seo": "^1.39.0",
+    "@quintype/seo": "^1.43.0-config-amp-story-path.0",
     "atob": "^2.1.2",
     "babel-plugin-react-css-modules": "^5.2.6",
     "chalk": "^4.1.2",
@@ -97,9 +97,6 @@
     "prettier": "^2.4.1",
     "standard-version": "^9.3.1",
     "supertest": "^6.1.6"
-  },
-  "peerDependencies": {
-    "@quintype/seo": "^1.39.0"
   },
   "nyc": {
     "exclude": [
