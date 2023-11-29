@@ -648,7 +648,7 @@ exports.mountQuintypeAt = function (app, mountAt) {
 /**
  * *ampRoutes* handles all the amp page routes using the *[@quintype/amp](https://developers.quintype.com/quintype-node-amp)* library
  * routes matched:
- * GET - "{ampPageBasePath}/:slug"* returns amp story page. ampPageBasePath can be configured through feature config. default is "/amp/story"
+ * GET - "/amp/:slug"* returns amp story page.
  * GET - "/amp/api/v1/amp-infinite-scroll" returns the infinite scroll config JSON. Passed to <amp-next-page> component's `src` attribute
  *
  * @param {Express} app Express app to add the routes to
