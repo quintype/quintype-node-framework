@@ -244,7 +244,7 @@ describe("ampStoryPageHandler integration tests", () => {
       enableAmp: false,
     });
     supertest(app)
-      .get("/amp/story/cricket/ipl-2021")
+      .get("/amp/cricket/ipl-2021")
       .expect(301)
       .expect("Location", "/cricket/ipl-2021")
       .end((err) => {
