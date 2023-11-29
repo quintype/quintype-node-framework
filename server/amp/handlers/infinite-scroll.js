@@ -12,6 +12,7 @@ async function storyPageInfiniteScrollHandler(req, res, next, { client, config, 
 
   const infiniteScrollAmp = new InfiniteScrollAmp({
     opts,
+    config,
     ampConfig,
     publisherConfig: config,
     client,

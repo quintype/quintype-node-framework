@@ -20,7 +20,7 @@ function addLightPageHeaders(
       path = shouldEncodeAmpUri ? encodeURIComponent(path) : path;
     }
 
-    const ampPagePath = typeof ampPageBasePath === "function" ? ampPageBasePath() : ampPageBasePath;
+    const ampPagePath = typeof ampPageBasePath === "function" ? ampPageBasePath(config) : ampPageBasePath;
     res.set("X-QT-Light-Pages-Url", `${req.protocol}://${req.hostname}${ampPagePath}/${path}`);
   }
 }

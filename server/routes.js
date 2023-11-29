@@ -29,7 +29,6 @@ const bodyParser = require("body-parser");
 const get = require("lodash/get");
 const { URL } = require("url");
 const prerender = require("@quintype/prerender-node");
-const { getAmpPageBasePath } = require("./amp/helpers/get-amp-page-base-path");
 
 /**
  * *upstreamQuintypeRoutes* connects various routes directly to the upstream API server.
@@ -665,9 +664,8 @@ exports.mountQuintypeAt = function (app, mountAt) {
  */
 exports.ampRoutes = (app, opts = {}) => {
   const { ampStoryPageHandler, storyPageInfiniteScrollHandler } = require("./amp/handlers");
-  const ampPageBasePath = getAmpPageBasePath(opts);
-  console.log("ampPageBasePath from getAmpPageBasePath is --->", ampPageBasePath);
-  getWithConfig(app, `${ampPageBasePath}/*`, ampStoryPageHandler, opts);
+
+  getWithConfig(app, "amp/*", ampStoryPageHandler, opts);
   getWithConfig(app, "/amp/api/v1/amp-infinite-scroll", storyPageInfiniteScrollHandler, opts);
   getWithConfig(app, "/ampstories/*", ampStoryPageHandler, { ...opts, isVisualStory: true });
 };

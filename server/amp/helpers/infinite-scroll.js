@@ -1,9 +1,10 @@
 const { getAmpPageBasePath } = require("./get-amp-page-base-path");
 
 class InfiniteScrollAmp {
-  constructor({ opts = {}, ampConfig, client, publisherConfig, queryParams, infiniteScrollSource }) {
+  constructor({ config = {}, opts = {}, ampConfig, client, publisherConfig, queryParams, infiniteScrollSource }) {
     this.client = client;
     this.opts = opts;
+    this.config = config;
     this.publisherConfig = publisherConfig;
     this.queryParams = queryParams;
     this.infiniteScrollSource = infiniteScrollSource;
@@ -28,7 +29,7 @@ class InfiniteScrollAmp {
 
   formatData({ itemsArr, type }) {
     // formats configuration as per need of amp infinite scroll
-    const ampPageBasePath = getAmpPageBasePath(this.opts);
+    const ampPageBasePath = getAmpPageBasePath(this.opts, this.config);
     const arr = itemsArr.map((item) => ({
       image: this.getImagePath(item),
       title: item.headline,
