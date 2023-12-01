@@ -70,7 +70,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   const _sMaxAge = get(config, ["publisher", "upstreamRoutesSmaxage"], sMaxAge);
   const _maxAge = get(config, ["publisher", "upstreamRoutesMaxage"], maxAge);
 
-  parseInt(_sMaxAge) > 0  &&
+  parseInt(_sMaxAge) > 0 &&
     apiProxy.on("proxyRes", function (proxyRes, req) {
       const pathName = get(req, ["originalUrl"], "").split("?")[0];
       const checkForExcludeRoutes = excludeRoutes.some((path) => {
@@ -79,8 +79,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
       });
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
       if (!checkForExcludeRoutes && getCacheControl.includes("public")) {
-        proxyRes.headers["cache-control"] = getCacheControl
-        .replace(/s-maxage=\d*/g, `s-maxage=${_sMaxAge}`);
+        proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${_sMaxAge}`);
       }
     });
   parseInt(_maxAge) > 0 &&
@@ -92,8 +91,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
       });
       const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
       if (!checkForExcludeRoutes && getCacheControl.includes("public")) {
-        proxyRes.headers["cache-control"] = getCacheControl
-        .replace(/max-age=\d*/g, `max-age=${_maxAge}`);
+        proxyRes.headers["cache-control"] = getCacheControl.replace(/max-age=\d*/g, `max-age=${_maxAge}`);
       }
     });
 
@@ -319,6 +317,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     seo,
     manifestFn,
     assetLinkFn,
+    ampPageBasePath = "/amp/story",
 
     oneSignalServiceWorkers = false,
     staticRoutes = [],
@@ -541,6 +540,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       publisherConfig,
       sMaxAge: _sMaxAge,
       maxAge: _maxAge,
+      ampPageBasePath,
     })
   );
 
@@ -648,7 +648,7 @@ exports.mountQuintypeAt = function (app, mountAt) {
 /**
  * *ampRoutes* handles all the amp page routes using the *[@quintype/amp](https://developers.quintype.com/quintype-node-amp)* library
  * routes matched:
- * GET - "/amp/story/:slug"* returns amp story page
+ * GET - "/amp/:slug"* returns amp story page
  * GET - "/amp/api/v1/amp-infinite-scroll" returns the infinite scroll config JSON. Passed to <amp-next-page> component's `src` attribute
  *
  * @param {Express} app Express app to add the routes to
@@ -665,7 +665,7 @@ exports.mountQuintypeAt = function (app, mountAt) {
 exports.ampRoutes = (app, opts = {}) => {
   const { ampStoryPageHandler, storyPageInfiniteScrollHandler } = require("./amp/handlers");
 
-  getWithConfig(app, "/amp/story/*", ampStoryPageHandler, opts);
   getWithConfig(app, "/amp/api/v1/amp-infinite-scroll", storyPageInfiniteScrollHandler, opts);
+  getWithConfig(app, "/amp/*", ampStoryPageHandler, opts);
   getWithConfig(app, "/ampstories/*", ampStoryPageHandler, { ...opts, isVisualStory: true });
 };
