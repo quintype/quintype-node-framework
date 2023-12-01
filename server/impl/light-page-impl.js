@@ -3,9 +3,13 @@ const _ = require("lodash");
 function addLightPageHeaders(
   result,
   lightPages,
-  { config, res, client, req, shouldEncodeAmpUri = true, ampPageBasePath }
+  { config, res, client, req, shouldEncodeAmpUri = true }
 ) {
-  const isAmpSupported = _.get(result, ["data", "story", "is-amp-supported"], false);
+  const isAmpSupported = _.get(
+    result,
+    ["data", "story", "is-amp-supported"],
+    false
+  );
 
   if (typeof lightPages === "function" && !lightPages(config)) {
     return;
@@ -20,8 +24,10 @@ function addLightPageHeaders(
       path = shouldEncodeAmpUri ? encodeURIComponent(path) : path;
     }
 
-    const ampPagePath = typeof ampPageBasePath === "function" ? ampPageBasePath(config) : ampPageBasePath;
-    res.set("X-QT-Light-Pages-Url", `${req.protocol}://${req.hostname}${ampPagePath}/${path}`);
+    res.set(
+      "X-QT-Light-Pages-Url",
+      `${req.protocol}://${req.hostname}/amp/story/${path}`
+    );
   }
 }
 

@@ -11,8 +11,6 @@ async function storyPageInfiniteScrollHandler(req, res, next, { client, config, 
   const infiniteScrollSource = get(opts, ["featureConfig", "infiniteScroll", "source"], "collection");
 
   const infiniteScrollAmp = new InfiniteScrollAmp({
-    opts,
-    config,
     ampConfig,
     publisherConfig: config,
     client,

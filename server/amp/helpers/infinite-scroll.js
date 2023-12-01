@@ -1,10 +1,6 @@
-const { getAmpPageBasePath } = require("./get-amp-page-base-path");
-
 class InfiniteScrollAmp {
-  constructor({ config = {}, opts = {}, ampConfig, client, publisherConfig, queryParams, infiniteScrollSource }) {
+  constructor({ ampConfig, client, publisherConfig, queryParams, infiniteScrollSource }) {
     this.client = client;
-    this.opts = opts;
-    this.config = config;
     this.publisherConfig = publisherConfig;
     this.queryParams = queryParams;
     this.infiniteScrollSource = infiniteScrollSource;
@@ -23,17 +19,18 @@ class InfiniteScrollAmp {
 
   getFilteredApiItems(relatedStories) {
     return relatedStories.filter(
-      (story) => story.access !== "subscription" && story["story-template"] !== "visual-story"
+      (story) =>
+        story.access !== "subscription" &&
+        story["story-template"] !== "visual-story"
     );
   }
 
   formatData({ itemsArr, type }) {
     // formats configuration as per need of amp infinite scroll
-    const ampPageBasePath = getAmpPageBasePath(this.opts, this.config);
     const arr = itemsArr.map((item) => ({
       image: this.getImagePath(item),
       title: item.headline,
-      url: `${ampPageBasePath}/${item.slug}`,
+      url: `/amp/story/${item.slug}`,
     }));
     switch (type) {
       case "inline":
@@ -60,38 +57,40 @@ class InfiniteScrollAmp {
     };
     if (this.infiniteScrollSource === "relatedStoriesApi") {
       const relatedStoriesList = await this.client.getRelatedStories(storyId, null, params);
-      if (!relatedStoriesList || !relatedStoriesList["related-stories"].length) return new Error();
-      return (filteredItems = this.getFilteredApiItems(relatedStoriesList["related-stories"]));
+      if (!relatedStoriesList || !relatedStoriesList["related-stories"].length)
+        return new Error();
+      return filteredItems = this.getFilteredApiItems(relatedStoriesList["related-stories"]);
     } else {
       const collection = await this.client.getCollectionBySlug("amp-infinite-scroll");
       if (!collection || (collection.items && !collection.items.length) || collection.error || collection === null)
         return new Error();
-      const collectionItems = this.getFilteredCollItems(collection, storyId).map((items) => items.story);
-      return (filteredItems = type === "inlineConfig" ? collectionItems.slice(0, 5) : collectionItems.slice(5));
+      const collectionItems = this.getFilteredCollItems(collection, storyId).map(items => items.story);
+      return filteredItems = type === "inlineConfig"
+        ? collectionItems.slice(0, 5)
+        : collectionItems.slice(5);
     }
   }
 
   async getResponse() {
     const { "story-id": storyId } = this.queryParams;
     if (!storyId) return new Error(`Query param "story-id" missing`);
-    const filteredItems = await this.getInfiniteScrollList({ storyId, type: "remoteConfig", offset: 5 });
-    if (filteredItems instanceof Error)
-      return new Error(`Infinite scroll collection amp-infinite-scroll returned falsy value`);
+    const filteredItems =
+      await this.getInfiniteScrollList({ storyId, type: "remoteConfig", offset: 5 });
+    if (filteredItems instanceof Error) return new Error(`Infinite scroll collection amp-infinite-scroll returned falsy value`);
     const formattedData = this.formatData({ itemsArr: filteredItems });
     return JSON.stringify(formattedData);
   }
 
   async getInitialInlineConfig({ storyId }) {
     if (!storyId) return new Error("Required params for getInitialInlineConfig missing");
-    const filteredItems = await this.getInfiniteScrollList({ storyId, type: "inlineConfig", offset: 0, limit: 5 });
+    const filteredItems =
+      await this.getInfiniteScrollList({ storyId, type: "inlineConfig", offset: 0, limit: 5 });
 
     if (filteredItems instanceof Error) return null;
-    const formattedData =
-      filteredItems.length > 0 &&
-      this.formatData({
-        itemsArr: filteredItems,
-        type: "inline",
-      });
+    const formattedData = filteredItems.length > 0 && this.formatData({
+      itemsArr: filteredItems,
+      type: "inline",
+    });
     return JSON.stringify(formattedData);
   }
 }
