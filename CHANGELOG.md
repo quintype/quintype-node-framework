@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.22.0](https://github.com/quintype/quintype-node-framework/compare/v7.21.2...v7.22.0) (2023-12-01)
+
+
+### Features
+
+* add support to configure amp story page path through featureConfig ([#403](https://github.com/quintype/quintype-node-framework/issues/403)) ([876e89a](https://github.com/quintype/quintype-node-framework/commit/876e89aeb1b4fadc9c071ffb7dcf824fc419a963))
+
 ### [7.21.2](https://github.com/quintype/quintype-node-framework/compare/v7.21.1...v7.21.2) (2023-11-15)
 
 
