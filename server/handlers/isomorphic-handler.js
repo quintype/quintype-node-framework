@@ -15,6 +15,7 @@ const { customUrlToCacheKey } = require("../caching");
 const { addLightPageHeaders } = require("../impl/light-page-impl");
 const { getOneSignalScript } = require("./onesignal-script");
 const { getRedirectUrl } = require("../redirect-url-helper");
+const { Story } = require("../impl/api-client-impl");
 
 const ABORT_HANDLER = "__ABORT__";
 function abortHandler() {
@@ -68,6 +69,19 @@ function loadDataForIsomorphicRoute(
 
       if (result && result.data && result.data[ABORT_HANDLER]) continue;
 
+      return result;
+    }
+
+    const story = await Story.getStoryByExternalId(client, url.pathname);
+    if (story) {
+      const params = Object.assign({}, url.query, otherParams, { storySlug: story.slug });
+      const result = await loadData("story-page", params, config, client, {
+        host,
+        next: abortHandler,
+        domainSlug,
+        cookies,
+        mobileApiEnabled,
+      });
       return result;
     }
   }
