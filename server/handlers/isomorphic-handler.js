@@ -101,6 +101,7 @@ function loadDataForIsomorphicRoute(
           cookies,
           mobileApiEnabled,
         });
+        result.data.story.redirect = true;
         return result;
       }
     }
