@@ -351,6 +351,8 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     appLoadingPlaceholder = "",
     fcmServerKey = "",
     webengageConfig = {},
+    externalIdPattern,
+    enableExternalStories,
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
@@ -541,6 +543,8 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       sMaxAge: _sMaxAge,
       maxAge: _maxAge,
       ampPageBasePath,
+      externalIdPattern,
+      enableExternalStories,
     })
   );
 

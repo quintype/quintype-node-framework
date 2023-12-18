@@ -27,7 +27,19 @@ function loadDataForIsomorphicRoute(
   loadErrorData,
   url,
   routes,
-  { otherParams, config, client, host, logError, domainSlug, redirectToLowercaseSlugs, cookies, mobileApiEnabled }
+  {
+    otherParams,
+    config,
+    client,
+    host,
+    logError,
+    domainSlug,
+    redirectToLowercaseSlugs,
+    cookies,
+    mobileApiEnabled,
+    externalIdPattern,
+    enableExternalStories,
+  }
 ) {
   return loadDataForEachRoute().catch((error) => {
     logError(error);
@@ -72,17 +84,25 @@ function loadDataForIsomorphicRoute(
       return result;
     }
 
-    const story = await Story.getStoryByExternalId(client, url.pathname);
-    if (story) {
-      const params = Object.assign({}, url.query, otherParams, { storySlug: story.slug });
-      const result = await loadData("story-page", params, config, client, {
-        host,
-        next: abortHandler,
-        domainSlug,
-        cookies,
-        mobileApiEnabled,
-      });
-      return result;
+    if (enableExternalStories) {
+      const getExternalIdFromUrl = (pattern, url) => {
+        const index = pattern.split("/").findIndex((e) => e === "EXTERNAL_ID");
+        return url.split("/")[index];
+      };
+
+      const externalId = getExternalIdFromUrl(externalIdPattern, url.pathname);
+      const story = await Story.getStoryByExternalId(client, externalId);
+      if (story) {
+        const params = Object.assign({}, url.query, otherParams, { storySlug: story.slug });
+        const result = await loadData("story-page", params, config, client, {
+          host,
+          next: abortHandler,
+          domainSlug,
+          cookies,
+          mobileApiEnabled,
+        });
+        return result;
+      }
     }
   }
 }
@@ -441,6 +461,8 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     sMaxAge,
     maxAge,
     ampPageBasePath,
+    externalIdPattern,
+    enableExternalStories,
   }
 ) {
   const url = urlLib.parse(req.url, true);
@@ -518,6 +540,8 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     domainSlug,
     redirectToLowercaseSlugs,
     cookies: req.cookies,
+    externalIdPattern,
+    enableExternalStories,
   })
     .catch((e) => {
       logError(e);
