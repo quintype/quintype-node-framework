@@ -351,8 +351,8 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     appLoadingPlaceholder = "",
     fcmServerKey = "",
     webengageConfig = {},
-    externalIdPattern,
-    enableExternalStories,
+    externalIdPattern = "",
+    enableExternalStories = false,
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
