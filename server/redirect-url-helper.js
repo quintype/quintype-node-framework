@@ -18,42 +18,56 @@ function processRedirects(req, res, next, sourceUrlArray, urls) {
     try {
       if (urls[sourceUrl]) {
         const destinationPath = urls[sourceUrl].destinationUrl;
-        const extractedSourceUrl = match(sourceUrl, {
-          decode: decodeURIComponent,
-        });
         const destinationUrl = isUrl(destinationPath);
-        if (extractedSourceUrl) {
-          let extractedDestinationUrl;
-          if (destinationUrl) {
-            extractedDestinationUrl = compile(destinationUrl.pathname, {
-              encode: encodeURIComponent,
-            });
-          } else {
-            extractedDestinationUrl = compile(destinationPath, {
-              encode: encodeURIComponent,
-            });
-          }
-          const dynamicKeys = extractedSourceUrl(req.path);
-          const compiledPath = dynamicKeys && extractedDestinationUrl(dynamicKeys.params);
-          if (compiledPath) {
+        if (isAbsoluteHttpUrl(sourceUrl)) {
+          const url = new URL(`${req.protocol}://${req.get("host")}${req.originalUrl}`);
+          if (`${url.origin}${url.pathname}` === sourceUrl) {
             const validStatusCodes = { 301: "max-age=604800", 302: "max-age=86400" };
             const statusCode = parseInt(urls[sourceUrl].statusCode, 10);
             const cacheValue = validStatusCodes[statusCode];
             if (cacheValue) {
               res.set("cache-control", `public,${cacheValue}`);
             }
-            res.redirect(
-              statusCode,
-              destinationUrl
-                ? `${destinationUrl.protocol}//${destinationUrl.hostname}${compiledPath}${search}`
-                : `${compiledPath}${search}`
-            );
+            res.redirect(statusCode, destinationUrl.href);
             return true;
+          }
+        } else {
+          const extractedSourceUrl = match(sourceUrl, {
+            decode: decodeURIComponent,
+          });
+          if (extractedSourceUrl) {
+            let extractedDestinationUrl;
+            if (destinationUrl) {
+              extractedDestinationUrl = compile(destinationUrl.pathname, {
+                encode: encodeURIComponent,
+              });
+            } else {
+              extractedDestinationUrl = compile(destinationPath, {
+                encode: encodeURIComponent,
+              });
+            }
+            const dynamicKeys = extractedSourceUrl(req.path);
+            const compiledPath = dynamicKeys && extractedDestinationUrl(dynamicKeys.params);
+            if (compiledPath) {
+              const validStatusCodes = { 301: "max-age=604800", 302: "max-age=86400" };
+              const statusCode = parseInt(urls[sourceUrl].statusCode, 10);
+              const cacheValue = validStatusCodes[statusCode];
+              if (cacheValue) {
+                res.set("cache-control", `public,${cacheValue}`);
+              }
+              res.redirect(
+                statusCode,
+                destinationUrl
+                  ? `${destinationUrl.protocol}//${destinationUrl.hostname}${compiledPath}${search}`
+                  : `${compiledPath}${search}`
+              );
+              return true;
+            }
           }
         }
       }
     } catch (err) {
-      console.log(`Redirection error on ${req.host}-----`, err);
+      console.log(`Redirection error on ${req.hostname}-----`, err);
     }
   });
 }
@@ -71,3 +85,7 @@ exports.getRedirectUrl = async function getRedirectUrl(req, res, next, { redirec
     sourceUrls.length > 0 && processRedirects(req, res, next, sourceUrls, redirectUrls);
   }
 };
+
+function isAbsoluteHttpUrl(url) {
+  return url.startsWith("http");
+}
