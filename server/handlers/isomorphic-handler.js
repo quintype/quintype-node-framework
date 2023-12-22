@@ -126,7 +126,8 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
   }
 ) {
   const url = urlLib.parse(req.url, true);
-  const freshRevision = `${assetHelper.assetHash("app.js")}-${await maxConfigVersion(config, domainSlug)}`;
+  const customAssetHelper = typeof assetHelper === 'function' && Object.keys(config).length > 0 ? assetHelper(config) : assetHelper;
+  const freshRevision = `${customAssetHelper.assetHash("app.js")}-${await maxConfigVersion(config, domainSlug)}`;
 
   if (req.query.revision && req.query.revision !== freshRevision)
     return res.status(503).send("Requested Shell Is Not Current");
@@ -144,7 +145,7 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
     res.setHeader("Vary", "Accept-Encoding");
 
     if (preloadJs) {
-      res.append("Link", `<${assetHelper.assetPath("app.js")}>; rel=preload; as=script;`);
+      res.append("Link", `<${customAssetHelper.assetPath("app.js")}>; rel=preload; as=script;`);
     }
     const seoInstance = getSeoInstance(seo, config, "shell");
     const seoTags = seoInstance && seoInstance.getMetaTags(config, "shell", result, { url });
@@ -430,6 +431,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
   }
 ) {
   const url = urlLib.parse(req.url, true);
+  const customAssetHelper = typeof assetHelper === 'function' && Object.keys(config).length > 0 ? assetHelper(config) : assetHelper;
 
   function writeResponse(result) {
     const statusCode = result.httpStatusCode || 200;
@@ -473,7 +475,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     });
 
     if (preloadJs) {
-      res.append("Link", `<${assetHelper.assetPath("app.js")}>; rel=preload; as=script;`);
+      res.append("Link", `<${customAssetHelper.assetPath("app.js")}>; rel=preload; as=script;`);
     }
     const oneSignalScript = oneSignalServiceWorkers ? getOneSignalScript({ config, publisherConfig }) : null;
     return pickComponent.preloadComponent(store.getState().qt.pageType, store.getState().qt.subPageType).then(() =>

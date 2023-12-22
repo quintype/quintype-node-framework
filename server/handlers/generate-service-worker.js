@@ -13,6 +13,7 @@ async function generateServiceWorker(
   }
 ) {
   const configVersion = await maxConfigVersion(config, domainSlug);
+  const customAssetHelper = typeof assetHelper === 'function' && Object.keys(config).length > 0 ? assetHelper(config) : assetHelper;
 
   return new Promise((resolve) => {
     renderServiceWorker(
@@ -20,12 +21,12 @@ async function generateServiceWorker(
       "js/service-worker",
       {
         config,
-        serviceWorkerHelper: assetHelper.serviceWorkerContents(),
-        assetPath: assetHelper.assetPath,
+        serviceWorkerHelper: customAssetHelper.serviceWorkerContents(),
+        assetPath: customAssetHelper.assetPath,
         hostname: req.hostname,
-        assetHash: assetHelper.assetHash,
+        assetHash: customAssetHelper.assetHash,
         configVersion,
-        getFilesForChunks: assetHelper.getFilesForChunks,
+        getFilesForChunks: customAssetHelper.getFilesForChunks,
         routes: generateRoutes(config, domainSlug).filter(
           (route) => !route.skipPWA
         ),
