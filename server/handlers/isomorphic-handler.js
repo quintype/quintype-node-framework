@@ -84,15 +84,11 @@ function loadDataForIsomorphicRoute(
       return result;
     }
 
-    const isExternalStoryEnabled = typeof enableExternalStories === "function" ? enableExternalStories(config) : enableExternalStories
+    const isExternalStoryEnabled =
+      typeof enableExternalStories === "function" ? enableExternalStories(config) : enableExternalStories;
     if (isExternalStoryEnabled) {
-      const getExternalIdFromUrl = (pattern, url) => {
-        const index = pattern.split("/").findIndex((e) => e === "EXTERNAL_ID");
-        return url.split("/")[index];
-      };
-
-      const pattern =  typeof externalIdPattern === "function" ? externalIdPattern(config) : externalIdPattern
-      const externalId = getExternalIdFromUrl(pattern, url.pathname);
+      const pattern = typeof externalIdPattern === "function" ? externalIdPattern(config) : externalIdPattern;
+      const externalId = url.pathname.split("/")[pattern.split("/").findIndex((e) => e === "EXTERNAL_ID")];
       const story = await Story.getStoryByExternalId(client, externalId);
       if (story) {
         const params = Object.assign({}, url.query, otherParams, { storySlug: story.slug });
