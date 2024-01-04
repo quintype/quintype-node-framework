@@ -547,7 +547,7 @@ GET - &quot;/amp/api/v1/amp-infinite-scroll&quot; returns the infinite scroll co
         <p class="tag-source">
             <a href="server_routes.js.html" class="button">View Source</a>
             <span>
-                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line665">line 665</a>
+                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line671">line 671</a>
             </span>
         </p>
     
@@ -588,7 +588,7 @@ GET - &quot;/amp/api/v1/amp-infinite-scroll&quot; returns the infinite scroll co
         
         <span class="code-name">
             
-                isomorphicRoutes<span class="signature">(app, opts, redirectToLowercaseSlugs, shouldEncodeAmpUri, sMaxAge, maxAge, fcmServerKey, appLoadingPlaceholder)</span><span class="type-signature"></span>
+                isomorphicRoutes<span class="signature">(app, opts, redirectToLowercaseSlugs, shouldEncodeAmpUri, sMaxAge, maxAge, fcmServerKey, appLoadingPlaceholder, enableExternalStories, externalIdPattern)</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -1406,6 +1406,62 @@ It accepts all the pieces needed, and implements all the plumbing to make these 
 
 
         
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>enableExternalStories</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">boolean</code>
+|
+
+<code class="param-type">function</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>If set to true, then for every request an external story api call is made and renders the story-page if the story is found. (default: false)</p></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>externalIdPattern</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+|
+
+<code class="param-type">function</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>This string specifies the external id pattern the in the url.</p></td>
+</tr>
+
+
+        
         </tbody>
     </table>
 </div>
@@ -1449,7 +1505,7 @@ It accepts all the pieces needed, and implements all the plumbing to make these 
         <p class="tag-source">
             <a href="server_routes.js.html" class="button">View Source</a>
             <span>
-                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line309">line 309</a>
+                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line311">line 311</a>
             </span>
         </p>
     
@@ -1700,7 +1756,7 @@ It accepts all the pieces needed, and implements all the plumbing to make these 
         <p class="tag-source">
             <a href="server_routes.js.html" class="button">View Source</a>
             <span>
-                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line600">line 600</a>
+                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line606">line 606</a>
             </span>
         </p>
     
