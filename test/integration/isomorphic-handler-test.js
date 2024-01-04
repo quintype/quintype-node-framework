@@ -24,7 +24,7 @@ function pickComponent(pageType) {
 const cdnProviderFunc = () => "akamai";
 
 function createApp(loadData, routes, opts = {}, app = express()) {
-  const { redirectToLowercaseSlugs = false } = opts;
+  const { redirectToLowercaseSlugs = false, enableExternalStories = false, externalIdPattern = "", } = opts;
   isomorphicRoutes(
     app,
     Object.assign(
@@ -42,6 +42,8 @@ function createApp(loadData, routes, opts = {}, app = express()) {
         handleCustomRoute: false,
         publisherConfig: {},
         redirectToLowercaseSlugs,
+        enableExternalStories,
+        externalIdPattern
       },
       opts
     )
@@ -907,6 +909,114 @@ describe("Isomorphic Handler", function () {
         .then((res) => {
           const response = JSON.parse(res.text);
           assert.equal("foobar", response.store.qt.data.text);
+        })
+        .then(done);
+    });
+  });
+
+  describe("External Stories", () => {
+    it("should render the story page when external stories are enabled and the route matches", (done) => {
+      const app = createApp(
+        (pageType, params, config, client, { host }) =>
+          Promise.resolve({
+            pageType,
+            data: { text: "foobar", host },
+          }),
+        [{ pageType: "story-page", path: "/*/:storySlug" }],
+        {
+          enableExternalStories: true,
+          externalIdPattern: "/EXTERNAL_ID",
+          getClient: (hostname) => ({
+            getConfig: () => Promise.resolve({ "publisher-id": 42 }),
+            getStoryByExternalId: (externalId) =>
+              Promise.resolve({
+                story: { slug: `section/${externalId}`, id: "abcdefgh-blah" },
+              }),
+          }),
+        }
+      );
+
+      supertest(app)
+        .get("/12345")
+        .expect("Content-Type", /html/)
+        .expect(200)
+        .then((res) => {
+          const response = JSON.parse(res.text);
+          assert.equal('<div data-page-type="story-page">foobar</div>', response.content);
+          assert.equal("foobar", response.store.qt.data.text);
+          assert.equal("127.0.0.1", response.store.qt.data.host);
+          assert.equal("story-page", response.store.qt.pageType);
+        })
+        .then(done);
+    });
+
+    it("should render the 404 page when external stories are enabled but the route doesn't match", (done) => {
+      const app = createApp(
+        (pageType, params, config, client) => Promise.resolve(),
+        [{ pageType: "story-page", path: "/:storySlug", exact: true }],
+        {
+          loadErrorData: (err, config, client, { host }) => ({
+            httpStatusCode: err.httpStatusCode,
+            pageType: "not-found",
+            data: { text: "foobar", host },
+          }),
+          enableExternalStories: true,
+          externalIdPattern: "/EXTERNAL_ID",
+          getClient: (hostname) => ({
+            getConfig: () => Promise.resolve({ "publisher-id": 42 }),
+            getStoryByExternalId: (externalId) =>
+              Promise.resolve({
+                story: null
+              }),
+          }),
+        }
+      );
+
+      supertest(app)
+        .get("/abc/def/12345")
+        .expect("Content-Type", /html/)
+        .expect(404)
+        .then((res) => {
+          const response = JSON.parse(res.text);
+          assert.equal(
+            '<div data-page-type="not-found">foobar</div>',
+            response.content
+          );
+          assert.equal("127.0.0.1", response.store.qt.data.host);
+        })
+        .then(done);
+    });
+
+    it("should render a 404 page when external stories are not enabled", (done) => {
+      const app = createApp(
+        (pageType, params, config, client) => Promise.resolve(),
+        [{ pageType: "story-page", path: "/*/:storySlug", exact: true }],
+        {
+          loadErrorData: (err, config, client, { host }) => ({
+            httpStatusCode: err.httpStatusCode,
+            pageType: "not-found",
+            data: { text: "foobar", host },
+          }),
+          enableExternalStories: false,
+          getClient: (hostname) => ({
+            getConfig: () => Promise.resolve({ "publisher-id": 42 }),
+            getStoryByExternalId: (externalId) =>
+              Promise.resolve(null),
+          }),
+        }
+      );
+
+      supertest(app)
+        .get("/12345")
+        .expect("Content-Type", /html/)
+        .expect(404)
+        .then((res) => {
+          const response = JSON.parse(res.text);
+          assert.equal(
+            '<div data-page-type="not-found">foobar</div>',
+            response.content
+          );
+          assert.equal("127.0.0.1", response.store.qt.data.host);
         })
         .then(done);
     });

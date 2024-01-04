@@ -15,6 +15,7 @@ const { customUrlToCacheKey } = require("../caching");
 const { addLightPageHeaders } = require("../impl/light-page-impl");
 const { getOneSignalScript } = require("./onesignal-script");
 const { getRedirectUrl } = require("../redirect-url-helper");
+const { Story } = require("../impl/api-client-impl");
 
 const ABORT_HANDLER = "__ABORT__";
 function abortHandler() {
@@ -26,7 +27,19 @@ function loadDataForIsomorphicRoute(
   loadErrorData,
   url,
   routes,
-  { otherParams, config, client, host, logError, domainSlug, redirectToLowercaseSlugs, cookies, mobileApiEnabled }
+  {
+    otherParams,
+    config,
+    client,
+    host,
+    logError,
+    domainSlug,
+    redirectToLowercaseSlugs,
+    cookies,
+    mobileApiEnabled,
+    externalIdPattern,
+    enableExternalStories,
+  }
 ) {
   return loadDataForEachRoute().catch((error) => {
     logError(error);
@@ -69,6 +82,25 @@ function loadDataForIsomorphicRoute(
       if (result && result.data && result.data[ABORT_HANDLER]) continue;
 
       return result;
+    }
+
+    const isExternalStoryEnabled =
+      typeof enableExternalStories === "function" ? enableExternalStories(config) : enableExternalStories;
+    if (isExternalStoryEnabled) {
+      const pattern = typeof externalIdPattern === "function" ? externalIdPattern(config) : externalIdPattern;
+      const externalId = url.pathname.split("/")[pattern.split("/").findIndex((e) => e === "EXTERNAL_ID")];
+      const story = await Story.getStoryByExternalId(client, externalId);
+      if (story) {
+        const params = Object.assign({}, url.query, otherParams, { storySlug: story.slug });
+        const result = await loadData("story-page", params, config, client, {
+          host,
+          next: abortHandler,
+          domainSlug,
+          cookies,
+          mobileApiEnabled,
+        });
+        return result;
+      }
     }
   }
 }
@@ -427,6 +459,8 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     sMaxAge,
     maxAge,
     ampPageBasePath,
+    externalIdPattern,
+    enableExternalStories,
   }
 ) {
   const url = urlLib.parse(req.url, true);
@@ -504,6 +538,8 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     domainSlug,
     redirectToLowercaseSlugs,
     cookies: req.cookies,
+    externalIdPattern,
+    enableExternalStories,
   })
     .catch((e) => {
       logError(e);
