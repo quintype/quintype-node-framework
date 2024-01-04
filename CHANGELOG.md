@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.23.0](https://github.com/quintype/quintype-node-framework/compare/v7.22.0...v7.23.0) (2024-01-04)
+
+
+### Features
+
+* **external id:** add support to retrieve stories with external ids ([#406](https://github.com/quintype/quintype-node-framework/issues/406)) ([a13b281](https://github.com/quintype/quintype-node-framework/commit/a13b281bb9e4aaaf28b0b01355f9937b74cb3be8))
+
+## [7.22.0](https://github.com/quintype/quintype-node-framework/compare/v7.21.2...v7.22.0) (2023-12-01)
+
+
+### Features
+
+* add support to configure amp story page path through featureConfig ([#403](https://github.com/quintype/quintype-node-framework/issues/403)) ([876e89a](https://github.com/quintype/quintype-node-framework/commit/876e89aeb1b4fadc9c071ffb7dcf824fc419a963))
+
 ### [7.21.2](https://github.com/quintype/quintype-node-framework/compare/v7.21.1...v7.21.2) (2023-11-15)
 
 
