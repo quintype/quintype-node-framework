@@ -37,7 +37,7 @@ function loadDataForIsomorphicRoute(
     redirectToLowercaseSlugs,
     cookies,
     mobileApiEnabled,
-    externalIdPattern,
+    externalIdIndex,
     enableExternalStories,
   }
 ) {
@@ -87,8 +87,8 @@ function loadDataForIsomorphicRoute(
     const isExternalStoryEnabled =
       typeof enableExternalStories === "function" ? enableExternalStories(config) : enableExternalStories;
     if (isExternalStoryEnabled) {
-      const pattern = typeof externalIdPattern === "function" ? externalIdPattern(config) : externalIdPattern;
-      const externalId = url.pathname.split("/")[pattern.split("/").findIndex((e) => e === "EXTERNAL_ID")];
+      const indexValue = typeof externalIdIndex === "function" ? externalIdIndex(config) : externalIdIndex;
+      const externalId = url.pathname.split("/")[indexValue];
       const story = await Story.getStoryByExternalId(client, externalId);
       if (story) {
         const params = Object.assign({}, url.query, otherParams, { storySlug: story.slug });
@@ -459,7 +459,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     sMaxAge,
     maxAge,
     ampPageBasePath,
-    externalIdPattern,
+    externalIdIndex,
     enableExternalStories,
   }
 ) {
@@ -538,7 +538,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     domainSlug,
     redirectToLowercaseSlugs,
     cookies: req.cookies,
-    externalIdPattern,
+    externalIdIndex,
     enableExternalStories,
   })
     .catch((e) => {

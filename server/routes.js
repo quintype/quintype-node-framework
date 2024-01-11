@@ -306,7 +306,7 @@ function getWithConfig(app, route, handler, opts = {}) {
  * @param {(string|function)} fcmServerKey  FCM serverKey is used for registering FCM Topic.
  * @param {string} appLoadingPlaceholder This string gets injected into the app container when the page is loaded via service worker. Can be used to show skeleton layouts, animations or other progress indicators before it is replaced by the page content.
  * @param {boolean|function} enableExternalStories If set to true, then for every request an external story api call is made and renders the story-page if the story is found. (default: false)
- * @param {string|function} externalIdPattern This string specifies the external id pattern the in the url. Mention `EXTERNAL_ID` to specify the position of external id in the url. Ex: "/parent-section/child-section/EXTERNAL_ID"
+ * @param {number|function} externalIdIndex This string specifies the external id pattern the in the url. Mention `EXTERNAL_ID` to specify the position of external id in the url. Ex: "/parent-section/child-section/EXTERNAL_ID"
  */
 exports.isomorphicRoutes = function isomorphicRoutes(
   app,
@@ -353,7 +353,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     appLoadingPlaceholder = "",
     fcmServerKey = "",
     webengageConfig = {},
-    externalIdPattern = "",
+    externalIdIndex = -1,
     enableExternalStories = false,
   }
 ) {
@@ -545,7 +545,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       sMaxAge: _sMaxAge,
       maxAge: _maxAge,
       ampPageBasePath,
-      externalIdPattern,
+      externalIdIndex,
       enableExternalStories,
     })
   );
