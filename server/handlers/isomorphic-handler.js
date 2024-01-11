@@ -88,7 +88,15 @@ function loadDataForIsomorphicRoute(
       typeof enableExternalStories === "function" ? enableExternalStories(config) : enableExternalStories;
     if (isExternalStoryEnabled) {
       const indexValue = typeof externalIdIndex === "function" ? externalIdIndex(config) : externalIdIndex;
-      const externalId = url.pathname.split("/")[indexValue];
+      let externalIdIndexValue = -1;
+      const urlParamsArray = url.pathname.split("/");
+      // ExternalID index value should be in the URL Params range
+      // Check to avoid any invalid input
+      // Default value (-1), Last param value
+      if (indexValue >= 0 && indexValue < urlParamsArray.length) {
+        externalIdIndexValue = indexValue;
+      }
+      const externalId = urlParamsArray[indexValue];
       const story = await Story.getStoryByExternalId(client, externalId);
       if (story) {
         const params = Object.assign({}, url.query, otherParams, { storySlug: story.slug });
