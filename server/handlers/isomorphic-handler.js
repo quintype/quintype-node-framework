@@ -88,8 +88,8 @@ function loadDataForIsomorphicRoute(
       typeof enableExternalStories === "function" ? enableExternalStories(config) : enableExternalStories;
     if (isExternalStoryEnabled) {
       const indexValue = typeof externalIdIndex === "function" ? externalIdIndex(config) : externalIdIndex;
-      let externalIdIndexValue = -1;
       const urlParamsArray = url.pathname.split("/");
+      let externalIdIndexValue = urlParamsArray.length - 1;
       // ExternalID index value should be in the URL Params range
       // Check to avoid any invalid input
       // Default value (-1), Last param value
