@@ -96,7 +96,7 @@ function loadDataForIsomorphicRoute(
       if (indexValue >= 0 && indexValue < urlParamsArray.length) {
         externalIdIndexValue = indexValue;
       }
-      const externalId = urlParamsArray[indexValue];
+      const externalId = urlParamsArray[externalIdIndexValue];
       const story = await Story.getStoryByExternalId(client, externalId);
       if (story) {
         const params = Object.assign({}, url.query, otherParams, { storySlug: story.slug });
