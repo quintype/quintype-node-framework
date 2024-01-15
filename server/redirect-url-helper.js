@@ -61,7 +61,7 @@ function processRedirects(req, res, next, sourceUrlArray, urls) {
 exports.getRedirectUrl = async function getRedirectUrl(req, res, next, { redirectUrls, config }) {
   let sourceUrls;
   if (typeof redirectUrls === "function") {
-    const redirectUrlsList = await redirectUrls(config);
+    const redirectUrlsList = await redirectUrls(config, { req });
     sourceUrls = Object.keys(redirectUrlsList);
     if (sourceUrls.length > 0) {
       processRedirects(req, res, next, sourceUrls, redirectUrlsList);
