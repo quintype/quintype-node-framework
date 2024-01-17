@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-npm install --legacy-peer-deps
+npm install
 git diff --quiet
 npm run docs
 
