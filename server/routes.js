@@ -305,6 +305,8 @@ function getWithConfig(app, route, handler, opts = {}) {
  * @param {number} maxAge Overrides the max-age value, the default value is set to 15 seconds. We can set `isomorphicRoutesMaxage: 15` under `publisher` in publisher.yml config file that comes from BlackKnight or pass maxAge as a param.
  * @param {(string|function)} fcmServerKey  FCM serverKey is used for registering FCM Topic.
  * @param {string} appLoadingPlaceholder This string gets injected into the app container when the page is loaded via service worker. Can be used to show skeleton layouts, animations or other progress indicators before it is replaced by the page content.
+ * @param {boolean|function} enableExternalStories If set to true, then for every request an external story api call is made and renders the story-page if the story is found. (default: false)
+ * @param {string|function} externalIdPattern This string specifies the external id pattern the in the url. Mention `EXTERNAL_ID` to specify the position of external id in the url. Ex: "/parent-section/child-section/EXTERNAL_ID"
  */
 exports.isomorphicRoutes = function isomorphicRoutes(
   app,
@@ -317,6 +319,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     seo,
     manifestFn,
     assetLinkFn,
+    ampPageBasePath = "/amp/story",
 
     oneSignalServiceWorkers = false,
     staticRoutes = [],
@@ -350,6 +353,8 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     appLoadingPlaceholder = "",
     fcmServerKey = "",
     webengageConfig = {},
+    externalIdPattern = "",
+    enableExternalStories = false,
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
@@ -539,6 +544,9 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       publisherConfig,
       sMaxAge: _sMaxAge,
       maxAge: _maxAge,
+      ampPageBasePath,
+      externalIdPattern,
+      enableExternalStories,
     })
   );
 
@@ -646,7 +654,7 @@ exports.mountQuintypeAt = function (app, mountAt) {
 /**
  * *ampRoutes* handles all the amp page routes using the *[@quintype/amp](https://developers.quintype.com/quintype-node-amp)* library
  * routes matched:
- * GET - "/amp/story/:slug"* returns amp story page
+ * GET - "/amp/:slug"* returns amp story page
  * GET - "/amp/api/v1/amp-infinite-scroll" returns the infinite scroll config JSON. Passed to <amp-next-page> component's `src` attribute
  *
  * To disable amp version for a specific story, you need to create a story attribute in bold with the slug {disable-amp-for-single-story} and values {true} and {false}. Set its value to "true" in the story which you want to disable amp. Please make sure to name the attributes and values in the exact same way as mentioned
@@ -666,7 +674,7 @@ exports.mountQuintypeAt = function (app, mountAt) {
 exports.ampRoutes = (app, opts = {}) => {
   const { ampStoryPageHandler, storyPageInfiniteScrollHandler } = require("./amp/handlers");
 
-  getWithConfig(app, "/amp/story/*", ampStoryPageHandler, opts);
   getWithConfig(app, "/amp/api/v1/amp-infinite-scroll", storyPageInfiniteScrollHandler, opts);
+  getWithConfig(app, "/amp/*", ampStoryPageHandler, opts);
   getWithConfig(app, "/ampstories/*", ampStoryPageHandler, { ...opts, isVisualStory: true });
 };
