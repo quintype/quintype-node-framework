@@ -83,6 +83,7 @@ function loadDataForIsomorphicRoute(
 
       return result;
     }
+
     const isExternalStoryEnabled =
       typeof enableExternalStories === "function" ? enableExternalStories(config) : enableExternalStories;
     if (isExternalStoryEnabled) {

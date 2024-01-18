@@ -24,7 +24,7 @@ function pickComponent(pageType) {
 const cdnProviderFunc = () => "akamai";
 
 function createApp(loadData, routes, opts = {}, app = express()) {
-  const { redirectToLowercaseSlugs = false, enableExternalStories = false, externalIdPattern = "" } = opts;
+  const { redirectToLowercaseSlugs = false, enableExternalStories = false, externalIdPattern = "", } = opts;
   isomorphicRoutes(
     app,
     Object.assign(
