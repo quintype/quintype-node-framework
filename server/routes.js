@@ -180,7 +180,7 @@ function withConfigPartial(
       const client = getClient(req.hostname);
       return client
         .getConfig()
-        .then((config) => configWrapper(config, domainSlug))
+        .then((config) => configWrapper(config, domainSlug, { req }))
         .then((config) =>
           f(
             req,
