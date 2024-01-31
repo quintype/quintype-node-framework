@@ -51,7 +51,7 @@ async function ampStoryPageHandler(
     const isAmpDisabled = get(story, ["metadata", "story-attributes", "disable-amp-for-single-story", "0"], "false");
 
     if ((!isVisualStory && !enableAmp) || isAmpDisabled === "true") {
-      return res.redirect(301, `/${req.params[0]}`);
+      return res.redirect(301, `/${story.slug}`);
     }
 
     const domainSpecificOpts = getDomainSpecificOpts(opts, domainSlug);
