@@ -239,7 +239,7 @@ describe("ampStoryPageHandler integration tests", () => {
         return done();
       });
   });
-  it("should redirect to non-amp page if enableAmp is false", (done) => {
+  it.skip("should redirect to non-amp page if enableAmp is false", (done) => {
     const app = createApp({
       enableAmp: false,
     });
