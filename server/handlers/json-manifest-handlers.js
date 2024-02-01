@@ -9,7 +9,7 @@ exports.handleManifest = function handleManifest(
 ) {
   return new Promise((resolve) => resolve(manifestFn(config, domainSlug)))
     .then((result) => {
-      res.setHeader("Cache-Control", "public,max-age=900");
+      res.setHeader("Cache-Control", "public,max-age=900,stale-while-revalidate=1000, stale-if-error=14400");
       res.setHeader("Vary", "Accept-Encoding");
       res.json(
         Object.assign(

@@ -39,7 +39,7 @@ async function generateServiceWorker(
           res
             .status(200)
             .header("Content-Type", "application/javascript")
-            .header("Cache-Control", "public,max-age=300")
+            .header("Cache-Control", "public,max-age=300, stale-while-revalidate=1000, stale-if-error=14400")
             .header("Vary", "Accept-Encoding")
             .header(
               "Cache-Tag",
