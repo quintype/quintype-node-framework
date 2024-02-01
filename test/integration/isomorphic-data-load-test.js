@@ -158,7 +158,7 @@ describe("Isomorphic Data Load", function () {
       .expect("Content-Type", /json/)
       .expect(
         "Cache-Control",
-        "public,s-maxage=900"
+        "public,s-maxage=900,stale-while-revalidate=1000, stale-if-error=14400",
       )
       .expect("Vary", "Accept-Encoding")
       .expect("Cache-Tag", "foo,bar")
