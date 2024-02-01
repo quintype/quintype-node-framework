@@ -9,6 +9,7 @@ const { optimize, getDomainSpecificOpts } = require("../helpers");
 const { storyToCacheKey } = require("../../caching");
 const { addCacheHeadersToResult } = require("../../handlers/cdn-caching");
 const { getRedirectUrl } = require("../../../server/redirect-url-helper");
+const { getAmpPageBasePath } = require("../helpers/get-amp-page-base-path");
 
 /**
  * ampStoryPageHandler gets all the things needed and calls "ampifyStory" function (which comes from ampLib)
@@ -51,7 +52,13 @@ async function ampStoryPageHandler(
     const isAmpDisabled = get(story, ["metadata", "story-attributes", "disable-amp-for-single-story", "0"], "false");
 
     if ((!isVisualStory && !enableAmp) || isAmpDisabled === "true") {
-      return res.redirect(301, `/${story.slug}`);
+      const ampPageBasePath = getAmpPageBasePath(opts, config);
+      const removeString = ampPageBasePath.substring(ampPageBasePath.indexOf("/amp") + "/amp".length + 1);
+      const redirectUrl = req.params[0].startsWith(removeString)
+        ? req.params[0].replace(removeString, "").slice(1)
+        : req.params[0];
+
+      return res.redirect(301, `/${redirectUrl}`);
     }
 
     const domainSpecificOpts = getDomainSpecificOpts(opts, domainSlug);
