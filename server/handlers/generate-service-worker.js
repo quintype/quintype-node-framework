@@ -1,3 +1,5 @@
+const { STALE_IF_ERROR_CACHE_DURATION } = require("../../constants");
+
 async function generateServiceWorker(
   req,
   res,
@@ -13,7 +15,6 @@ async function generateServiceWorker(
   }
 ) {
   const configVersion = await maxConfigVersion(config, domainSlug);
-  const STALE_IF_ERROR_CACHE_DURATION = 14400;
 
   return new Promise((resolve) => {
     renderServiceWorker(

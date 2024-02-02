@@ -1,5 +1,6 @@
 const get = require("lodash/get");
 const Promise = require("bluebird");
+const { STALE_IF_ERROR_CACHE_DURATION } = require("../../constants");
 
 exports.handleManifest = function handleManifest(
   req,
@@ -7,7 +8,6 @@ exports.handleManifest = function handleManifest(
   next,
   { config, logError, manifestFn, domainSlug }
 ) {
-  const STALE_IF_ERROR_CACHE_DURATION = 14400;
   return new Promise((resolve) => resolve(manifestFn(config, domainSlug)))
     .then((result) => {
       res.setHeader("Cache-Control", `public,max-age=900,stale-while-revalidate=1000, stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`);

@@ -7,6 +7,7 @@ const supertest = require("supertest");
 const {
   MOCK_WHITELIST_MOBILE_CONFIG,
 } = require("../data/whitelist-mobile-config");
+const { STALE_IF_ERROR_CACHE_DURATION } = require("../../constants");
 
 function getClientStub() {
   return {
@@ -158,7 +159,7 @@ describe("Isomorphic Data Load", function () {
       .expect("Content-Type", /json/)
       .expect(
         "Cache-Control",
-        "public,s-maxage=900,stale-if-error=14400",
+        `public,s-maxage=900,stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`,
       )
       .expect("Vary", "Accept-Encoding")
       .expect("Cache-Tag", "foo,bar")

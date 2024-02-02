@@ -1,5 +1,6 @@
 const { cache } = require("ejs");
 const _ = require("lodash");
+const { STALE_IF_ERROR_CACHE_DURATION } = require("../../constants");
 
 exports.addCacheHeadersToResult = function addCacheHeadersToResult({
   res,
@@ -11,7 +12,6 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
   networkOnly = false,
 }) {
   let cdnProviderVal = null;
-  const STALE_IF_ERROR_CACHE_DURATION = 14400;
   cdnProviderVal =
     typeof cdnProvider === "function" && Object.keys(config).length > 0 ? cdnProvider(config) : cdnProvider;
   if (cacheKeys) {
