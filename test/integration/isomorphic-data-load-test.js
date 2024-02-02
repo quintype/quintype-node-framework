@@ -1,6 +1,6 @@
 const assert = require("assert").strict;
 const express = require("express");
-
+const { STALE_IF_ERROR_CACHE_DURATION } = require("../../constants");
 const { isomorphicRoutes } = require("../../server/routes");
 const supertest = require("supertest");
 
@@ -158,7 +158,7 @@ describe("Isomorphic Data Load", function () {
       .expect("Content-Type", /json/)
       .expect(
         "Cache-Control",
-        "public,s-maxage=900"
+        `public,s-maxage=900,stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`,
       )
       .expect("Vary", "Accept-Encoding")
       .expect("Cache-Tag", "foo,bar")

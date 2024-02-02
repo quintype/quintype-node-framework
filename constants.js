@@ -1,0 +1,1 @@
+export const STALE_IF_ERROR_CACHE_DURATION = 14400;

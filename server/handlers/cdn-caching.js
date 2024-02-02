@@ -1,5 +1,6 @@
 const { cache } = require("ejs");
 const _ = require("lodash");
+const { STALE_IF_ERROR_CACHE_DURATION } = require("../../constants");
 
 exports.addCacheHeadersToResult = function addCacheHeadersToResult({
   res,
@@ -16,7 +17,6 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
   if (cacheKeys) {
     if (cacheKeys === "DO_NOT_CACHE") {
       res.setHeader("Cache-Control", "private,no-cache,no-store,max-age=0");
-      cdnProviderVal === "akamai" && res.setHeader("Edge-Control", "private,no-cache,no-store,max-age=0");
       res.setHeader("Vary", "Accept-Encoding");
       res.setHeader(
         "Content-Security-Policy",
@@ -34,19 +34,16 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
       );
     } else {
       if (networkOnly) {
-        res.setHeader("Cache-Control", `public,s-maxage=${sMaxAge}`);
+        res.setHeader("Cache-Control", `public,s-maxage=${sMaxAge},stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`);
         res.setHeader(
           "Cloudflare-CDN-Cache-Control",
           `max-age=${sMaxAge}, stale-while-revalidate=1000, stale-if-error=14400`
         );
-        cdnProviderVal === "akamai" && res.setHeader("Edge-Control", `public,maxage=${sMaxAge}`);
       } else {
         res.setHeader(
           "Cache-Control",
-          `public,max-age=${maxAge},s-maxage=${sMaxAge},stale-while-revalidate=1000,stale-if-error=14400`
+          `public,max-age=${maxAge},s-maxage=${sMaxAge},stale-while-revalidate=1000,stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`
         );
-        cdnProviderVal === "akamai" &&
-          res.setHeader("Edge-Control", `public,maxage=${sMaxAge},stale-while-revalidate=1000,stale-if-error=14400`);
       }
 
       res.setHeader("Vary", "Accept-Encoding");

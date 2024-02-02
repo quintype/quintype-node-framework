@@ -1,16 +1,10 @@
+const { STALE_IF_ERROR_CACHE_DURATION } = require("../../constants");
+
 async function generateServiceWorker(
   req,
   res,
   next,
-  {
-    config,
-    generateRoutes,
-    appendFn,
-    assetHelper,
-    renderServiceWorker,
-    domainSlug,
-    maxConfigVersion,
-  }
+  { config, generateRoutes, appendFn, assetHelper, renderServiceWorker, domainSlug, maxConfigVersion }
 ) {
   const configVersion = await maxConfigVersion(config, domainSlug);
 
@@ -26,9 +20,7 @@ async function generateServiceWorker(
         assetHash: assetHelper.assetHash,
         configVersion,
         getFilesForChunks: assetHelper.getFilesForChunks,
-        routes: generateRoutes(config, domainSlug).filter(
-          (route) => !route.skipPWA
-        ),
+        routes: generateRoutes(config, domainSlug).filter((route) => !route.skipPWA),
       },
       (err, content) => {
         // istanbul ignore if
@@ -39,12 +31,12 @@ async function generateServiceWorker(
           res
             .status(200)
             .header("Content-Type", "application/javascript")
-            .header("Cache-Control", "public,max-age=300")
-            .header("Vary", "Accept-Encoding")
             .header(
-              "Cache-Tag",
-              `s/${config["publisher-id"]}/service-worker s/${config["publisher-id"]}/config`
+              "Cache-Control",
+              `public,max-age=300, stale-while-revalidate=1000, stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`
             )
+            .header("Vary", "Accept-Encoding")
+            .header("Cache-Tag", `s/${config["publisher-id"]}/service-worker s/${config["publisher-id"]}/config`)
             .write(content);
           if (appendFn) appendFn(res);
           res.end();
