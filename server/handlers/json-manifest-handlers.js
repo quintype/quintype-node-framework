@@ -7,9 +7,10 @@ exports.handleManifest = function handleManifest(
   next,
   { config, logError, manifestFn, domainSlug }
 ) {
+  const STALE_IF_ERROR_CACHE_DURATION = 14400;
   return new Promise((resolve) => resolve(manifestFn(config, domainSlug)))
     .then((result) => {
-      res.setHeader("Cache-Control", "public,max-age=900,stale-while-revalidate=1000, stale-if-error=14400");
+      res.setHeader("Cache-Control", `public,max-age=900,stale-while-revalidate=1000, stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`);
       res.setHeader("Vary", "Accept-Encoding");
       res.json(
         Object.assign(

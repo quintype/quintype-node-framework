@@ -13,6 +13,7 @@ async function generateServiceWorker(
   }
 ) {
   const configVersion = await maxConfigVersion(config, domainSlug);
+  const STALE_IF_ERROR_CACHE_DURATION = 14400;
 
   return new Promise((resolve) => {
     renderServiceWorker(
@@ -39,7 +40,7 @@ async function generateServiceWorker(
           res
             .status(200)
             .header("Content-Type", "application/javascript")
-            .header("Cache-Control", "public,max-age=300, stale-while-revalidate=1000, stale-if-error=14400")
+            .header("Cache-Control", `public,max-age=300, stale-while-revalidate=1000, stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`)
             .header("Vary", "Accept-Encoding")
             .header(
               "Cache-Tag",

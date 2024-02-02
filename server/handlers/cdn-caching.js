@@ -11,6 +11,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
   networkOnly = false,
 }) {
   let cdnProviderVal = null;
+  const STALE_IF_ERROR_CACHE_DURATION = 14400;
   cdnProviderVal =
     typeof cdnProvider === "function" && Object.keys(config).length > 0 ? cdnProvider(config) : cdnProvider;
   if (cacheKeys) {
@@ -33,15 +34,15 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
       );
     } else {
       if (networkOnly) {
-        res.setHeader("Cache-Control", `public,s-maxage=${sMaxAge},stale-if-error=14400`);
+        res.setHeader("Cache-Control", `public,s-maxage=${sMaxAge},stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`);
         res.setHeader(
           "Cloudflare-CDN-Cache-Control",
-          `max-age=${sMaxAge}, stale-while-revalidate=1000, stale-if-error=14400`
+          `max-age=${sMaxAge}, stale-while-revalidate=1000, stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`
         );
       } else {
         res.setHeader(
           "Cache-Control",
-          `public,max-age=${maxAge},s-maxage=${sMaxAge},stale-while-revalidate=1000,stale-if-error=14400`
+          `public,max-age=${maxAge},s-maxage=${sMaxAge},stale-while-revalidate=1000,stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`
         );
       }
 
