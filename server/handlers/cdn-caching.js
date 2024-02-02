@@ -36,7 +36,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
         res.setHeader("Cache-Control", `public,s-maxage=${sMaxAge},stale-if-error=14400`);
         res.setHeader(
           "Cloudflare-CDN-Cache-Control",
-          `max-age=${sMaxAge},stale-if-error=14400`
+          `max-age=${sMaxAge}, stale-while-revalidate=1000, stale-if-error=14400`
         );
       } else {
         res.setHeader(
