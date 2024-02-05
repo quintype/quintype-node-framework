@@ -172,7 +172,7 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
   ).then((result) => {
     res.status(200);
     res.setHeader("Content-Type", "text/html");
-    res.setHeader("Cache-Control", "public,max-age=900,stale-while-revalidate=1500,stale-if-error=28800");
+    res.setHeader("Cache-Control", "public,max-age=450,stale-while-revalidate=1500,stale-if-error=28800");
     res.setHeader("Vary", "Accept-Encoding");
 
     if (preloadJs) {
