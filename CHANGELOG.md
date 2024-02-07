@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.23.2](https://github.com/quintype/quintype-node-framework/compare/v7.23.1...v7.23.2) (2024-02-07)
+
+
+### Bug Fixes
+
+* **cache-header:** Add stale-if-error and stale-while-revalidate headers for route-data/manifest/sw ([#412](https://github.com/quintype/quintype-node-framework/issues/412)) ([97325a0](https://github.com/quintype/quintype-node-framework/commit/97325a0751e6df15f5e214a07f30b4fc9a69d71a))
+
 ### [7.23.1](https://github.com/quintype/quintype-node-framework/compare/v7.23.0...v7.23.1) (2024-01-30)
 
 ## [7.23.0](https://github.com/quintype/quintype-node-framework/compare/v7.22.0...v7.23.0) (2024-01-04)
