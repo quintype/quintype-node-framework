@@ -41,6 +41,10 @@ async function ampStoryPageHandler(
 ) {
   try {
     const opts = cloneDeep(rest);
+    const isCorrectAmpPath = req.path.startsWith(`${getAmpPageBasePath(opts, config)}/`)
+    if (!isCorrectAmpPath) {
+      return next()
+    }
     const redirectUrls = opts && opts.redirectUrls;
     const getEnableAmp = get(opts, ["enableAmp"], true);
     const enableAmp = typeof getEnableAmp === "function" ? opts.enableAmp(config) : getEnableAmp;
