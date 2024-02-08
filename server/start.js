@@ -13,7 +13,6 @@
 const chalk = require('chalk');
 const cluster = require("cluster");
 const process = require("process");
-const { initializeAllClients } = require("./api-client");
 const logger = require("./logger");
 const logSuccess = chalk.bold.cyanBright;
 
@@ -72,7 +71,6 @@ async function startWorker(appThunk, opts) {
   try {
     const app = appThunk();
 
-    await initializeAllClients();
     const server = app.listen(opts.port || 3000, () => {
       console.log(logSuccess(`||=============================||`));
       console.log(logSuccess(`|| App listening on port ${opts.port || 3000}! ||`))

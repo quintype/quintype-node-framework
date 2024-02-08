@@ -38,6 +38,7 @@
     "@quintype/seo": "^1.43.0-config-amp-story-path.1",
     "atob": "^2.1.2",
     "babel-plugin-react-css-modules": "^5.2.6",
+    "cache-manager": "^5.4.0",
     "chalk": "^4.1.2",
     "cluster": "^0.7.7",
     "compression": "^1.7.4",
