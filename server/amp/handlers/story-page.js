@@ -41,9 +41,9 @@ async function ampStoryPageHandler(
 ) {
   try {
     const opts = cloneDeep(rest);
-    const isCorrectAmpPath = req.path.startsWith(`${getAmpPageBasePath(opts, config)}/`)
+    const isCorrectAmpPath = req.path.startsWith(`${getAmpPageBasePath(opts, config)}/`);
     if (!isCorrectAmpPath) {
-      return next()
+      return next();
     }
     const redirectUrls = opts && opts.redirectUrls;
     const getEnableAmp = get(opts, ["enableAmp"], true);
@@ -57,12 +57,11 @@ async function ampStoryPageHandler(
 
     if ((!isVisualStory && !enableAmp) || isAmpDisabled === "true") {
       const ampPageBasePath = getAmpPageBasePath(opts, config);
-      const removeString = ampPageBasePath.substring(ampPageBasePath.indexOf("/amp") + "/amp".length + 1);
-      const redirectUrl = req.params[0].startsWith(removeString)
-        ? req.params[0].replace(removeString, "").slice(1)
-        : req.params[0];
+      const redirectUrl = `/${req.params[0]}`.startsWith(ampPageBasePath)
+        ? `/${req.params[0]}`.replace(ampPageBasePath, "")
+        : `/${req.params[0]}`;
 
-      return res.redirect(301, `/${redirectUrl}`);
+      return res.redirect(301, redirectUrl);
     }
 
     const domainSpecificOpts = getDomainSpecificOpts(opts, domainSlug);
