@@ -658,7 +658,7 @@ exports.mountQuintypeAt = function (app, mountAt) {
  * GET - "/amp/api/v1/amp-infinite-scroll" returns the infinite scroll config JSON. Passed to <amp-next-page> component's `src` attribute
  *
  * To disable amp version for a specific story, you need to create a story attribute in bold with the slug {disable-amp-for-single-story} and values {true} and {false}. Set its value to "true" in the story which you want to disable amp. Please make sure to name the attributes and values in the exact same way as mentioned
- * attribute slug: "disable-amp-for-single-story" values: "true" , "false". This will redirect 'amp/story/:slug' to the non-amp page
+ * attribute slug: "disable-amp-for-single-story" values: "true" , "false". This will redirect '<amp-page-base-path>/:slug' to the non-amp page
  *
  * @param {Express} app Express app to add the routes to
  * @param {Object} opts Options object used to configure amp. Passing this is optional
