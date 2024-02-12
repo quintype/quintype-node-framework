@@ -28,7 +28,6 @@ const rp = require("request-promise");
 const bodyParser = require("body-parser");
 const get = require("lodash/get");
 const { URL } = require("url");
-const { caching } = require("cache-manager");
 const prerender = require("@quintype/prerender-node");
 
 /**
@@ -176,28 +175,25 @@ function withConfigPartial(
   configWrapper = (config) => config
 ) {
   return function withConfig(f, staticParams) {
-    return async function (req, res, next) {
-      const { hostname } = req;
-      const domainSlug = getDomainSlug(publisherConfig, hostname);
-      const client = getClient(hostname);
-      try {
-        const config = await memoryCache.wrap(`config-${domainSlug}`, () => client.getConfig(), 4000);
-        await configWrapper(config, domainSlug, { req });
-        f(
-          req,
-          res,
-          next,
-          Object.assign({}, staticParams, {
-            config,
-            client,
-            domainSlug,
-          })
-        );
-      } catch (e) {
-        logError(e);
-      }
-
-      return config;
+    return function (req, res, next) {
+      const domainSlug = getDomainSlug(publisherConfig, req.hostname);
+      const client = getClient(req.hostname);
+      return client
+        .getConfig()
+        .then((config) => configWrapper(config, domainSlug, { req }))
+        .then((config) =>
+          f(
+            req,
+            res,
+            next,
+            Object.assign({}, staticParams, {
+              config,
+              client,
+              domainSlug,
+            })
+          )
+        )
+        .catch(logError);
     };
   };
 }
