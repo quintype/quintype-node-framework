@@ -11,6 +11,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
   sMaxAge = "900",
   networkOnly = false,
 }) {
+  console.log('test')
   let cdnProviderVal = null;
   cdnProviderVal =
     typeof cdnProvider === "function" && Object.keys(config).length > 0 ? cdnProvider(config) : cdnProvider;
