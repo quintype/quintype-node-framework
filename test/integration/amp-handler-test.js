@@ -299,7 +299,7 @@ describe("ampStoryPageHandler integration tests", () => {
       enableAmp: true,
     });
     supertest(app)
-      .get("/amp/cricket/ipl-2021")
+      .get("/amp/story/cricket/ipl-2021")
       .expect(301)
       .expect("Location", "/cricket/ipl-2021")
       .end((err) => {
@@ -367,7 +367,7 @@ describe("ampStoryPageHandler integration tests", () => {
       enableAmp: true,
     });
     supertest(app)
-      .get("/amp/cricket/ipl-2021")
+      .get("/amp/story/cricket/ipl-2021")
       .expect("Content-Type", /html/)
       .expect(200)
       .end((err) => {
@@ -380,7 +380,7 @@ describe("ampStoryPageHandler integration tests", () => {
       enableAmp: false,
     });
     supertest(app)
-      .get("/amp/cricket/ipl-2021")
+      .get("/amp/story/cricket/ipl-2021")
       .expect(301)
       .expect("Location", "/cricket/ipl-2021")
       .end((err) => {
