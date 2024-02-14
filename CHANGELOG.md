@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.23.3](https://github.com/quintype/quintype-node-framework/compare/v7.23.2...v7.23.3) (2024-02-14)
+
+
+### Bug Fixes
+
+* **bulk request:** POST bulk to a get ([#415](https://github.com/quintype/quintype-node-framework/issues/415)) ([93ada22](https://github.com/quintype/quintype-node-framework/commit/93ada2239266cb61775d40163d77e1858f25aebc))
+
 ### [7.23.2](https://github.com/quintype/quintype-node-framework/compare/v7.23.1...v7.23.2) (2024-02-07)
 
 
