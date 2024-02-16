@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.23.3-pb-2828.0",
+  "version": "7.23.3",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
