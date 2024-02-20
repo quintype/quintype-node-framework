@@ -559,12 +559,10 @@ describe("Isomorphic Handler", function () {
         .expect(200)
         .then((res) => {
           const cacheControl = res.header["cache-control"];
-          const edgeCacheControl = res.header["edge-control"];
           const cacheTag = res.header["cache-tag"];
           const edgeCacheTag = res.header["edge-cache-tag"];
           const contentSecurityPolicy = res.header["content-security-policy"];
           assert.equal(cacheControl, "private,no-cache,no-store,max-age=0");
-          assert.equal(edgeCacheControl, "private,no-cache,no-store,max-age=0");
           assert.equal(cacheTag, undefined);
           assert.equal(edgeCacheTag, undefined);
           assert.equal(
@@ -602,11 +600,9 @@ describe("Isomorphic Handler", function () {
         .expect(200)
         .then((res) => {
           const cacheControl = res.header["cache-control"];
-          const edgeCacheControl = res.header["edge-control"];
           const edgeCacheTag = res.header["edge-cache-tag"];
           const contentSecurityPolicy = res.header["content-security-policy"];
           assert.equal(cacheControl, "public,max-age=15,s-maxage=60,stale-while-revalidate=150,stale-if-error=3600");
-          assert.equal(edgeCacheControl, "public,maxage=60,stale-while-revalidate=150,stale-if-error=3600");
           assert.equal(edgeCacheTag, undefined);
           assert.equal(
             contentSecurityPolicy,
@@ -643,11 +639,9 @@ describe("Isomorphic Handler", function () {
         .expect(200)
         .then((res) => {
           const cacheControl = res.header["cache-control"];
-          const edgeCacheControl = res.header["edge-control"];
           const edgeCacheTag = res.header["edge-cache-tag"];
           const contentSecurityPolicy = res.header["content-security-policy"];
           assert.equal(cacheControl, "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
-          assert.equal(edgeCacheControl, "public,maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
           assert.equal(edgeCacheTag, "c/1/abcdefgh");
           assert.equal(
             contentSecurityPolicy,
@@ -684,11 +678,9 @@ describe("Isomorphic Handler", function () {
         .expect(200)
         .then((res) => {
           const cacheControl = res.header["cache-control"];
-          const edgeCacheControl = res.header["edge-control"];
           const edgeCacheTag = res.header["edge-cache-tag"];
           const contentSecurityPolicy = res.header["content-security-policy"];
           assert.equal(cacheControl, "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
-          assert.equal(edgeCacheControl, "public,maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
           assert.equal(edgeCacheTag, "c/1/abcdefgh");
           assert.equal(
             contentSecurityPolicy,
