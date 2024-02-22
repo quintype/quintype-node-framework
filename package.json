@@ -32,10 +32,10 @@
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
     "@quintype/amp": "^2.17.13",
-    "@quintype/backend": "^2.3.5",
+    "@quintype/backend": "^2.4.0",
     "@quintype/components": "^3.5.0",
     "@quintype/prerender-node": "^3.2.26",
-    "@quintype/seo": "^1.43.0-config-amp-story-path.1",
+    "@quintype/seo": "^1.44.1",
     "atob": "^2.1.2",
     "babel-plugin-react-css-modules": "^5.2.6",
     "chalk": "^4.1.2",
