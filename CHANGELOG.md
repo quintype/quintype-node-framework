@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.24.0](https://github.com/quintype/quintype-node-framework/compare/v7.23.4...v7.24.0) (2024-02-22)
+
+
+### Features
+
+* **cache:** Implement config cache 🔥  ([#416](https://github.com/quintype/quintype-node-framework/issues/416)) ([d59ecb4](https://github.com/quintype/quintype-node-framework/commit/d59ecb4899f7b7c8c8b9a13bb41729f9780abe18))
+
 ### [7.23.4](https://github.com/quintype/quintype-node-framework/compare/v7.23.3...v7.23.4) (2024-02-16)
 
 ### [7.23.3](https://github.com/quintype/quintype-node-framework/compare/v7.23.2...v7.23.3) (2024-02-14)
