@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.25.0](https://github.com/quintype/quintype-node-framework/compare/v7.24.2...v7.25.0) (2024-02-23)
+
+
+### Features
+
+* **amp:** disable amp for a particular story ([#402](https://github.com/quintype/quintype-node-framework/issues/402)) ([8e99d24](https://github.com/quintype/quintype-node-framework/commit/8e99d24b38c6ff3eb452bc2362043910f3179e9b))
+
 ### [7.24.2](https://github.com/quintype/quintype-node-framework/compare/v7.24.1...v7.24.2) (2024-02-22)
 
 ### [7.24.1](https://github.com/quintype/quintype-node-framework/compare/v7.24.0...v7.24.1) (2024-02-22)
