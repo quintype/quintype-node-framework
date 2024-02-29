@@ -41,7 +41,7 @@ async function ampStoryPageHandler(
 ) {
   try {
     const opts = cloneDeep(rest);
-    const isCorrectAmpPath = req.path.startsWith(`${getAmpPageBasePath(opts, config)}/`);
+    const isCorrectAmpPath = req.path.startsWith(`${getAmpPageBasePath(opts, config)}/`) || isVisualStory;
     if (!isCorrectAmpPath) {
       return next();
     }
