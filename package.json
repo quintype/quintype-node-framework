@@ -31,6 +31,7 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
+    "@grpc/grpc-js": "^1.10.2",
     "@quintype/amp": "^2.17.13",
     "@quintype/backend": "^2.4.0",
     "@quintype/components": "^3.5.0",
@@ -45,7 +46,6 @@
     "express": "^4.17.1",
     "firebase": "^9.6.10",
     "get-youtube-id": "^1.0.1",
-    "grpc": "^1.21.1",
     "http-proxy": "^1.18.1",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
