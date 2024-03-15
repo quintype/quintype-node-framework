@@ -85,7 +85,7 @@
     "gh-pages": "^3.2.3",
     "history": "^5.0.1",
     "husky": "^7.0.2",
-    "jsdoc": "^4.0.2",
+    "jsdoc": "^3.6.7",
     "jsdom": "^17.0.0",
     "jsdom-global": "3.0.2",
     "lint-staged": "^11.2.0",
