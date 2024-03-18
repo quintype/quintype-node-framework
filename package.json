@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.25.1-fix-ampstories-404.1",
+  "version": "7.25.1-fix-ampstories-404.2",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
