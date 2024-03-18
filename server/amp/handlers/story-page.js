@@ -41,10 +41,12 @@ async function ampStoryPageHandler(
 ) {
   try {
     const opts = cloneDeep(rest);
-    const isCorrectAmpPath = req.path.startsWith(`${getAmpPageBasePath(opts, config)}/`);
-    if (!isCorrectAmpPath) {
-      return next();
-    }
+    const isCorrectAmpPath = isVisualStory
+      ? req.path.startsWith(`/ampstories`)
+      : req.path.startsWith(`${getAmpPageBasePath(opts, config)}/`);
+
+    if (!isCorrectAmpPath) return next();
+
     const redirectUrls = opts && opts.redirectUrls;
     const getEnableAmp = get(opts, ["enableAmp"], true);
     const enableAmp = typeof getEnableAmp === "function" ? opts.enableAmp(config) : getEnableAmp;
@@ -55,7 +57,7 @@ async function ampStoryPageHandler(
     const story = await Story.getStoryBySlug(client, req.params["0"]);
     const isAmpDisabled = get(story, ["metadata", "story-attributes", "disable-amp-for-single-story", "0"], "false");
 
-    if ((!isVisualStory && !enableAmp) || isAmpDisabled === "true") {
+    if (!isVisualStory && (!enableAmp || isAmpDisabled === "true")) {
       const ampPageBasePath = getAmpPageBasePath(opts, config);
       const redirectUrl = `/${req.params[0]}`.startsWith(ampPageBasePath)
         ? `/${req.params[0]}`.replace(ampPageBasePath, "")
