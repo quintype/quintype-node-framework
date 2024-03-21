@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.26.0](https://github.com/quintype/quintype-node-framework/compare/v7.23.0...v7.26.0) (2024-03-21)
+
+
+### Features
+
+* **amp:** disable amp for a particular story ([#402](https://github.com/quintype/quintype-node-framework/issues/402)) ([8e99d24](https://github.com/quintype/quintype-node-framework/commit/8e99d24b38c6ff3eb452bc2362043910f3179e9b))
+* **cache:** Implement config cache 🔥  ([#416](https://github.com/quintype/quintype-node-framework/issues/416)) ([d59ecb4](https://github.com/quintype/quintype-node-framework/commit/d59ecb4899f7b7c8c8b9a13bb41729f9780abe18))
+* **Default Collection:** Avail Canonical Url field for Default Collections [#556](https://github.com/quintype/quintype-node-framework/issues/556) ([#418](https://github.com/quintype/quintype-node-framework/issues/418)) ([cb66ad1](https://github.com/quintype/quintype-node-framework/commit/cb66ad1b8e14043b9fe46981f7f39c996fee26e4))
+
+
+### Bug Fixes
+
+* **bulk request:** POST bulk to a get ([#415](https://github.com/quintype/quintype-node-framework/issues/415)) ([93ada22](https://github.com/quintype/quintype-node-framework/commit/93ada2239266cb61775d40163d77e1858f25aebc))
+* **cache-header:** Add stale-if-error and stale-while-revalidate headers for route-data/manifest/sw ([#412](https://github.com/quintype/quintype-node-framework/issues/412)) ([97325a0](https://github.com/quintype/quintype-node-framework/commit/97325a0751e6df15f5e214a07f30b4fc9a69d71a))
+
 ## [7.25.0](https://github.com/quintype/quintype-node-framework/compare/v7.24.2...v7.25.0) (2024-02-23)
 
 
