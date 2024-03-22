@@ -1,3 +1,5 @@
+const { STALE_IF_ERROR_CACHE_DURATION } = require("../../constants");
+
 async function generateServiceWorker(
   req,
   res,
@@ -39,7 +41,7 @@ async function generateServiceWorker(
           res
             .status(200)
             .header("Content-Type", "application/javascript")
-            .header("Cache-Control", "public,max-age=300")
+            .header("Cache-Control", `public,max-age=300, stale-while-revalidate=1000, stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`)
             .header("Vary", "Accept-Encoding")
             .header(
               "Cache-Tag",

@@ -42,7 +42,11 @@ exports.generateSectionPageRoutes = function generateSectionPageRoutes(
 };
 
 function generateSectionPageRoute(section, sectionsById, opts) {
-  const params = { sectionId: section.id };
+  const params = {
+    sectionId: section.id,
+    ...(opts.layoutId && { layoutId: opts.layoutId }),
+    ...(opts.preview && { preview: true }),
+  };
   if (section.collection) params.collectionSlug = section.collection.slug;
 
   let { slug } = section;

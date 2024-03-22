@@ -9,6 +9,7 @@ const { optimize, getDomainSpecificOpts } = require("../helpers");
 const { storyToCacheKey } = require("../../caching");
 const { addCacheHeadersToResult } = require("../../handlers/cdn-caching");
 const { getRedirectUrl } = require("../../../server/redirect-url-helper");
+const { getAmpPageBasePath } = require("../helpers/get-amp-page-base-path");
 
 /**
  * ampStoryPageHandler gets all the things needed and calls "ampifyStory" function (which comes from ampLib)
@@ -40,6 +41,10 @@ async function ampStoryPageHandler(
 ) {
   try {
     const opts = cloneDeep(rest);
+    const isCorrectAmpPath = req.path.startsWith(`${getAmpPageBasePath(opts, config)}/`);
+    if (!isCorrectAmpPath) {
+      return next();
+    }
     const redirectUrls = opts && opts.redirectUrls;
     const getEnableAmp = get(opts, ["enableAmp"], true);
     const enableAmp = typeof getEnableAmp === "function" ? opts.enableAmp(config) : getEnableAmp;
@@ -47,9 +52,16 @@ async function ampStoryPageHandler(
     if (typeof redirectUrls === "function" || (redirectUrls && Object.keys(redirectUrls).length > 0)) {
       await getRedirectUrl(req, res, next, { redirectUrls, config });
     }
+    const story = await Story.getStoryBySlug(client, req.params["0"]);
+    const isAmpDisabled = get(story, ["metadata", "story-attributes", "disable-amp-for-single-story", "0"], "false");
 
-    if (!isVisualStory && !enableAmp) {
-      return res.redirect(301, `/${req.params[0]}`);
+    if ((!isVisualStory && !enableAmp) || isAmpDisabled === "true") {
+      const ampPageBasePath = getAmpPageBasePath(opts, config);
+      const redirectUrl = `/${req.params[0]}`.startsWith(ampPageBasePath)
+        ? `/${req.params[0]}`.replace(ampPageBasePath, "")
+        : `/${req.params[0]}`;
+
+      return res.redirect(301, redirectUrl);
     }
 
     const domainSpecificOpts = getDomainSpecificOpts(opts, domainSlug);
@@ -57,7 +69,6 @@ async function ampStoryPageHandler(
     const { ampifyStory, unsupportedStoryElementsPresent } = ampLibrary;
     // eslint-disable-next-line no-return-await
     const ampConfig = await config.memoizeAsync("amp-config", async () => await AmpConfig.getAmpConfig(client));
-    const story = await Story.getStoryBySlug(client, req.params["0"]);
     let relatedStoriesCollection;
     let relatedStories = [];
 
