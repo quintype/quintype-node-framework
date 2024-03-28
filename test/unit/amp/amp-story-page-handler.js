@@ -36,7 +36,6 @@ function getClientStub({
 const dummyReq = {
   url: "foo",
   params: "/story/slug",
-  path: "/amp/story/slug",
 };
 const dummyRes = {
   redirect: () => null,

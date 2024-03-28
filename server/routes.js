@@ -657,9 +657,6 @@ exports.mountQuintypeAt = function (app, mountAt) {
  * GET - "/amp/:slug"* returns amp story page
  * GET - "/amp/api/v1/amp-infinite-scroll" returns the infinite scroll config JSON. Passed to <amp-next-page> component's `src` attribute
  *
- * To disable amp version for a specific story, you need to create a story attribute in bold with the slug {disable-amp-for-single-story} and values {true} and {false}. Set its value to "true" in the story which you want to disable amp. Please make sure to name the attributes and values in the exact same way as mentioned
- * attribute slug: "disable-amp-for-single-story" values: "true" , "false". This will redirect '<amp-page-base-path>/:slug' to the non-amp page
- *
  * @param {Express} app Express app to add the routes to
  * @param {Object} opts Options object used to configure amp. Passing this is optional
  * @param {Object} opts.templates An object that's used to pass custom templates. Each key corresponds to the template name and corresponding value is the template
@@ -675,6 +672,6 @@ exports.ampRoutes = (app, opts = {}) => {
   const { ampStoryPageHandler, storyPageInfiniteScrollHandler } = require("./amp/handlers");
 
   getWithConfig(app, "/amp/api/v1/amp-infinite-scroll", storyPageInfiniteScrollHandler, opts);
+  getWithConfig(app, "/amp/*", ampStoryPageHandler, opts);
   getWithConfig(app, "/ampstories/*", ampStoryPageHandler, { ...opts, isVisualStory: true });
-  getWithConfig(app, "/*", ampStoryPageHandler, opts);
 };
