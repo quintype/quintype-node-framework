@@ -15,8 +15,8 @@ function processRedirects(req, res, next, sourceUrlArray, urls) {
   const search = query.search || "";
 
   sourceUrlArray.some((sourceUrl) => {
-    try {
-      if (urls[sourceUrl]) {
+    if (urls[sourceUrl]) {
+      try {
         const destinationPath = urls[sourceUrl].destinationUrl;
         const extractedSourceUrl = match(sourceUrl, {
           decode: decodeURIComponent,
@@ -51,9 +51,9 @@ function processRedirects(req, res, next, sourceUrlArray, urls) {
             return true;
           }
         }
+      } catch (err) {
+        console.log(`Redirection error on host: '${req.host}' url: '${sourceUrl}'`, err);
       }
-    } catch (err) {
-      console.log(`Redirection error on ${req.host}-----`, err);
     }
   });
 }
