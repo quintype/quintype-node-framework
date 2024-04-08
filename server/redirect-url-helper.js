@@ -13,10 +13,10 @@ function isUrl(url) {
 function processRedirects(req, res, next, sourceUrlArray, urls) {
   const query = url.parse(req.url, true) || {};
   const search = query.search || "";
-  if (!urls || !sourceUrlArray || !Array.isArray(urls) || !Array.isArray(sourceUrlArray)) return;
+  if (!urls || !sourceUrlArray) return;
 
   sourceUrlArray.some((sourceUrl) => {
-    if (urls[sourceUrl]) {
+    if (typeof urls === "object" && urls[sourceUrl]) {
       try {
         const destinationPath = urls[sourceUrl].destinationUrl;
         const extractedSourceUrl = match(sourceUrl, {
