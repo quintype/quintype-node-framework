@@ -22,7 +22,7 @@ async function storyPageInfiniteScrollHandler(req, res, next, { client, config, 
     infiniteScrollSource,
   });
   const jsonResponse = await infiniteScrollAmp.getResponse();
-  if (jsonResponse instanceof Error) return next(errorMessage);
+  if (jsonResponse instanceof Error) return next(jsonResponse);
   res.set("Content-Type", "application/json; charset=utf-8");
   setCorsHeaders({ req, res, next, publisherConfig: config });
 
