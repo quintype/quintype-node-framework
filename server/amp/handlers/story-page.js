@@ -57,7 +57,6 @@ async function ampStoryPageHandler(
     const story = await Story.getStoryBySlug(client, req.params["0"]);
     const isAmpDisabled = get(story, ["metadata", "story-attributes", "disable-amp-for-single-story", "0"], "false");
 
-    console.log(!isVisualStory && (!enableAmp || isAmpDisabled === "true"));
     if (!isVisualStory && (!enableAmp || isAmpDisabled === "true")) {
       const ampPageBasePath = getAmpPageBasePath(opts, config);
       const redirectUrl = `/${req.params[0]}`.startsWith(ampPageBasePath)
