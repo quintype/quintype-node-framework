@@ -251,6 +251,8 @@
 routes matched:
 GET - &quot;/amp/:slug&quot;* returns amp story page
 GET - &quot;/amp/api/v1/amp-infinite-scroll&quot; returns the infinite scroll config JSON. Passed to <amp-next-page> component's <code>src</code> attribute</p>
+<p>To disable amp version for a specific story, you need to create a story attribute in bold with the slug {disable-amp-for-single-story} and values {true} and {false}. Set its value to &quot;true&quot; in the story which you want to disable amp. Please make sure to name the attributes and values in the exact same way as mentioned
+attribute slug: &quot;disable-amp-for-single-story&quot; values: &quot;true&quot; , &quot;false&quot;. This will redirect '<amp-page-base-path>/:slug' to the non-amp page</p>
     </div>
     
 
@@ -547,7 +549,7 @@ GET - &quot;/amp/api/v1/amp-infinite-scroll&quot; returns the infinite scroll co
         <p class="tag-source">
             <a href="server_routes.js.html" class="button">View Source</a>
             <span>
-                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line671">line 671</a>
+                <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line674">line 674</a>
             </span>
         </p>
     

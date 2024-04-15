@@ -148,21 +148,12 @@ exports.storyToCacheKey = function storyToCacheKey(publisherId, story) {
  * @param {Object} collection The Collection. Note, this is not recursive
  * @returns {string} The cache key
  */
-exports.collectionToCacheKey = function collectionToCacheKey(
-  publisherId,
-  collection
-) {
+exports.collectionToCacheKey = function collectionToCacheKey(publisherId, collection) {
   return `c/${publisherId}/${collection.id}`;
 };
 
-exports.sorterToCacheKey = function sorterToCacheKey(
-  publisherId,
-  storyGroup,
-  sectionId
-) {
-  return `q/${publisherId}/${storyGroup}/${
-    sectionId ? `section-${sectionId}` : "home"
-  }`;
+exports.sorterToCacheKey = function sorterToCacheKey(publisherId, storyGroup, sectionId) {
+  return `q/${publisherId}/${storyGroup}/${sectionId ? `section-${sectionId}` : "home"}`;
 };
 
 /**
