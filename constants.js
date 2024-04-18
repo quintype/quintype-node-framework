@@ -1,3 +1,3 @@
 const STALE_IF_ERROR_CACHE_DURATION = 14400;
 
-module.exports = { STALE_IF_ERROR_CACHE_DURATION }
+module.exports = { STALE_IF_ERROR_CACHE_DURATION };

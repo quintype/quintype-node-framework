@@ -13,11 +13,10 @@ function isUrl(url) {
 function processRedirects(req, res, next, sourceUrlArray, urls) {
   const query = url.parse(req.url, true) || {};
   const search = query.search || "";
-  if (!urls || !sourceUrlArray) return;
 
   sourceUrlArray.some((sourceUrl) => {
-    if (typeof urls === "object" && urls[sourceUrl]) {
-      try {
+    try {
+      if (urls[sourceUrl]) {
         const destinationPath = urls[sourceUrl].destinationUrl;
         const extractedSourceUrl = match(sourceUrl, {
           decode: decodeURIComponent,
@@ -52,9 +51,9 @@ function processRedirects(req, res, next, sourceUrlArray, urls) {
             return true;
           }
         }
-      } catch (err) {
-        console.log(`Redirection error on host: '${req.host}' url: '${sourceUrl}'`, err);
       }
+    } catch (err) {
+      console.log(`Redirection error on ${req.host}-----`, err);
     }
   });
 }
