@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.27.2](https://github.com/quintype/quintype-node-framework/compare/v7.27.1...v7.27.2) (2024-04-18)
+
+
+### Bug Fixes
+
+* ** infinite-scroll amp:** handle errors in infinite-scroll amp api response ([#421](https://github.com/quintype/quintype-node-framework/issues/421)) ([8c24b9b](https://github.com/quintype/quintype-node-framework/commit/8c24b9bca02de741861858878e5dd47bc7ac3a9a))
+
 ### [7.27.1](https://github.com/quintype/quintype-node-framework/compare/v7.27.0...v7.27.1) (2024-04-16)
 
 ## [7.27.0](https://github.com/quintype/quintype-node-framework/compare/v7.26.1...v7.27.0) (2024-04-15)

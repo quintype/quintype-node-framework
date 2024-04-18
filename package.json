@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.27.2-amp-infinite-scroll-errors.0",
+  "version": "7.27.2",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
