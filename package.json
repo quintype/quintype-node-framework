@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.27.3-test-bulk-requests.3",
+  "version": "7.27.3-test-bulk-requests.4",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
