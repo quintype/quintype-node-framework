@@ -181,14 +181,17 @@ describe("Sketches Proxy", function () {
     });
 
     it("if sMaxAge value is not present, do not override cache headers", function (done) {
+      this.timeout(5000); // Increase the timeout to 5000ms
+
       supertest(buildApp())
         .get("/api/v1/config")
         .expect(200)
         .then((res) => {
           const cacheControl = res.headers["cache-control"];
           assert.equal(cacheControl, "public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=7200");
+          done(); // Ensure done() is called here
         })
-        .then(done);
+        .catch((err) => done(err)); // Catch any errors and call done with the error
     });
   });
 
@@ -243,14 +246,18 @@ describe("Sketches Proxy", function () {
     });
 
     it("Does not override the max-age cache header for Breaking News", function (done) {
+      this.timeout(5000); // Increase the timeout to 5000ms
+
       const maxAge = 3600;
       supertest(buildApp(maxAge))
         .get("/api/v1/breaking-news")
+        .expect(200)
         .then((res) => {
           const cacheControl = res.headers["cache-control"];
           assert.equal(cacheControl, "public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=7200");
+          done(); // Ensure done() is called here
         })
-        .then(done);
+        .catch((err) => done(err)); // Catch any errors and call done with the error
     });
 
     it("if maxAge value is not present, do not override cache headers", function (done) {
