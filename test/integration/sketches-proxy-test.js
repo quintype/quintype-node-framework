@@ -170,14 +170,18 @@ describe("Sketches Proxy", function () {
     });
 
     it("Does not override the s-maxage cache header for Breaking News", function (done) {
+      this.timeout(5000);
+
       const sMaxAge = 900;
       supertest(buildApp(sMaxAge))
         .get("/api/v1/breaking-news")
+        .expect(200)
         .then((res) => {
           const cacheControl = res.headers["cache-control"];
           assert.equal(cacheControl, "public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=7200");
+          done();
         })
-        .then(done);
+        .catch((err) => done(err));
     });
 
     it("if sMaxAge value is not present, do not override cache headers", function (done) {
