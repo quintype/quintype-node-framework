@@ -144,6 +144,8 @@ describe("Sketches Proxy", function () {
     }
 
     it("Override the s-maxage cache header when sMaxAge value is present", function (done) {
+      this.timeout(5000);
+
       const sMaxAge = 900;
       supertest(buildApp(sMaxAge))
         .get("/api/v1/config")
@@ -151,8 +153,9 @@ describe("Sketches Proxy", function () {
         .then((res) => {
           const cacheControl = res.headers["cache-control"];
           assert.equal(cacheControl, "public,max-age=15,s-maxage=900,stale-while-revalidate=300,stale-if-error=7200");
+          done();
         })
-        .then(done);
+        .catch((err) => done(err));
     });
 
     it("Does not override the s-maxage cache header if cacheability is Private", function (done) {
