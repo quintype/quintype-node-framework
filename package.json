@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.27.3-fix-author-schema.8",
+  "version": "7.27.3-fix-author-schema.9",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
