@@ -35,7 +35,7 @@
     "@quintype/backend": "^2.4.0",
     "@quintype/components": "^3.5.0",
     "@quintype/prerender-node": "^3.2.26",
-    "@quintype/seo": "1.46.1-fix-author-schema.9",
+    "@quintype/seo": "1.46.1",
     "atob": "^2.1.2",
     "babel-plugin-react-css-modules": "^5.2.6",
     "chalk": "^4.1.2",
