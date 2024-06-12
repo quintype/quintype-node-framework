@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.28.1](https://github.com/quintype/quintype-node-framework/compare/v7.28.0...v7.28.1) (2024-06-12)
+
+
+### Bug Fixes
+
+* updated version of seo for author schema ([#428](https://github.com/quintype/quintype-node-framework/issues/428)) ([f93fc06](https://github.com/quintype/quintype-node-framework/commit/f93fc06aa4ba382f4583c9d6f548bda020880807))
+
+## [7.28.0](https://github.com/quintype/quintype-node-framework/compare/v7.27.3...v7.28.0) (2024-06-05)
+
+
+### Features
+
+* Support for Videos on Visual (amp) Stories  ([#425](https://github.com/quintype/quintype-node-framework/issues/425)) ([76cc82d](https://github.com/quintype/quintype-node-framework/commit/76cc82dd3a1e8fc290cc3b2efa3a72a7b55f3c53))
+
+### [7.27.3](https://github.com/quintype/quintype-node-framework/compare/v7.27.2...v7.27.3) (2024-06-03)
+
 ### [7.27.2](https://github.com/quintype/quintype-node-framework/compare/v7.27.1...v7.27.2) (2024-04-18)
 
 
