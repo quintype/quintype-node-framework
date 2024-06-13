@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.28.0",
+  "version": "7.28.2",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
@@ -31,11 +31,11 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
-    "@quintype/amp": "^2.18.1",
-    "@quintype/backend": "2.5.1",
     "@quintype/components": "^3.5.0",
+    "@quintype/backend": "2.5.1",
+    "@quintype/amp": "^2.18.2",
     "@quintype/prerender-node": "^3.2.26",
-    "@quintype/seo": "^1.45.0",
+    "@quintype/seo": "^1.46.1",
     "atob": "^2.1.2",
     "babel-plugin-react-css-modules": "^5.2.6",
     "chalk": "^4.1.2",
