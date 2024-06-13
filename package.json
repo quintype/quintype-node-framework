@@ -32,7 +32,7 @@
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
     "@quintype/amp": "^2.18.1",
-    "@quintype/backend": "2.5.1-bulk-hot-fix.0",
+    "@quintype/backend": "2.5.1",
     "@quintype/components": "^3.5.0",
     "@quintype/prerender-node": "^3.2.26",
     "@quintype/seo": "^1.45.0",
