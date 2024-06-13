@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.28.3](https://github.com/quintype/quintype-node-framework/compare/v7.28.2...v7.28.3) (2024-06-13)
+
+
+### Bug Fixes
+
+* **bulk:** Bulk hash fix ([#430](https://github.com/quintype/quintype-node-framework/issues/430)) ([79cfa62](https://github.com/quintype/quintype-node-framework/commit/79cfa6219d05e75a0445726f08ad4ae11461cf4a))
+
 ### [7.28.2](https://github.com/quintype/quintype-node-framework/compare/v7.28.1...v7.28.2) (2024-06-12)
 
 ### [7.28.1](https://github.com/quintype/quintype-node-framework/compare/v7.28.0...v7.28.1) (2024-06-12)
