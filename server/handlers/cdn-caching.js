@@ -18,6 +18,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
     if (cacheKeys === "DO_NOT_CACHE") {
       res.setHeader("Cache-Control", "private,no-cache,no-store,max-age=0");
       res.setHeader("Vary", "Accept-Encoding");
+      cdnProviderVal === "fastly" && res.setHeader('Surrogate-Control', 'private,no-cache,no-store,max-age=0');
       res.setHeader(
         "Content-Security-Policy",
         `default-src data: 'unsafe-inline' 'unsafe-eval' https: http:;` +
@@ -46,6 +47,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
         );
       }
 
+
       res.setHeader("Vary", "Accept-Encoding");
 
       // Cloudflare Headers
@@ -53,6 +55,9 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
 
       // Akamai Headers
       cdnProviderVal === "akamai" && res.setHeader("Edge-Cache-Tag", _(cacheKeys).uniq().join(","));
+
+      // Fastly Headers
+      cdnProviderVal === "fastly" && res.setHeader("Surrogate-Control", `public,max-age=${maxAge},s-maxage=${sMaxAge},stale-while-revalidate=1000,stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`);
 
       res.setHeader("Surrogate-Key", _(cacheKeys).uniq().join(" "));
       res.setHeader(
@@ -73,6 +78,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
   } else {
     res.setHeader("Cache-Control", "public,max-age=15,s-maxage=60,stale-while-revalidate=150,stale-if-error=3600");
     res.setHeader("Vary", "Accept-Encoding");
+    cdnProviderVal === "fastly" && res.setHeader("Surrogate-Control", "public,max-age=15,s-maxage=60,stale-while-revalidate=150,stale-if-error=3600");
     res.setHeader(
       "Content-Security-Policy",
       `default-src data: 'unsafe-inline' 'unsafe-eval' https: http:;` +
