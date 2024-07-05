@@ -47,16 +47,13 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
       }
 
       res.setHeader("Vary", "Accept-Encoding");
-
-      // Cloudflare Headers
-      cdnProviderVal === "cloudflare" && res.setHeader("Cache-Tag", _(cacheKeys).uniq().join(","));
+      
+      cdnProviderVal === "fastly" ? res.setHeader("Cache-Tag", _(cacheKeys).uniq().join(" ")) : res.setHeader("Cache-Tag", _(cacheKeys).uniq().join(","));
 
       // Akamai Headers
       cdnProviderVal === "akamai" && res.setHeader("Edge-Cache-Tag", _(cacheKeys).uniq().join(","));
 
-       // Fastly Headers
-      cdnProviderVal === "fastly" && res.setHeader("Surrogate-Key", _(cacheKeys).uniq().join(" "));
-
+      res.setHeader("Surrogate-Key", _(cacheKeys).uniq().join(" "));
       res.setHeader(
         "Content-Security-Policy",
         `default-src data: 'unsafe-inline' 'unsafe-eval' https: http:;` +
