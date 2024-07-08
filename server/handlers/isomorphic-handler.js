@@ -192,6 +192,8 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
 };
 
 function createStoreFromResult(url, result, opts = {}) {
+  const botRequest = url.query?.botrequest;
+
   const qt = {
     pageType: result.pageType || opts.defaultPageType,
     subPageType: result.subPageType,
@@ -199,6 +201,7 @@ function createStoreFromResult(url, result, opts = {}) {
     currentPath: `${url.pathname}${url.search || ""}`,
     currentHostUrl: result.currentHostUrl,
     primaryHostUrl: result.primaryHostUrl,
+    isBotRequest: botRequest,
   };
   return createBasicStore(result, qt, opts);
 }
@@ -481,6 +484,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     }
     const seoInstance = getSeoInstance(seo, config, result.pageType);
     const seoTags = seoInstance && seoInstance.getMetaTags(config, result.pageType || match.pageType, result, { url });
+
     const store = createStoreFromResult(url, result, {
       disableIsomorphicComponent: statusCode != 200,
     });
