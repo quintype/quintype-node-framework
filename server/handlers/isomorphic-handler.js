@@ -192,7 +192,7 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
 };
 
 function createStoreFromResult(url, result, opts = {}) {
-  const isBotRequest = url?.query?.botrequest;
+  const isBotRequest = url.query.botrequest;
   const qt = {
     pageType: result.pageType || opts.defaultPageType,
     subPageType: result.subPageType,
