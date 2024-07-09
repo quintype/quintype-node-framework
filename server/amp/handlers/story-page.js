@@ -41,6 +41,11 @@ async function ampStoryPageHandler(
 ) {
   try {
     const opts = cloneDeep(rest);
+    // console.log("fw--opts:", Object.keys(opts));
+    // console.log("fw--client", Object.keys(client));
+    // console.log("fw--config", Object.keys(config));
+    // console.log("fw--rest", Object.keys(rest));
+
     const isCorrectAmpPath = isVisualStory
       ? req.path.startsWith(`/ampstories`)
       : req.path.startsWith(`${getAmpPageBasePath(opts, config)}/`);
@@ -55,6 +60,8 @@ async function ampStoryPageHandler(
     }
 
     const story = await Story.getStoryBySlug(client, req.params["0"]);
+    console.log("fw--story", story.cards);
+
     const isAmpDisabled = get(story, ["metadata", "story-attributes", "disable-amp-for-single-story", "0"], "false");
 
     if (!isVisualStory && (!enableAmp || isAmpDisabled === "true")) {
@@ -70,6 +77,7 @@ async function ampStoryPageHandler(
     const url = urlLib.parse(req.url, true);
     const { ampifyStory, unsupportedStoryElementsPresent } = ampLibrary;
     // eslint-disable-next-line no-return-await
+    //
     const ampConfig = await config.memoizeAsync("amp-config", async () => await AmpConfig.getAmpConfig(client));
     let relatedStoriesCollection;
     let relatedStories = [];
@@ -141,7 +149,7 @@ async function ampStoryPageHandler(
       });
       merge(mergedAdditionalConfig, additionalConfig, fetchedAdditionalConfig);
     }
-
+    console.log("");
     const ampHtml = ampifyStory({
       story,
       publisherConfig: config.config,
