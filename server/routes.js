@@ -355,7 +355,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     webengageConfig = {},
     externalIdPattern = "",
     enableExternalStories = false,
-    belowFoldImgMargin,
+    lazyLoadImageMargin,
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
@@ -548,7 +548,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       ampPageBasePath,
       externalIdPattern,
       enableExternalStories,
-      belowFoldImgMargin,
+      lazyLoadImageMargin,
     })
   );
 

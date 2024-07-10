@@ -201,7 +201,7 @@ function createStoreFromResult(url, result, opts = {}) {
     currentHostUrl: result.currentHostUrl,
     primaryHostUrl: result.primaryHostUrl,
     isBotRequest: isBotRequest,
-    belowFoldImgMargin: opts.belowFoldImgMargin,
+    lazyLoadImageMargin: opts.lazyLoadImageMargin,
   };
   return createBasicStore(result, qt, opts);
 }
@@ -464,7 +464,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     ampPageBasePath,
     externalIdPattern,
     enableExternalStories,
-    belowFoldImgMargin,
+    lazyLoadImageMargin,
   }
 ) {
   const url = urlLib.parse(req.url, true);
@@ -488,7 +488,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
 
     const store = createStoreFromResult(url, result, {
       disableIsomorphicComponent: statusCode != 200,
-      belowFoldImgMargin,
+      lazyLoadImageMargin,
     });
 
     if (lightPages) {
