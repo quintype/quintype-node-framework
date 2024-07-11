@@ -70,7 +70,6 @@ async function ampStoryPageHandler(
     const url = urlLib.parse(req.url, true);
     const { ampifyStory, unsupportedStoryElementsPresent } = ampLibrary;
     // eslint-disable-next-line no-return-await
-    //
     const ampConfig = await config.memoizeAsync("amp-config", async () => await AmpConfig.getAmpConfig(client));
     let relatedStoriesCollection;
     let relatedStories = [];
@@ -142,6 +141,7 @@ async function ampStoryPageHandler(
       });
       merge(mergedAdditionalConfig, additionalConfig, fetchedAdditionalConfig);
     }
+
     const ampHtml = ampifyStory({
       story,
       publisherConfig: config.config,
