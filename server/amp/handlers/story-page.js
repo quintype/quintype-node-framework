@@ -142,7 +142,6 @@ async function ampStoryPageHandler(
       });
       merge(mergedAdditionalConfig, additionalConfig, fetchedAdditionalConfig);
     }
-    console.log("aa--generalConfig", mergedAdditionalConfig.general.amp); //
     const ampHtml = ampifyStory({
       story,
       publisherConfig: config.config,
