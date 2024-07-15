@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.29.0](https://github.com/quintype/quintype-node-framework/compare/v7.28.3...v7.29.0) (2024-07-15)
+
+
+### Features
+
+* Add support for 410 Gone URL  ([#431](https://github.com/quintype/quintype-node-framework/issues/431)) ([8820a42](https://github.com/quintype/quintype-node-framework/commit/8820a42a51f0a22f598d4562c0b2a154fce8931a))
+
 ### [7.28.3](https://github.com/quintype/quintype-node-framework/compare/v7.28.2...v7.28.3) (2024-06-13)
 
 
