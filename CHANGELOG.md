@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.29.1](https://github.com/quintype/quintype-node-framework/compare/v7.29.0...v7.29.1) (2024-07-15)
+
+
+### Bug Fixes
+
+* **image-fold:** add bot request to store ([#432](https://github.com/quintype/quintype-node-framework/issues/432)) ([cd8b3f5](https://github.com/quintype/quintype-node-framework/commit/cd8b3f505eba5d50e57b146cb42484b8764646ad))
+
 ## [7.29.0](https://github.com/quintype/quintype-node-framework/compare/v7.28.3...v7.29.0) (2024-07-15)
 
 
