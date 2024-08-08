@@ -23,7 +23,7 @@ exports.renderReduxComponent = function renderReduxComponent(
   store,
   props
 ) {
-  return ReactDOMServer.renderToString(
+  return ReactDOMServer.renderToPipeableStream(
     React.createElement(
       Provider,
       { store },
@@ -64,5 +64,5 @@ exports.renderLoadableReduxComponent = function renderLoadableReduxComponent(
     React.createElement(Provider, { store }, children)
   );
   // Render your Component
-  return ReactDOMServer.renderToString(component);
+  return ReactDOMServer.renderToPipeableStream(component);
 };
