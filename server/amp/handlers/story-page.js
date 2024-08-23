@@ -164,7 +164,7 @@ async function ampStoryPageHandler (
     let finalResponse
     if (optimizeAmpHtml) {
       const startTime = performance.now()
-      finalResponse = await optimize(ampHtml, req.query)
+      finalResponse = await optimize(ampHtml)
       const endTime = performance.now()
       console.log(`aa--Time taken: ${endTime - startTime} milliseconds`)
     } else {
