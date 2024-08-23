@@ -1,15 +1,15 @@
-const urlLib = require("url");
-const set = require("lodash/set");
-const get = require("lodash/get");
-const isEmpty = require("lodash/isEmpty");
-const cloneDeep = require("lodash/cloneDeep");
-const merge = require("lodash/merge");
-const { Story, AmpConfig } = require("../../impl/api-client-impl");
-const { optimize, getDomainSpecificOpts } = require("../helpers");
-const { storyToCacheKey } = require("../../caching");
-const { addCacheHeadersToResult } = require("../../handlers/cdn-caching");
-const { getRedirectUrl } = require("../../../server/redirect-url-helper");
-const { getAmpPageBasePath } = require("../helpers/get-amp-page-base-path");
+const urlLib = require('url')
+const set = require('lodash/set')
+const get = require('lodash/get')
+const isEmpty = require('lodash/isEmpty')
+const cloneDeep = require('lodash/cloneDeep')
+const merge = require('lodash/merge')
+const { Story, AmpConfig } = require('../../impl/api-client-impl')
+const { optimize, getDomainSpecificOpts } = require('../helpers')
+const { storyToCacheKey } = require('../../caching')
+const { addCacheHeadersToResult } = require('../../handlers/cdn-caching')
+const { getRedirectUrl } = require('../../../server/redirect-url-helper')
+const { getAmpPageBasePath } = require('../helpers/get-amp-page-base-path')
 
 /**
  * ampStoryPageHandler gets all the things needed and calls "ampifyStory" function (which comes from ampLib)
@@ -22,7 +22,7 @@ const { getAmpPageBasePath } = require("../helpers/get-amp-page-base-path");
  * @category AmpHandler
  */
 
-async function ampStoryPageHandler(
+async function ampStoryPageHandler (
   req,
   res,
   next,
@@ -30,86 +30,86 @@ async function ampStoryPageHandler(
     client,
     config,
     domainSlug,
-    seo = "",
+    seo = '',
     cdnProvider = null,
-    ampLibrary = require("@quintype/amp"),
-    additionalConfig = require("../../publisher-config"),
-    InfiniteScrollAmp = require("../helpers/infinite-scroll"),
+    ampLibrary = require('@quintype/amp'),
+    additionalConfig = require('../../publisher-config'),
+    InfiniteScrollAmp = require('../helpers/infinite-scroll'),
     isVisualStory = false,
     ...rest
   }
 ) {
   try {
-    const opts = cloneDeep(rest);
+    const opts = cloneDeep(rest)
     const isCorrectAmpPath = isVisualStory
       ? req.path.startsWith(`/ampstories`)
-      : req.path.startsWith(`${getAmpPageBasePath(opts, config)}/`);
+      : req.path.startsWith(`${getAmpPageBasePath(opts, config)}/`)
 
-    if (!isCorrectAmpPath) return next();
-    const redirectUrls = opts && opts.redirectUrls;
-    const getEnableAmp = get(opts, ["enableAmp"], true);
-    const enableAmp = typeof getEnableAmp === "function" ? opts.enableAmp(config) : getEnableAmp;
+    if (!isCorrectAmpPath) return next()
+    const redirectUrls = opts && opts.redirectUrls
+    const getEnableAmp = get(opts, ['enableAmp'], true)
+    const enableAmp = typeof getEnableAmp === 'function' ? opts.enableAmp(config) : getEnableAmp
 
-    if (typeof redirectUrls === "function" || (redirectUrls && Object.keys(redirectUrls).length > 0)) {
-      await getRedirectUrl(req, res, next, { redirectUrls, config });
+    if (typeof redirectUrls === 'function' || (redirectUrls && Object.keys(redirectUrls).length > 0)) {
+      await getRedirectUrl(req, res, next, { redirectUrls, config })
     }
 
-    const story = await Story.getStoryBySlug(client, req.params["0"]);
-    const isAmpDisabled = get(story, ["metadata", "story-attributes", "disable-amp-for-single-story", "0"], "false");
+    const story = await Story.getStoryBySlug(client, req.params['0'])
+    const isAmpDisabled = get(story, ['metadata', 'story-attributes', 'disable-amp-for-single-story', '0'], 'false')
 
-    if (!isVisualStory && (!enableAmp || isAmpDisabled === "true")) {
-      const ampPageBasePath = getAmpPageBasePath(opts, config);
+    if (!isVisualStory && (!enableAmp || isAmpDisabled === 'true')) {
+      const ampPageBasePath = getAmpPageBasePath(opts, config)
       const redirectUrl = `/${req.params[0]}`.startsWith(ampPageBasePath)
-        ? `/${req.params[0]}`.replace(ampPageBasePath, "")
-        : `/${req.params[0]}`;
+        ? `/${req.params[0]}`.replace(ampPageBasePath, '')
+        : `/${req.params[0]}`
 
-      return res.redirect(301, redirectUrl);
+      return res.redirect(301, redirectUrl)
     }
 
-    const domainSpecificOpts = getDomainSpecificOpts(opts, domainSlug);
-    const url = urlLib.parse(req.url, true);
-    const { ampifyStory, unsupportedStoryElementsPresent } = ampLibrary;
+    const domainSpecificOpts = getDomainSpecificOpts(opts, domainSlug)
+    const url = urlLib.parse(req.url, true)
+    const { ampifyStory, unsupportedStoryElementsPresent } = ampLibrary
     // eslint-disable-next-line no-return-await
-    const ampConfig = await config.memoizeAsync("amp-config", async () => await AmpConfig.getAmpConfig(client));
-    let relatedStoriesCollection;
-    let relatedStories = [];
+    const ampConfig = await config.memoizeAsync('amp-config', async () => await AmpConfig.getAmpConfig(client))
+    let relatedStoriesCollection
+    let relatedStories = []
 
-    if (!story) return next();
-    if (ampConfig["related-collection-id"])
-      relatedStoriesCollection = await client.getCollectionBySlug(ampConfig["related-collection-id"]);
+    if (!story) return next()
+    if (ampConfig['related-collection-id'])
+      relatedStoriesCollection = await client.getCollectionBySlug(ampConfig['related-collection-id'])
     if (relatedStoriesCollection && relatedStoriesCollection.items) {
-      const storiesToTake = get(domainSpecificOpts, ["featureConfig", "relatedStories", "storiesToTake"], 5);
+      const storiesToTake = get(domainSpecificOpts, ['featureConfig', 'relatedStories', 'storiesToTake'], 5)
       relatedStories = relatedStoriesCollection.items
-        .filter((item) => item.type === "story" && item.id !== story["story-content-id"])
+        .filter(item => item.type === 'story' && item.id !== story['story-content-id'])
         .slice(0, storiesToTake)
-        .map((item) => item.story);
+        .map(item => item.story)
     }
     if (relatedStories.length) {
-      set(domainSpecificOpts, ["featureConfig", "relatedStories", "stories"], relatedStories);
+      set(domainSpecificOpts, ['featureConfig', 'relatedStories', 'stories'], relatedStories)
     }
 
     if (
       unsupportedStoryElementsPresent(story) &&
-      ampConfig.ampConfig["invalid-elements-strategy"] === "redirect-to-web-version"
+      ampConfig.ampConfig['invalid-elements-strategy'] === 'redirect-to-web-version'
     )
-      return res.redirect(story.url);
+      return res.redirect(story.url)
 
-    const timezone = get(additionalConfig, ["publisher", "timezone"], null);
-    const seoInstance = typeof seo === "function" ? seo(config, "story-page-amp") : seo;
+    const timezone = get(additionalConfig, ['publisher', 'timezone'], null)
+    const seoInstance = typeof seo === 'function' ? seo(config, 'story-page-amp') : seo
     const seoTags =
-      seoInstance && seoInstance.getMetaTags(config, "story-page-amp", { data: { story, timezone }, config }, { url });
+      seoInstance && seoInstance.getMetaTags(config, 'story-page-amp', { data: { story, timezone }, config }, { url })
 
-    const infiniteScrollConfig = get(opts, ["featureConfig", "infiniteScroll"], "");
-    const infiniteScrollSource = get(infiniteScrollConfig, ["source"], "collection");
-    const inlineConfig = get(infiniteScrollConfig, ["inlineConfig"], "");
-    const remoteConfigEndpoint = get(infiniteScrollConfig, ["remoteConfigEndpoint"], "");
+    const infiniteScrollConfig = get(opts, ['featureConfig', 'infiniteScroll'], '')
+    const infiniteScrollSource = get(infiniteScrollConfig, ['source'], 'collection')
+    const inlineConfig = get(infiniteScrollConfig, ['inlineConfig'], '')
+    const remoteConfigEndpoint = get(infiniteScrollConfig, ['remoteConfigEndpoint'], '')
 
-    let infiniteScrollInlineConfig = [];
+    let infiniteScrollInlineConfig = []
 
-    if (infiniteScrollSource === "custom") {
+    if (infiniteScrollSource === 'custom') {
       if (!inlineConfig || !remoteConfigEndpoint)
-        throw new Error("Required params of 'custom' source (inlineConfig /remoteConfigEndpoint) is missing!!");
-      infiniteScrollInlineConfig = await inlineConfig();
+        throw new Error("Required params of 'custom' source (inlineConfig /remoteConfigEndpoint) is missing!!")
+      infiniteScrollInlineConfig = await inlineConfig()
     } else {
       const infiniteScrollAmp = new InfiniteScrollAmp({
         opts,
@@ -117,29 +117,29 @@ async function ampStoryPageHandler(
         ampConfig,
         publisherConfig: config,
         client,
-        infiniteScrollSource,
-      });
+        infiniteScrollSource
+      })
       infiniteScrollInlineConfig = await infiniteScrollAmp.getInitialInlineConfig({
-        storyId: story["story-content-id"],
-      });
+        storyId: story['story-content-id']
+      })
     }
-    if (infiniteScrollInlineConfig instanceof Error) return next(infiniteScrollInlineConfig);
+    if (infiniteScrollInlineConfig instanceof Error) return next(infiniteScrollInlineConfig)
     if (infiniteScrollInlineConfig) {
       set(
         domainSpecificOpts,
-        ["featureConfig", "infiniteScroll", "infiniteScrollInlineConfig"],
+        ['featureConfig', 'infiniteScroll', 'infiniteScrollInlineConfig'],
         infiniteScrollInlineConfig
-      );
+      )
     }
-    const mergedAdditionalConfig = {};
+    const mergedAdditionalConfig = {}
     if (opts.getAdditionalConfig && opts.getAdditionalConfig instanceof Function) {
       const fetchedAdditionalConfig = await opts.getAdditionalConfig({
         story,
         apiConfig: config.config,
         ampApiConfig: ampConfig.ampConfig,
-        publisherConfig: additionalConfig,
-      });
-      merge(mergedAdditionalConfig, additionalConfig, fetchedAdditionalConfig);
+        publisherConfig: additionalConfig
+      })
+      merge(mergedAdditionalConfig, additionalConfig, fetchedAdditionalConfig)
     }
 
     const ampHtml = ampifyStory({
@@ -148,25 +148,33 @@ async function ampStoryPageHandler(
       ampConfig: ampConfig.ampConfig,
       additionalConfig: isEmpty(mergedAdditionalConfig) ? additionalConfig : mergedAdditionalConfig,
       opts: { ...domainSpecificOpts, domainSlug },
-      seo: seoTags ? seoTags.toString() : "",
-    });
-    if (ampHtml instanceof Error) return next(ampHtml);
+      seo: seoTags ? seoTags.toString() : ''
+    })
+    if (ampHtml instanceof Error) return next(ampHtml)
 
-    res.set("Content-Type", "text/html");
+    res.set('Content-Type', 'text/html')
     addCacheHeadersToResult({
       res,
-      cacheKeys: storyToCacheKey(config["publisher-id"], story),
+      cacheKeys: storyToCacheKey(config['publisher-id'], story),
       cdnProvider,
-      config,
-    });
+      config
+    })
 
-    const optimizeAmpHtml = get(domainSpecificOpts, ["featureConfig", "optimizeAmpHtml"], true);
-    const finalResponse = optimizeAmpHtml ? await optimize(ampHtml) : ampHtml;
+    const optimizeAmpHtml = get(domainSpecificOpts, ['featureConfig', 'optimizeAmpHtml'], true)
+    let finalResponse
+    if (optimizeAmpHtml) {
+      const startTime = performance.now()
+      finalResponse = await optimize(ampHtml, req.query)
+      const endTime = performance.now()
+      console.log(`aa--Time taken: ${endTime - startTime} milliseconds`)
+    } else {
+      finalResponse = ampHtml
+    }
 
-    return res.send(finalResponse);
+    return res.send(finalResponse)
   } catch (e) {
-    return next(e);
+    return next(e)
   }
 }
 
-module.exports = { ampStoryPageHandler };
+module.exports = { ampStoryPageHandler }
