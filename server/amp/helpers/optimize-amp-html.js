@@ -9,7 +9,7 @@ const ampOptimizer = AmpOptimizer.create({
 const ampOptimizer1 = AmpOptimizer.create()
 
 async function optimize (ampHtml, query) {
-  const optimizedAmp = query?.prefetch ? ampOptimizer1 : ampOptimizer.transformHtml(ampHtml)
+  const optimizedAmp = query.prefetch ? ampOptimizer1 : ampOptimizer.transformHtml(ampHtml)
 
   return optimizedAmp
 }
