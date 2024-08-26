@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.30.2-update-amp-optimizer.1",
+  "version": "7.30.2-update-amp-optimizer.2",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
