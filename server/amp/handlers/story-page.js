@@ -168,7 +168,10 @@ async function ampStoryPageHandler (
       const endTime = performance.now()
       console.log(`aa--Time taken: ${endTime - startTime} milliseconds`)
     } else {
+      const startTime = performance.now()
       finalResponse = ampHtml
+      const endTime = performance.now()
+      console.log(`aa--Time taken: ${endTime - startTime} milliseconds`)
     }
 
     return res.send(finalResponse)
