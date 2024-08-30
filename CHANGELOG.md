@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.30.1](https://github.com/quintype/quintype-node-framework/compare/v7.30.0...v7.30.1) (2024-08-14)
+
+## [7.30.0](https://github.com/quintype/quintype-node-framework/compare/v7.29.1...v7.30.0) (2024-07-30)
+
+
+### Features
+
+* **auto advance cards:** auto advance images and videos in  visual stories ([#433](https://github.com/quintype/quintype-node-framework/issues/433)) ([0f82fd7](https://github.com/quintype/quintype-node-framework/commit/0f82fd7a48b0322540696415fe6778e5271ec90c))
+
 ### [7.29.1](https://github.com/quintype/quintype-node-framework/compare/v7.29.0...v7.29.1) (2024-07-15)
 
 
