@@ -158,6 +158,7 @@ async function ampStoryPageHandler(
       cacheKeys: storyToCacheKey(config["publisher-id"], story),
       cdnProvider,
       config,
+      sMaxAge: "86400",
     });
 
     const optimizeAmpHtml = get(domainSpecificOpts, ["featureConfig", "optimizeAmpHtml"], true);
