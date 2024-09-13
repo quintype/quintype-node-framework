@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.30.2](https://github.com/quintype/quintype-node-framework/compare/v7.30.1...v7.30.2) (2024-09-13)
+
+
+### Bug Fixes
+
+* **Amp story:** pass amp optimizer toggle to preload hero image ([#439](https://github.com/quintype/quintype-node-framework/issues/439)) ([c943095](https://github.com/quintype/quintype-node-framework/commit/c943095a25000377f94b709df1b75ccfed3983df))
+
 ### [7.30.1](https://github.com/quintype/quintype-node-framework/compare/v7.30.0...v7.30.1) (2024-08-14)
 
 ## [7.30.0](https://github.com/quintype/quintype-node-framework/compare/v7.29.1...v7.30.0) (2024-07-30)
