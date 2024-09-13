@@ -141,13 +141,13 @@ async function ampStoryPageHandler(
       });
       merge(mergedAdditionalConfig, additionalConfig, fetchedAdditionalConfig);
     }
-
+    const optimizeAmpHtml = get(domainSpecificOpts, ["featureConfig", "optimizeAmpHtml"], true);
     const ampHtml = ampifyStory({
       story,
       publisherConfig: config.config,
       ampConfig: ampConfig.ampConfig,
       additionalConfig: isEmpty(mergedAdditionalConfig) ? additionalConfig : mergedAdditionalConfig,
-      opts: { ...domainSpecificOpts, domainSlug },
+      opts: { ...domainSpecificOpts, domainSlug, optimizeAmpHtml },
       seo: seoTags ? seoTags.toString() : "",
     });
     if (ampHtml instanceof Error) return next(ampHtml);
@@ -160,7 +160,7 @@ async function ampStoryPageHandler(
       config,
     });
 
-    const optimizeAmpHtml = get(domainSpecificOpts, ["featureConfig", "optimizeAmpHtml"], true);
+
     const finalResponse = optimizeAmpHtml ? await optimize(ampHtml) : ampHtml;
 
     return res.send(finalResponse);
