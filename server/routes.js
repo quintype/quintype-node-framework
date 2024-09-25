@@ -114,7 +114,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     "/api/instant-articles.rss",
   ];
 
-  app.all("/api/*", sketchesProxy);
+  app.all("*/api/*", sketchesProxy);
   app.all("/login", sketchesProxy);
   app.all("/qlitics.js", sketchesProxy);
   app.all("/auth.form", sketchesProxy);
