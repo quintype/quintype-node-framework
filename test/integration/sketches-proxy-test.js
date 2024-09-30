@@ -49,6 +49,19 @@ describe("Sketches Proxy", function () {
         .then(done);
     });
 
+    it("forwards subdirectory api requests to sketches", function (done) {
+      supertest(buildApp())
+        .get("/anything/api/v1/config")
+        .expect(200)
+        .then((res) => {
+          const { method, url, host } = JSON.parse(res.text);
+          assert.equal("GET", method);
+          assert.equal("/anything/api/v1/config", url);
+          assert.equal("127.0.0.1", host);
+        })
+        .then(done);
+    });
+
     it("forwards custom routes to sketches", function (done) {
       supertest(buildApp())
         .get("/custom-route")
