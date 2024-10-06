@@ -155,11 +155,10 @@ async function ampStoryPageHandler(
     res.set("Content-Type", "text/html");
     addCacheHeadersToResult({
       res,
-      cacheKeys: storyToCacheKey(config["publisher-id"], story),
+      cacheKeys: [storyToCacheKey(config["publisher-id"], story)],
       cdnProvider,
       config,
     });
-
 
     const finalResponse = optimizeAmpHtml ? await optimize(ampHtml) : ampHtml;
 
