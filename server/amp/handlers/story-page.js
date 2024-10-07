@@ -154,7 +154,8 @@ async function ampStoryPageHandler(
 
     res.set("Content-Type", "text/html");
 
-    let cacheKeys = [storyToCacheKey(config["publisher-id"], story)];
+    const pageCacheKey = `page/${config["publisher-id"]}/story-page`;
+    let cacheKeys = [storyToCacheKey(config["publisher-id"], story), pageCacheKey];
 
     const getAdditionalCacheKeys = get(opts, ["featureConfig", "getAdditionalCacheKeys"]);
     if (getAdditionalCacheKeys) {
