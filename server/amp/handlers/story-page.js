@@ -153,11 +153,21 @@ async function ampStoryPageHandler(
     if (ampHtml instanceof Error) return next(ampHtml);
 
     res.set("Content-Type", "text/html");
+
+    let cacheKeys = [storyToCacheKey(config["publisher-id"], story)];
+
+    const getAdditionalCacheKeys = get(opts, ["featureConfig", "getAdditionalCacheKeys"]);
+    if (getAdditionalCacheKeys) {
+      const additionalCacheKeys = getAdditionalCacheKeys(config);
+      cacheKeys = cacheKeys.concat(additionalCacheKeys);
+    }
+
     addCacheHeadersToResult({
       res,
-      cacheKeys: [storyToCacheKey(config["publisher-id"], story)],
+      cacheKeys,
       cdnProvider,
       config,
+      sMaxAge: "86400",
     });
 
     const finalResponse = optimizeAmpHtml ? await optimize(ampHtml) : ampHtml;
