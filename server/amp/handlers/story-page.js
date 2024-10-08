@@ -157,6 +157,8 @@ async function ampStoryPageHandler(
     const pageCacheKey = `page/${config["publisher-id"]}/story-page`;
     let cacheKeys = [storyToCacheKey(config["publisher-id"], story), pageCacheKey];
 
+    /* To cdn purge amp stories through custom tags, use getAdditionalCacheKeys function
+     to generate one or more cache tags, it should return cache tags as an array of strings. */
     const getAdditionalCacheKeys = get(opts, ["featureConfig", "getAdditionalCacheKeys"]);
     if (getAdditionalCacheKeys) {
       const additionalCacheKeys = getAdditionalCacheKeys(config);
