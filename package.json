@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.30.4-amp-cache-tags.2",
+  "version": "7.30.4-amp-cache-tags.3",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
