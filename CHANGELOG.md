@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.30.5](https://github.com/quintype/quintype-node-framework/compare/v7.30.4...v7.30.5) (2024-10-22)
+
+
+### Bug Fixes
+
+* **cache-tags:** fix amp cache tags ([#443](https://github.com/quintype/quintype-node-framework/issues/443)) ([009bbca](https://github.com/quintype/quintype-node-framework/commit/009bbcab7d42e70626d541ca80def10625ca021e))
+
 ### [7.30.4](https://github.com/quintype/quintype-node-framework/compare/v7.30.3...v7.30.4) (2024-10-22)
 
 
