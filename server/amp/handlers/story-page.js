@@ -170,7 +170,7 @@ async function ampStoryPageHandler(
       cacheKeys,
       cdnProvider,
       config,
-      // sMaxAge: "86400", // uncomment this after testing fastly cache purge
+      // sMaxAge: "86400", // uncomment this after testing fastly cache purge on prod
     });
 
     const finalResponse = optimizeAmpHtml ? await optimize(ampHtml) : ampHtml;
