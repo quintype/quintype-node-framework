@@ -153,13 +153,25 @@ async function ampStoryPageHandler(
     if (ampHtml instanceof Error) return next(ampHtml);
 
     res.set("Content-Type", "text/html");
+
+    const pageCacheKey = `page/${config["publisher-id"]}/story-page`;
+    let cacheKeys = [storyToCacheKey(config["publisher-id"], story), pageCacheKey];
+
+    /* To cdn purge amp stories through custom tags, use getAdditionalCacheKeys function
+     to generate one or more cache tags, it should return cache tags as an array of strings. */
+    const getAdditionalCacheKeys = get(opts, ["featureConfig", "getAdditionalCacheKeys"]);
+    if (getAdditionalCacheKeys) {
+      const additionalCacheKeys = getAdditionalCacheKeys(config);
+      cacheKeys = cacheKeys.concat(additionalCacheKeys);
+    }
+
     addCacheHeadersToResult({
       res,
-      cacheKeys: storyToCacheKey(config["publisher-id"], story),
+      cacheKeys,
       cdnProvider,
       config,
+      // sMaxAge: "86400", // uncomment this after testing fastly cache purge on prod
     });
-
 
     const finalResponse = optimizeAmpHtml ? await optimize(ampHtml) : ampHtml;
 
