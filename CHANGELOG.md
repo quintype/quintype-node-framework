@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.30.8](https://github.com/quintype/quintype-node-framework/compare/v7.30.7...v7.30.8) (2024-11-05)
+
+### [7.30.7](https://github.com/quintype/quintype-node-framework/compare/v7.30.6...v7.30.7) (2024-10-30)
+
+### [7.30.6](https://github.com/quintype/quintype-node-framework/compare/v7.30.5...v7.30.6) (2024-10-30)
+
+### [7.30.5](https://github.com/quintype/quintype-node-framework/compare/v7.30.4...v7.30.5) (2024-10-22)
+
+
+### Bug Fixes
+
+* **cache-tags:** fix amp cache tags ([#443](https://github.com/quintype/quintype-node-framework/issues/443)) ([009bbca](https://github.com/quintype/quintype-node-framework/commit/009bbcab7d42e70626d541ca80def10625ca021e))
+
+### [7.30.4](https://github.com/quintype/quintype-node-framework/compare/v7.30.3...v7.30.4) (2024-10-22)
+
+
+### Bug Fixes
+
+* **publish time:** fix amp publish time ([#441](https://github.com/quintype/quintype-node-framework/issues/441)) ([fe22c6b](https://github.com/quintype/quintype-node-framework/commit/fe22c6b78e435b32a03da79bdf616197d4ecdb39))
+
 ### [7.30.3](https://github.com/quintype/quintype-node-framework/compare/v7.30.2...v7.30.3) (2024-09-30)
 
 ### [7.30.2](https://github.com/quintype/quintype-node-framework/compare/v7.30.1...v7.30.2) (2024-09-13)
