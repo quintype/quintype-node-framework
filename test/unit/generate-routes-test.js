@@ -375,7 +375,24 @@ describe("generateCommonRoutes", function () {
     });
 
     assert.deepEqual(
-      [
+      [{
+        exact: true,
+        pageType: 'home-page-preview',
+        params: {
+          collectionSlug: 'home'
+        },
+        path: '/preview/:previewId/collection/home',
+        skipPWA: true
+      },
+      {
+        exact: true,
+        pageType: 'collection-page-preview',
+        params: {
+          collectionSlug: 'home'
+        },
+        path: '/preview/:previewId/collection/:collectionSlug',
+        skipPWA: false
+      },
         {
           path: "/photos",
           pageType: "section-page",
@@ -391,7 +408,24 @@ describe("generateCommonRoutes", function () {
     );
 
     assert.deepEqual(
-      [
+      [{
+        exact: true,
+        pageType: 'home-page-preview',
+        params: {
+          collectionSlug: 'home'
+        },
+        path: '/preview/:previewId/collection/home',
+        skipPWA: true
+      },
+      {
+        exact: true,
+        pageType: 'collection-page-preview',
+        params: {
+          collectionSlug: 'home'
+        },
+        path: '/preview/:previewId/collection/:collectionSlug',
+        skipPWA: false
+      },
         {
           path: "/photos(/.*)?/:storySlug",
           pageType: "story-page",
@@ -416,6 +450,24 @@ describe("generateCommonRoutes", function () {
     assert.deepEqual(
       [
         {
+          exact: true,
+          pageType: 'home-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/home',
+          skipPWA: true
+        },
+        {
+          exact: true,
+          pageType: 'collection-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/:collectionSlug',
+          skipPWA: false
+        },
+        {
           path: "/photos",
           pageType: "section-page",
           exact: true,
@@ -438,6 +490,23 @@ describe("generateCommonRoutes", function () {
           params: { collectionSlug: "home" },
           exact: true,
           skipPWA: true,
+        },{
+          exact: true,
+          pageType: 'home-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/home',
+          skipPWA: true
+        },
+        {
+          exact: true,
+          pageType: 'collection-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/:collectionSlug',
+          skipPWA: true
         },
       ],
       generateCommonRoutes(config, undefined, {
@@ -448,7 +517,24 @@ describe("generateCommonRoutes", function () {
     );
 
     assert.deepEqual(
-      [
+      [{
+        exact: true,
+        pageType: 'home-page-preview',
+        params: {
+          collectionSlug: 'home'
+        },
+        path: '/preview/:previewId/collection/home',
+        skipPWA: true
+      },
+      {
+        exact: true,
+        pageType: 'collection-page-preview',
+        params: {
+          collectionSlug: 'home'
+        },
+        path: '/preview/:previewId/collection/:collectionSlug',
+        skipPWA: false
+      },
         {
           path: "/photos(/.*)?/:storySlug",
           pageType: "story-page",
@@ -478,6 +564,24 @@ describe("generateCommonRoutes", function () {
     assert.deepEqual(
       [
         {
+          exact: true,
+          pageType: 'home-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/home',
+          skipPWA: true
+        },
+        {
+          exact: true,
+          pageType: 'collection-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/:collectionSlug',
+          skipPWA: false
+        },
+        {
           path: "/photos",
           pageType: "section-page",
           exact: true,
@@ -504,7 +608,24 @@ describe("generateCommonRoutes", function () {
     });
 
     assert.deepEqual(
-      [],
+      [{
+        exact: true,
+        pageType: 'home-page-preview',
+        params: {
+          collectionSlug: 'home'
+        },
+        path: '/preview/:previewId/collection/home',
+        skipPWA: true
+      },
+      {
+        exact: true,
+        pageType: 'collection-page-preview',
+        params: {
+          collectionSlug: 'home'
+        },
+        path: '/preview/:previewId/collection/:collectionSlug',
+        skipPWA: false
+      }],
       generateCommonRoutes(config, null, {
         allRoutes: false,
         sectionPageRoutes: true,
@@ -513,6 +634,24 @@ describe("generateCommonRoutes", function () {
 
     assert.deepEqual(
       [
+        {
+          exact: true,
+          pageType: 'home-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/home',
+          skipPWA: true
+        },
+        {
+          exact: true,
+          pageType: 'collection-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/:collectionSlug',
+          skipPWA: false
+        },
         {
           path: "/photos",
           pageType: "section-page",
@@ -541,6 +680,24 @@ describe("generateCommonRoutes", function () {
 
     assert.deepEqual(
       [
+        {
+          exact: true,
+          pageType: 'home-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/home',
+          skipPWA: true
+        },
+        {
+          exact: true,
+          pageType: 'collection-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/:collectionSlug',
+          skipPWA: false
+        },
         {
           path: "/photos",
           pageType: "section-page",
@@ -589,6 +746,24 @@ describe("generateCommonRoutes", function () {
     assert.deepEqual(
       [
         {
+          exact: true,
+          pageType: 'home-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/home',
+          skipPWA: true
+        },
+        {
+          exact: true,
+          pageType: 'collection-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/:collectionSlug',
+          skipPWA: false
+        },
+        {
           path: "/section/photos",
           pageType: "section-page",
           exact: true,
@@ -604,6 +779,24 @@ describe("generateCommonRoutes", function () {
 
     assert.deepEqual(
       [
+        {
+          exact: true,
+          pageType: 'home-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/home',
+          skipPWA: true
+        },
+        {
+          exact: true,
+          pageType: 'collection-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/:collectionSlug',
+          skipPWA: false
+        },
         {
           path: "/photos(/.*)?/:storySlug",
           pageType: "story-page",
@@ -624,6 +817,24 @@ describe("generateCommonRoutes", function () {
     assert.deepEqual(
       [
         {
+          exact: true,
+          pageType: 'home-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/home',
+          skipPWA: true
+        },
+        {
+          exact: true,
+          pageType: 'collection-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/:collectionSlug',
+          skipPWA: false
+        },
+        {
           path: "/photos(/.*)?/:storySlug",
           pageType: "story-page",
           exact: true,
@@ -638,6 +849,24 @@ describe("generateCommonRoutes", function () {
 
     assert.deepEqual(
       [
+        {
+          exact: true,
+          pageType: 'home-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/home',
+          skipPWA: true
+        },
+        {
+          exact: true,
+          pageType: 'collection-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/:collectionSlug',
+          skipPWA: false
+        },
         {
           path: "/photos",
           pageType: "section-page",
@@ -655,7 +884,7 @@ describe("generateCommonRoutes", function () {
 
   it("generates the home page route", function () {
     const config = Config.build({
-      domains: [{ slug: "sub", "home-collection-id": 1234 }],
+      domains: [{ slug: "sub", "home-collection-id": "home" }],
       sections: [],
     });
 
@@ -667,6 +896,24 @@ describe("generateCommonRoutes", function () {
           exact: true,
           params: { collectionSlug: "home" },
           skipPWA: false,
+        },
+        {
+          exact: true,
+          pageType: 'home-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/home',
+          skipPWA: true
+        },
+        {
+          exact: true,
+          pageType: 'collection-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/:collectionSlug',
+          skipPWA: false
         },
       ],
       generateCommonRoutes(config, undefined, {
@@ -684,6 +931,24 @@ describe("generateCommonRoutes", function () {
           params: { collectionSlug: "home" },
           skipPWA: false,
         },
+        {
+          exact: true,
+          pageType: 'home-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/home',
+          skipPWA: true
+        },
+        {
+          exact: true,
+          pageType: 'collection-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/:collectionSlug',
+          skipPWA: false
+        },
       ],
       generateCommonRoutes(config, null, {
         allRoutes: false,
@@ -697,8 +962,26 @@ describe("generateCommonRoutes", function () {
           path: "/",
           pageType: "home-page",
           exact: true,
-          params: { collectionSlug: "1234" },
+          params: { collectionSlug: "home" },
           skipPWA: false,
+        },
+        {
+          exact: true,
+          pageType: 'home-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/home',
+          skipPWA: true
+        },
+        {
+          exact: true,
+          pageType: 'collection-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/:collectionSlug',
+          skipPWA: false
         },
       ],
       generateCommonRoutes(config, "sub", {
@@ -722,6 +1005,24 @@ describe("generateCommonRoutes", function () {
     assert.deepEqual(
       [
         {
+          exact: true,
+          pageType: 'home-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/home',
+          skipPWA: true
+        },
+        {
+          exact: true,
+          pageType: 'collection-page-preview',
+          params: {
+            collectionSlug: 'home'
+          },
+          path: '/preview/:previewId/collection/:collectionSlug',
+          skipPWA: false
+        },
+        {
           path: "/photos",
           pageType: "section-page",
           exact: true,
@@ -736,7 +1037,24 @@ describe("generateCommonRoutes", function () {
     );
 
     assert.deepEqual(
-      [
+      [{
+        exact: true,
+        pageType: 'home-page-preview',
+        params: {
+          collectionSlug: 'home'
+        },
+        path: '/preview/:previewId/collection/home',
+        skipPWA: true
+      },
+      {
+        exact: true,
+        pageType: 'collection-page-preview',
+        params: {
+          collectionSlug: 'home'
+        },
+        path: '/preview/:previewId/collection/:collectionSlug',
+        skipPWA: false
+      },
         {
           path: "/photos(/.*)?/:storySlug",
           pageType: "story-page",

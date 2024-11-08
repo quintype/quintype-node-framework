@@ -23,16 +23,20 @@ exports.homeCollectionOrStories = function homeCollectionOrStories(
   customLayouts = [],
   defaultNestedLimit = null
 ) {
+  const {qtInternalAppsKey = "", previewId = "", ...rest} = params || {};
+
   return Collection.getCollectionBySlug(
     client,
     "home",
-    { "item-type": "collection", ...params },
+    { "item-type": "collection", ...rest },
     {
       depth,
       ...(getStoryLimits && { storyLimits: getStoryLimits() }),
       collectionOfCollectionsIndexes,
       customLayouts,
       defaultNestedLimit,
+      qtInternalAppsKey,
+      previewId
     }
   ).then((collection) => {
     if (collection) return collection;
