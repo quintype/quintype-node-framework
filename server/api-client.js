@@ -11,7 +11,6 @@
  */
 // istanbul ignore file
 
-const config = require("./publisher-config");
 const {
   getClientImpl,
   Client,
@@ -29,16 +28,31 @@ const {
 const defaultClient = new Client(config.sketches_host);
 const cachedSecondaryClients = {};
 
+let config = require("./publisher-config");
+
+const xHostAPIToken = config["x_host_mapping_token"];
+const hostInternalDomain = config["x_host_internal_domain"];
+const enableSketchesHostResolution = config["x_enable_sketches_host_resolution"];
+
+if (enableSketchesHostResolution && xHostAPIToken && hostInternalDomain) {
+  const hostMapping = {};
+  const sketchesHostMapping = Client.getHostToAPIMappingCache(xHostAPIToken);
+
+  for (const [key, value] of Object.entries(sketchesHostMapping)) {
+    hostMapping[key] = `http://${value}${hostInternalDomain}`;
+  }
+
+  config.host_to_api_host = { ...hostMapping, ...config["host_to_api_host"] };
+}
+
 function getClient(hostname) {
-  return (
-    getClientImpl(config, cachedSecondaryClients, hostname) || defaultClient
-  );
+  return getClientImpl(config, cachedSecondaryClients, hostname) || defaultClient;
 }
 
 function initializeAllClients() {
   const promises = [defaultClient.getConfig()];
   if (!config.skip_warm_config) {
-    Object.entries(config.host_to_api_host || []).forEach(([host, apiHost]) => {
+    Object.entries(config["host_to_api_host"] || []).forEach(([host, apiHost]) => {
       const client = new Client(apiHost);
       cachedSecondaryClients[host] = client;
       promises.push(client.getConfig());
