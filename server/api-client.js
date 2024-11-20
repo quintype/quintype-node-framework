@@ -25,31 +25,35 @@ const {
   AmpConfig,
 } = require("./impl/api-client-impl");
 
+let config = require("./publisher-config");
+
 const defaultClient = new Client(config.sketches_host);
 const cachedSecondaryClients = {};
-
-let config = require("./publisher-config");
 
 const xHostAPIToken = config["x_host_mapping_token"];
 const hostInternalDomain = config["x_host_internal_domain"];
 const enableSketchesHostResolution = config["x_enable_sketches_host_resolution"];
 
-if (enableSketchesHostResolution && xHostAPIToken && hostInternalDomain) {
-  const hostMapping = {};
-  const sketchesHostMapping = Client.getHostToAPIMappingCache(xHostAPIToken);
+async function mappingHost() {
+  if (enableSketchesHostResolution && xHostAPIToken && hostInternalDomain) {
+    const hostMapping = {};
+    const sketchesHostMapping = await defaultClient.getHostToAPIMappingCache(xHostAPIToken);
 
-  for (const [key, value] of Object.entries(sketchesHostMapping)) {
-    hostMapping[key] = `http://${value}${hostInternalDomain}`;
+    for (const [key, value] of Object.entries(sketchesHostMapping)) {
+      hostMapping[key] = `http://${value}${hostInternalDomain}`;
+    }
+
+    config.host_to_api_host = { ...hostMapping, ...config["host_to_api_host"] };
   }
-
-  config.host_to_api_host = { ...hostMapping, ...config["host_to_api_host"] };
 }
 
-function getClient(hostname) {
+async function getClient(hostname) {
+  await mappingHost();
   return getClientImpl(config, cachedSecondaryClients, hostname) || defaultClient;
 }
 
-function initializeAllClients() {
+async function initializeAllClients() {
+  await mappingHost();
   const promises = [defaultClient.getConfig()];
   if (!config.skip_warm_config) {
     Object.entries(config["host_to_api_host"] || []).forEach(([host, apiHost]) => {
