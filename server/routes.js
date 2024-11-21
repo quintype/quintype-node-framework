@@ -99,6 +99,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   app.get("/ping", (req, res) => {
     getClient(req.hostname)
+      .then(res => res)
       .getConfig()
       .then(() => res.send("pong"))
       .catch(() => res.status(503).send({ error: { message: "Config not loaded" } }));
@@ -176,9 +177,9 @@ function withConfigPartial(
   configWrapper = (config) => config
 ) {
   return function withConfig(f, staticParams) {
-    return function (req, res, next) {
+    return async function (req, res, next) {
       const domainSlug = getDomainSlug(publisherConfig, req.hostname);
-      const client = getClient(req.hostname);
+      const client = await getClient(req.hostname);
       return client
         .getConfig()
         .then((config) => configWrapper(config, domainSlug, { req }))

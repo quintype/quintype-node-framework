@@ -53,8 +53,8 @@ async function getClient(hostname) {
 }
 
 async function initializeAllClients() {
-  await mappingHost();
   const promises = [defaultClient.getConfig()];
+  await mappingHost();
   if (!config.skip_warm_config) {
     Object.entries(config["host_to_api_host"] || []).forEach(([host, apiHost]) => {
       const client = new Client(apiHost);
@@ -75,7 +75,6 @@ module.exports = {
   MenuGroups,
   Config,
   AmpConfig,
-
   client: defaultClient,
   getClient,
   initializeAllClients,
