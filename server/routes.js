@@ -99,7 +99,6 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   app.get("/ping", (req, res) => {
     getClient(req.hostname)
-      .then(res => res)
       .getConfig()
       .then(() => res.send("pong"))
       .catch(() => res.status(503).send({ error: { message: "Config not loaded" } }));
