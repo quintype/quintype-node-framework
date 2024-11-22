@@ -177,9 +177,9 @@ function withConfigPartial(
   configWrapper = (config) => config
 ) {
   return function withConfig(f, staticParams) {
-    return async function (req, res, next) {
+    return function (req, res, next) {
       const domainSlug = getDomainSlug(publisherConfig, req.hostname);
-      const client = await getClient(req.hostname);
+      const client = getClient(req.hostname);
       return client
         .getConfig()
         .then((config) => configWrapper(config, domainSlug, { req }))

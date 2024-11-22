@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.30.9-host-to-api.1",
+  "version": "7.31.9-host-to-api.1",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {

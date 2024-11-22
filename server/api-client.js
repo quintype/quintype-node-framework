@@ -47,14 +47,12 @@ async function mappingHost() {
   }
 }
 
-async function getClient(hostname) {
-  await mappingHost();
+function getClient(hostname) {
   return getClientImpl(config, cachedSecondaryClients, hostname) || defaultClient;
 }
 
-async function initializeAllClients() {
+function initializeAllClients() {
   const promises = [defaultClient.getConfig()];
-  await mappingHost();
   if (!config.skip_warm_config) {
     Object.entries(config["host_to_api_host"] || []).forEach(([host, apiHost]) => {
       const client = new Client(apiHost);
