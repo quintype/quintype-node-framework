@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.31.0](https://github.com/quintype/quintype-node-framework/compare/v7.30.9...v7.31.0) (2024-11-22)
+
+
+### Features
+
+* **Preview:** support home & collection preview route ([#450](https://github.com/quintype/quintype-node-framework/issues/450)) ([0c34ec4](https://github.com/quintype/quintype-node-framework/commit/0c34ec406fbe8d9ee56de1215c2100b2bb3e6896))
+
 ### [7.30.9](https://github.com/quintype/quintype-node-framework/compare/v7.30.8...v7.30.9) (2024-11-22)
 
 ### [7.30.8](https://github.com/quintype/quintype-node-framework/compare/v7.30.7...v7.30.8) (2024-11-05)
