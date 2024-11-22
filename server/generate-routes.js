@@ -165,6 +165,28 @@ exports.generateCommonRoutes = function generateSectionPageRoutes(
           },
         ]
       : [],
+      [
+        {
+          path: '/preview/:previewId/collection/home',
+          pageType: 'home-page-preview',
+          exact: true,
+          skipPWA: true,
+          params: {
+            collectionSlug: config.getHomeCollectionSlug(domainSlug)
+          }
+        }
+      ],
+      [
+        {
+          path: '/preview/:previewId/collection/:collectionSlug',
+          pageType: 'collection-page-preview',
+          exact: true,
+          skipPWA: skipPWA.home || false,
+          params: {
+            collectionSlug: config.getHomeCollectionSlug(domainSlug)
+          }
+        }
+      ],
     sectionPageRoutes ? sectionRoutes : [],
     storyPageRoutes ? storyRoutes : []
   );
