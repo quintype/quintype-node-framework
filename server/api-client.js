@@ -42,7 +42,6 @@ async function mappingHost() {
     for (const [key, value] of Object.entries(sketchesHostMapping)) {
       hostMapping[key] = `http://${value}${hostInternalDomain}`;
     }
-
     config.host_to_api_host = { ...hostMapping, ...config["host_to_api_host"] };
   }
 }
@@ -76,4 +75,5 @@ module.exports = {
   client: defaultClient,
   getClient,
   initializeAllClients,
+  mappingHost
 };

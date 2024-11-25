@@ -10,10 +10,10 @@
 // istanbul ignore file
 // This is the start file, to be called from your start.js
 
-const chalk = require('chalk');
+const chalk = require("chalk");
 const cluster = require("cluster");
 const process = require("process");
-const { initializeAllClients } = require("./api-client");
+const { initializeAllClients, mappingHost } = require("./api-client");
 const logger = require("./logger");
 const logSuccess = chalk.bold.cyanBright;
 
@@ -48,9 +48,7 @@ function startMaster({ workers = 4 }) {
 
   cluster.on("exit", (worker, code, signal) => {
     logger.error(`worker ${worker.process.pid} died`);
-    const aliveWorkers = Object.values(cluster.workers).filter(
-      (worker) => worker.state !== "dead"
-    );
+    const aliveWorkers = Object.values(cluster.workers).filter((worker) => worker.state !== "dead");
 
     if (terminating) {
       if (aliveWorkers.length == 0) {
@@ -64,6 +62,8 @@ function startMaster({ workers = 4 }) {
 }
 
 async function startWorker(appThunk, opts) {
+  let setIntervalIndex = null;
+  const { hostToApiInterval } = opts;
   if (process.env.NODE_ENV !== "production") {
     require("@quintype/build")(opts);
   }
@@ -72,10 +72,11 @@ async function startWorker(appThunk, opts) {
   try {
     const app = appThunk();
 
+    await mappingHost();
     await initializeAllClients();
     const server = app.listen(opts.port || 3000, () => {
       console.log(logSuccess(`||=============================||`));
-      console.log(logSuccess(`|| App listening on port ${opts.port || 3000}! ||`))
+      console.log(logSuccess(`|| App listening on port ${opts.port || 3000}! ||`));
       console.log(logSuccess(`||=============================||`));
     });
 
@@ -86,7 +87,14 @@ async function startWorker(appThunk, opts) {
       });
     });
     process.on("SIGHUP", () => {});
+
+    if (hostToApiInterval) {
+      setIntervalIndex = setInterval(() => {
+        mappingHost();
+      }, hostToApiInterval);
+    }
   } catch (e) {
+    clearInterval(setIntervalIndex);
     if (process.env.NODE_ENV !== "production") {
       console.log(e.stack);
     }
