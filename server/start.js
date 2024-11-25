@@ -94,7 +94,9 @@ async function startWorker(appThunk, opts) {
       }, hostToApiInterval);
     }
   } catch (e) {
-    clearInterval(setIntervalIndex);
+    if (hostToApiInterval) {
+      clearInterval(setIntervalIndex);
+    }
     if (process.env.NODE_ENV !== "production") {
       console.log(e.stack);
     }
