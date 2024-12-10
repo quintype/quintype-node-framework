@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.32.0](https://github.com/quintype/quintype-node-framework/compare/v7.31.0...v7.32.0) (2024-12-10)
+
+
+### Features
+
+* **host_to_api:** Implement host to api mapping ⚡  ([#449](https://github.com/quintype/quintype-node-framework/issues/449)) ([2d1789f](https://github.com/quintype/quintype-node-framework/commit/2d1789f2970d14406ccf1fff545d6b04d23ae750))
+
 ## [7.31.0](https://github.com/quintype/quintype-node-framework/compare/v7.30.9...v7.31.0) (2024-11-22)
 
 
