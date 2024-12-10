@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.33.0](https://github.com/quintype/quintype-node-framework/compare/v7.32.0...v7.33.0) (2024-12-10)
+
+
+### Features
+
+* **CORS:** whitelist quintype.com ([#451](https://github.com/quintype/quintype-node-framework/issues/451)) ([94eafa5](https://github.com/quintype/quintype-node-framework/commit/94eafa5e3180dfe56dc0b74ac7c92b12615937af))
+
 ## [7.32.0](https://github.com/quintype/quintype-node-framework/compare/v7.31.0...v7.32.0) (2024-12-10)
 
 
