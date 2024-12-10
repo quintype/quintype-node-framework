@@ -117,29 +117,29 @@
  * @category Server
  * @module routes
  */
-const { match } = require("path-to-regexp");
-const { generateServiceWorker } = require("./handlers/generate-service-worker");
+const { match } = require('path-to-regexp')
+const { generateServiceWorker } = require('./handlers/generate-service-worker')
 const {
   handleIsomorphicShell,
   handleIsomorphicDataLoad,
   handleIsomorphicRoute,
   handleStaticRoute,
-  notFoundHandler,
-} = require("./handlers/isomorphic-handler");
+  notFoundHandler
+} = require('./handlers/isomorphic-handler')
 
-const { oneSignalImport } = require("./handlers/one-signal");
-const { customRouteHandler } = require("./handlers/custom-route-handler");
-const { handleManifest, handleAssetLink } = require("./handlers/json-manifest-handlers");
-const { redirectStory } = require("./handlers/story-redirect");
-const { simpleJsonHandler } = require("./handlers/simple-json-handler");
-const { makePickComponentSync } = require("../isomorphic/impl/make-pick-component-sync");
-const { registerFCMTopic } = require("./handlers/fcm-registration-handler");
-const { triggerWebengageNotifications } = require("./handlers/webengage-notifications");
-const rp = require("request-promise");
-const bodyParser = require("body-parser");
-const get = require("lodash/get");
-const { URL } = require("url");
-const prerender = require("@quintype/prerender-node");
+const { oneSignalImport } = require('./handlers/one-signal')
+const { customRouteHandler } = require('./handlers/custom-route-handler')
+const { handleManifest, handleAssetLink } = require('./handlers/json-manifest-handlers')
+const { redirectStory } = require('./handlers/story-redirect')
+const { simpleJsonHandler } = require('./handlers/simple-json-handler')
+const { makePickComponentSync } = require('../isomorphic/impl/make-pick-component-sync')
+const { registerFCMTopic } = require('./handlers/fcm-registration-handler')
+const { triggerWebengageNotifications } = require('./handlers/webengage-notifications')
+const rp = require('request-promise')
+const bodyParser = require('body-parser')
+const get = require('lodash/get')
+const { URL } = require('url')
+const prerender = require('@quintype/prerender-node')
 
 /**
  * *upstreamQuintypeRoutes* connects various routes directly to the upstream API server.
@@ -154,7 +154,7 @@ const prerender = require("@quintype/prerender-node");
  * @param {boolean} opts.forwardFavicon Forward favicon requests to the CMS (default false)
  * @param {boolean} opts.isSitemapUrlEnabled To enable /news_sitemap/today and /news_sitemap/yesterday sitemap news url (default /news_sitemap.xml)
  */
-exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
+exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes (
   app,
   {
     forwardAmp = false,
@@ -162,138 +162,138 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     extraRoutes = [],
     sMaxAge,
     maxAge,
-    config = require("./publisher-config"),
-    getClient = require("./api-client").getClient,
-    isSitemapUrlEnabled = false,
+    config = require('./publisher-config'),
+    getClient = require('./api-client').getClient,
+    isSitemapUrlEnabled = false
   } = {}
 ) {
-  const host = config.sketches_host;
-  const get = require("lodash/get");
-  const apiProxy = require("http-proxy").createProxyServer({
+  const host = config.sketches_host
+  const get = require('lodash/get')
+  const apiProxy = require('http-proxy').createProxyServer({
     target: host,
-    ssl: host.startsWith("https") ? { servername: host.replace(/^https:\/\//, "") } : undefined,
-  });
+    ssl: host.startsWith('https') ? { servername: host.replace(/^https:\/\//, '') } : undefined
+  })
 
-  apiProxy.on("proxyReq", (proxyReq, req, res, options) => {
-    proxyReq.setHeader("Host", getClient(req.hostname).getHostname());
-  });
+  apiProxy.on('proxyReq', (proxyReq, req, res, options) => {
+    proxyReq.setHeader('Host', getClient(req.hostname).getHostname())
+  })
 
-  const _sMaxAge = get(config, ["publisher", "upstreamRoutesSmaxage"], sMaxAge);
-  const _maxAge = get(config, ["publisher", "upstreamRoutesMaxage"], maxAge);
+  const _sMaxAge = get(config, ['publisher', 'upstreamRoutesSmaxage'], sMaxAge)
+  const _maxAge = get(config, ['publisher', 'upstreamRoutesMaxage'], maxAge)
 
   parseInt(_sMaxAge) > 0 &amp;&amp;
-    apiProxy.on("proxyRes", function (proxyRes, req) {
-      const pathName = get(req, ["originalUrl"], "").split("?")[0];
-      const checkForExcludeRoutes = excludeRoutes.some((path) => {
-        const matchFn = match(path, { decode: decodeURIComponent });
-        return matchFn(pathName);
-      });
-      const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
-      if (!checkForExcludeRoutes &amp;&amp; getCacheControl.includes("public")) {
-        proxyRes.headers["cache-control"] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${_sMaxAge}`);
+    apiProxy.on('proxyRes', function (proxyRes, req) {
+      const pathName = get(req, ['originalUrl'], '').split('?')[0]
+      const checkForExcludeRoutes = excludeRoutes.some(path => {
+        const matchFn = match(path, { decode: decodeURIComponent })
+        return matchFn(pathName)
+      })
+      const getCacheControl = get(proxyRes, ['headers', 'cache-control'], '')
+      if (!checkForExcludeRoutes &amp;&amp; getCacheControl.includes('public')) {
+        proxyRes.headers['cache-control'] = getCacheControl.replace(/s-maxage=\d*/g, `s-maxage=${_sMaxAge}`)
       }
-    });
+    })
   parseInt(_maxAge) > 0 &amp;&amp;
-    apiProxy.on("proxyRes", function (proxyRes, req) {
-      const pathName = get(req, ["originalUrl"], "").split("?")[0];
-      const checkForExcludeRoutes = excludeRoutes.some((path) => {
-        const matchFn = match(path, { decode: decodeURIComponent });
-        return matchFn(pathName);
-      });
-      const getCacheControl = get(proxyRes, ["headers", "cache-control"], "");
-      if (!checkForExcludeRoutes &amp;&amp; getCacheControl.includes("public")) {
-        proxyRes.headers["cache-control"] = getCacheControl.replace(/max-age=\d*/g, `max-age=${_maxAge}`);
+    apiProxy.on('proxyRes', function (proxyRes, req) {
+      const pathName = get(req, ['originalUrl'], '').split('?')[0]
+      const checkForExcludeRoutes = excludeRoutes.some(path => {
+        const matchFn = match(path, { decode: decodeURIComponent })
+        return matchFn(pathName)
+      })
+      const getCacheControl = get(proxyRes, ['headers', 'cache-control'], '')
+      if (!checkForExcludeRoutes &amp;&amp; getCacheControl.includes('public')) {
+        proxyRes.headers['cache-control'] = getCacheControl.replace(/max-age=\d*/g, `max-age=${_maxAge}`)
       }
-    });
+    })
 
-  const sketchesProxy = (req, res) => apiProxy.web(req, res);
+  const sketchesProxy = (req, res) => apiProxy.web(req, res)
 
-  app.get("/ping", (req, res) => {
+  app.get('/ping', (req, res) => {
     getClient(req.hostname)
       .getConfig()
-      .then(() => res.send("pong"))
-      .catch(() => res.status(503).send({ error: { message: "Config not loaded" } }));
-  });
+      .then(() => res.send('pong'))
+      .catch(() => res.status(503).send({ error: { message: 'Config not loaded' } }))
+  })
 
   // Mention the routes which don't want to override the s-maxage value and max-age value
   const excludeRoutes = [
-    "/qlitics.js",
-    "/api/v1/breaking-news",
-    "/stories.rss",
-    "/api/v1/collections/:slug.rss",
-    "/api/v1/advanced-search",
-    "/api/instant-articles.rss",
-  ];
+    '/qlitics.js',
+    '/api/v1/breaking-news',
+    '/stories.rss',
+    '/api/v1/collections/:slug.rss',
+    '/api/v1/advanced-search',
+    '/api/instant-articles.rss'
+  ]
 
-  app.all("/api/*", sketchesProxy);
-  app.all("*/api/*", sketchesProxy);
-  app.all("/login", sketchesProxy);
-  app.all("/qlitics.js", sketchesProxy);
-  app.all("/auth.form", sketchesProxy);
-  app.all("/auth.callback", sketchesProxy);
-  app.all("/auth", sketchesProxy);
-  app.all("/admin/*", sketchesProxy);
-  app.all("/sitemap.xml", sketchesProxy);
-  app.all("/sitemap/*", sketchesProxy);
-  app.all("/feed", sketchesProxy);
-  app.all("/rss-feed", sketchesProxy);
-  app.all("/stories.rss", sketchesProxy);
-  app.all("/sso-login", sketchesProxy);
-  app.all("/sso-signup", sketchesProxy);
+  app.all('/api/*', sketchesProxy)
+  app.all('*/api/*', sketchesProxy)
+  app.all('/login', sketchesProxy)
+  app.all('/qlitics.js', sketchesProxy)
+  app.all('/auth.form', sketchesProxy)
+  app.all('/auth.callback', sketchesProxy)
+  app.all('/auth', sketchesProxy)
+  app.all('/admin/*', sketchesProxy)
+  app.all('/sitemap.xml', sketchesProxy)
+  app.all('/sitemap/*', sketchesProxy)
+  app.all('/feed', sketchesProxy)
+  app.all('/rss-feed', sketchesProxy)
+  app.all('/stories.rss', sketchesProxy)
+  app.all('/sso-login', sketchesProxy)
+  app.all('/sso-signup', sketchesProxy)
   if (isSitemapUrlEnabled) {
-    app.all("/news_sitemap/today.xml", sketchesProxy);
-    app.all("/news_sitemap/yesterday.xml", sketchesProxy);
+    app.all('/news_sitemap/today.xml', sketchesProxy)
+    app.all('/news_sitemap/yesterday.xml', sketchesProxy)
   } else {
-    app.all("/news_sitemap.xml", sketchesProxy);
+    app.all('/news_sitemap.xml', sketchesProxy)
   }
   if (forwardAmp) {
-    app.get("/amp/*", sketchesProxy);
+    app.get('/amp/*', sketchesProxy)
   }
   if (forwardFavicon) {
-    app.get("/favicon.ico", sketchesProxy);
+    app.get('/favicon.ico', sketchesProxy)
   }
 
-  extraRoutes.forEach((route) => app.all(route, sketchesProxy));
-};
-
-// istanbul ignore next
-function renderServiceWorkerFn(res, layout, params, callback) {
-  return res.render(layout, params, callback);
+  extraRoutes.forEach(route => app.all(route, sketchesProxy))
 }
 
 // istanbul ignore next
-function toFunction(value, toRequire) {
+function renderServiceWorkerFn (res, layout, params, callback) {
+  return res.render(layout, params, callback)
+}
+
+// istanbul ignore next
+function toFunction (value, toRequire) {
   if (value === true) {
-    value = require(toRequire);
+    value = require(toRequire)
   }
 
-  if (typeof value === "function") {
-    return value;
+  if (typeof value === 'function') {
+    return value
   }
-  return () => value;
+  return () => value
 }
 
-function getDomainSlug(publisherConfig, hostName) {
+function getDomainSlug (publisherConfig, hostName) {
   if (!publisherConfig.domain_mapping) {
-    return undefined;
+    return undefined
   }
-  return publisherConfig.domain_mapping[hostName] || null;
+  return publisherConfig.domain_mapping[hostName] || null
 }
 
-function withConfigPartial(
+function withConfigPartial (
   getClient,
   logError,
-  publisherConfig = require("./publisher-config"),
-  configWrapper = (config) => config
+  publisherConfig = require('./publisher-config'),
+  configWrapper = config => config
 ) {
-  return function withConfig(f, staticParams) {
+  return function withConfig (f, staticParams) {
     return function (req, res, next) {
-      const domainSlug = getDomainSlug(publisherConfig, req.hostname);
-      const client = getClient(req.hostname);
+      const domainSlug = getDomainSlug(publisherConfig, req.hostname)
+      const client = getClient(req.hostname)
       return client
         .getConfig()
-        .then((config) => configWrapper(config, domainSlug, { req }))
-        .then((config) =>
+        .then(config => configWrapper(config, domainSlug, { req }))
+        .then(config =>
           f(
             req,
             res,
@@ -301,52 +301,52 @@ function withConfigPartial(
             Object.assign({}, staticParams, {
               config,
               client,
-              domainSlug,
+              domainSlug
             })
           )
         )
-        .catch(logError);
-    };
-  };
+        .catch(logError)
+    }
+  }
 }
 
-exports.withError = function withError(handler, logError) {
+exports.withError = function withError (handler, logError) {
   return async (req, res, next, opts) => {
     try {
-      await handler(req, res, next, opts);
+      await handler(req, res, next, opts)
     } catch (e) {
-      logError(e);
-      res.status(500);
-      res.end();
+      logError(e)
+      res.status(500)
+      res.end()
     }
-  };
-};
-
-function convertToDomain(path) {
-  if (!path) {
-    return path;
   }
-  return new URL(path).origin;
 }
 
-function wrapLoadDataWithMultiDomain(publisherConfig, f, configPos) {
-  return async function loadDataWrapped() {
-    const { domainSlug } = arguments[arguments.length - 1];
-    const config = arguments[configPos];
-    const primaryHostUrl = convertToDomain(config["sketches-host"]);
-    const domain = (config.domains || []).find((d) => d.slug === domainSlug) || {
-      "host-url": primaryHostUrl,
-    };
-    const result = await f.apply(this, arguments);
+function convertToDomain (path) {
+  if (!path) {
+    return path
+  }
+  return new URL(path).origin
+}
+
+function wrapLoadDataWithMultiDomain (publisherConfig, f, configPos) {
+  return async function loadDataWrapped () {
+    const { domainSlug } = arguments[arguments.length - 1]
+    const config = arguments[configPos]
+    const primaryHostUrl = convertToDomain(config['sketches-host'])
+    const domain = (config.domains || []).find(d => d.slug === domainSlug) || {
+      'host-url': primaryHostUrl
+    }
+    const result = await f.apply(this, arguments)
     return Object.assign(
       {
         domainSlug,
-        currentHostUrl: convertToDomain(domain["host-url"]),
-        primaryHostUrl,
+        currentHostUrl: convertToDomain(domain['host-url']),
+        primaryHostUrl
       },
       result
-    );
-  };
+    )
+  }
 }
 
 /**
@@ -368,15 +368,15 @@ function wrapLoadDataWithMultiDomain(publisherConfig, f, configPos) {
  * @param {module:routes~Handler} handler The Handler to run
  * @param {Object} opts Options that will be passed to the handler. These options will be merged with a *config* and *client*
  */
-function getWithConfig(app, route, handler, opts = {}) {
-  const configWrapper = opts.configWrapper;
+function getWithConfig (app, route, handler, opts = {}) {
+  const configWrapper = opts.configWrapper
   const {
-    getClient = require("./api-client").getClient,
-    publisherConfig = require("./publisher-config"),
-    logError = require("./logger").error,
-  } = opts;
-  const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
-  app.get(route, withConfig(handler, opts));
+    getClient = require('./api-client').getClient,
+    publisherConfig = require('./publisher-config'),
+    logError = require('./logger').error
+  } = opts
+  const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper)
+  app.get(route, withConfig(handler, opts))
 }
 
 /**
@@ -420,7 +420,7 @@ function getWithConfig(app, route, handler, opts = {}) {
  * @param {boolean|function} enableExternalStories If set to true, then for every request an external story api call is made and renders the story-page if the story is found. (default: false)
  * @param {string|function} externalIdPattern This string specifies the external id pattern the in the url. Mention `EXTERNAL_ID` to specify the position of external id in the url. Ex: "/parent-section/child-section/EXTERNAL_ID"
  */
-exports.isomorphicRoutes = function isomorphicRoutes(
+exports.isomorphicRoutes = function isomorphicRoutes (
   app,
   {
     generateRoutes,
@@ -431,7 +431,7 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     seo,
     manifestFn,
     assetLinkFn,
-    ampPageBasePath = "/amp/story",
+    ampPageBasePath = '/amp/story',
 
     oneSignalServiceWorkers = false,
     staticRoutes = [],
@@ -445,56 +445,73 @@ exports.isomorphicRoutes = function isomorphicRoutes(
     mobileConfigFields = {},
     templateOptions = false,
     lightPages = false,
-    cdnProvider = "cloudflare",
-    serviceWorkerPaths = ["/service-worker.js"],
-    maxConfigVersion = (config) => get(config, ["theme-attributes", "cache-burst"], 0),
-    configWrapper = (config) => config,
+    cdnProvider = 'cloudflare',
+    serviceWorkerPaths = ['/service-worker.js'],
+    maxConfigVersion = config => get(config, ['theme-attributes', 'cache-burst'], 0),
+    configWrapper = config => config,
 
     // The below are primarily for testing
-    logError = require("./logger").error,
-    assetHelper = require("./asset-helper"),
-    getClient = require("./api-client").getClient,
+    logError = require('./logger').error,
+    assetHelper = require('./asset-helper'),
+    getClient = require('./api-client').getClient,
     renderServiceWorker = renderServiceWorkerFn,
-    publisherConfig = require("./publisher-config"),
+    publisherConfig = require('./publisher-config'),
     redirectUrls = [],
-    prerenderServiceUrl = "",
+    prerenderServiceUrl = '',
     redirectToLowercaseSlugs = false,
     shouldEncodeAmpUri,
     sMaxAge = 900,
     maxAge = 15,
-    appLoadingPlaceholder = "",
-    fcmServerKey = "",
+    appLoadingPlaceholder = '',
+    fcmServerKey = '',
     webengageConfig = {},
-    externalIdPattern = "",
+    externalIdPattern = '',
     enableExternalStories = false,
-    lazyLoadImageMargin,
+    lazyLoadImageMargin
   }
 ) {
-  const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper);
+  const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper)
 
-  const _sMaxAge = parseInt(get(publisherConfig, ["publisher", "isomorphicRoutesSmaxage"], sMaxAge));
+  const _sMaxAge = parseInt(get(publisherConfig, ['publisher', 'isomorphicRoutesSmaxage'], sMaxAge))
 
-  const _maxAge = parseInt(get(publisherConfig, ["publisher", "isomorphicRoutesMaxage"], maxAge));
+  const _maxAge = parseInt(get(publisherConfig, ['publisher', 'isomorphicRoutesMaxage'], maxAge))
 
-  pickComponent = makePickComponentSync(pickComponent);
-  loadData = wrapLoadDataWithMultiDomain(publisherConfig, loadData, 2);
-  loadErrorData = wrapLoadDataWithMultiDomain(publisherConfig, loadErrorData, 1);
+  pickComponent = makePickComponentSync(pickComponent)
+  loadData = wrapLoadDataWithMultiDomain(publisherConfig, loadData, 2)
+  loadErrorData = wrapLoadDataWithMultiDomain(publisherConfig, loadErrorData, 1)
 
   if (prerenderServiceUrl) {
     app.use((req, res, next) => {
       if (req.query.prerender) {
         try {
           // eslint-disable-next-line global-require
-          prerender.set("protocol", "https");
-          prerender.set("prerenderServiceUrl", prerenderServiceUrl)(req, res, next);
+          prerender.set('protocol', 'https')
+          prerender.set('prerenderServiceUrl', prerenderServiceUrl)(req, res, next)
         } catch (e) {
-          logError(e);
+          logError(e)
         }
       } else {
-        next();
+        next()
       }
-    });
+    })
   }
+
+  app.use((req, res, next) => {
+    const origin = req.headers.origin
+    const allowedOriginRegex = /^https?:\/\/([a-zA-Z0-9-]+\.)*quintype\.com$/
+
+    if (allowedOriginRegex.test(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin)
+      res.setHeader('Access-Control-Allow-Methods', 'GET')
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+
+      if (req.method === 'OPTIONS') {
+        res.sendStatus(204)
+        return
+      }
+    }
+    next()
+  })
 
   if (serviceWorkerPaths.length > 0) {
     app.get(
@@ -503,36 +520,36 @@ exports.isomorphicRoutes = function isomorphicRoutes(
         generateRoutes,
         assetHelper,
         renderServiceWorker,
-        maxConfigVersion,
+        maxConfigVersion
       })
-    );
+    )
   }
 
   if (oneSignalServiceWorkers) {
     app.get(
-      "/OneSignalSDKWorker.js",
+      '/OneSignalSDKWorker.js',
       withConfig(generateServiceWorker, {
         generateRoutes,
         renderServiceWorker,
         assetHelper,
         appendFn: oneSignalImport,
-        maxConfigVersion,
+        maxConfigVersion
       })
-    );
+    )
     app.get(
-      "/OneSignalSDKUpdaterWorker.js",
+      '/OneSignalSDKUpdaterWorker.js',
       withConfig(generateServiceWorker, {
         generateRoutes,
         renderServiceWorker,
         assetHelper,
         appendFn: oneSignalImport,
-        maxConfigVersion,
+        maxConfigVersion
       })
-    );
+    )
   }
 
   app.get(
-    "/shell.html",
+    '/shell.html',
     withConfig(handleIsomorphicShell, {
       seo,
       renderLayout,
@@ -542,11 +559,11 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       logError,
       preloadJs,
       maxConfigVersion,
-      appLoadingPlaceholder,
+      appLoadingPlaceholder
     })
-  );
+  )
   app.get(
-    "/route-data.json",
+    '/route-data.json',
     withConfig(handleIsomorphicDataLoad, {
       generateRoutes,
       loadData,
@@ -559,27 +576,27 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       redirectToLowercaseSlugs,
       sMaxAge: _sMaxAge,
       maxAge: _maxAge,
-      networkOnly: true,
+      networkOnly: true
     })
-  );
+  )
 
-  app.post("/register-fcm-topic", bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }));
+  app.post('/register-fcm-topic', bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }))
 
   if (webengageConfig.enableWebengage) {
     app.post(
-      "/integrations/webengage/trigger-notification",
+      '/integrations/webengage/trigger-notification',
       bodyParser.json(),
       withConfig(triggerWebengageNotifications, webengageConfig)
-    );
+    )
   }
 
   if (manifestFn) {
-    app.get("/manifest.json", withConfig(handleManifest, { manifestFn, logError }));
+    app.get('/manifest.json', withConfig(handleManifest, { manifestFn, logError }))
   }
 
   if (mobileApiEnabled) {
     app.get(
-      "/mobile-data.json",
+      '/mobile-data.json',
       withConfig(handleIsomorphicDataLoad, {
         generateRoutes,
         loadData,
@@ -593,25 +610,25 @@ exports.isomorphicRoutes = function isomorphicRoutes(
         cdnProvider,
         redirectToLowercaseSlugs,
         sMaxAge: _sMaxAge,
-        maxAge: _maxAge,
+        maxAge: _maxAge
       })
-    );
+    )
   }
 
   if (assetLinkFn) {
-    app.get("/.well-known/assetlinks.json", withConfig(handleAssetLink, { assetLinkFn, logError }));
+    app.get('/.well-known/assetlinks.json', withConfig(handleAssetLink, { assetLinkFn, logError }))
   }
 
   if (templateOptions) {
     app.get(
-      "/template-options.json",
+      '/template-options.json',
       withConfig(simpleJsonHandler, {
-        jsonData: toFunction(templateOptions, "./impl/template-options"),
+        jsonData: toFunction(templateOptions, './impl/template-options')
       })
-    );
+    )
   }
 
-  staticRoutes.forEach((route) => {
+  staticRoutes.forEach(route => {
     app.get(
       route.path,
       withConfig(
@@ -627,16 +644,16 @@ exports.isomorphicRoutes = function isomorphicRoutes(
             oneSignalServiceWorkers,
             publisherConfig,
             sMaxAge: _sMaxAge,
-            maxAge: _maxAge,
+            maxAge: _maxAge
           },
           route
         )
       )
-    );
-  });
+    )
+  })
 
   app.get(
-    "/*",
+    '/*',
     withConfig(handleIsomorphicRoute, {
       generateRoutes,
       loadData,
@@ -660,17 +677,17 @@ exports.isomorphicRoutes = function isomorphicRoutes(
       ampPageBasePath,
       externalIdPattern,
       enableExternalStories,
-      lazyLoadImageMargin,
+      lazyLoadImageMargin
     })
-  );
+  )
 
   if (redirectRootLevelStories) {
-    app.get("/:storySlug", withConfig(redirectStory, { logError, cdnProvider, sMaxAge: _sMaxAge, maxAge: _maxAge }));
+    app.get('/:storySlug', withConfig(redirectStory, { logError, cdnProvider, sMaxAge: _sMaxAge, maxAge: _maxAge }))
   }
 
   if (handleCustomRoute) {
     app.get(
-      "/*",
+      '/*',
       withConfig(customRouteHandler, {
         loadData,
         renderLayout,
@@ -678,27 +695,27 @@ exports.isomorphicRoutes = function isomorphicRoutes(
         seo,
         cdnProvider,
         sMaxAge: _sMaxAge,
-        maxAge: _maxAge,
+        maxAge: _maxAge
       })
-    );
+    )
   }
 
   if (handleNotFound) {
     app.get(
-      "/*",
+      '/*',
       withConfig(notFoundHandler, {
         renderLayout,
         pickComponent,
         loadErrorData,
         logError,
         seo,
-        assetHelper,
+        assetHelper
       })
-    );
+    )
   }
-};
+}
 
-exports.getWithConfig = getWithConfig;
+exports.getWithConfig = getWithConfig
 
 /**
  * *proxyGetRequest* can be used to forward requests to another host, and cache the results on our CDN. This can be done as follows in `app/server/app.js`.
@@ -718,52 +735,52 @@ exports.getWithConfig = getWithConfig;
  * @param opts.cacheControl The cache control header to set on proxied requests (default: *"public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=3600"*)
  */
 exports.proxyGetRequest = function (app, route, handler, opts = {}) {
-  const { logError = require("./logger").error } = opts;
-  const { cacheControl = "public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=3600" } = opts;
+  const { logError = require('./logger').error } = opts
+  const { cacheControl = 'public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=3600' } = opts
 
-  getWithConfig(app, route, proxyHandler, opts);
+  getWithConfig(app, route, proxyHandler, opts)
 
-  async function proxyHandler(req, res, next, { config, client }) {
+  async function proxyHandler (req, res, next, { config, client }) {
     try {
-      const result = await handler(req.params, { config, client });
-      if (typeof result === "string" &amp;&amp; result.startsWith("http")) {
-        sendResult(await rp(result, { json: true }));
+      const result = await handler(req.params, { config, client })
+      if (typeof result === 'string' &amp;&amp; result.startsWith('http')) {
+        sendResult(await rp(result, { json: true }))
       } else {
-        sendResult(result);
+        sendResult(result)
       }
     } catch (e) {
-      logError(e);
-      sendResult(null);
+      logError(e)
+      sendResult(null)
     }
 
-    function sendResult(result) {
+    function sendResult (result) {
       if (result) {
-        res.setHeader("Cache-Control", cacheControl);
-        res.setHeader("Vary", "Accept-Encoding");
-        res.json(result);
+        res.setHeader('Cache-Control', cacheControl)
+        res.setHeader('Vary', 'Accept-Encoding')
+        res.json(result)
       } else {
-        res.status(503);
-        res.end();
+        res.status(503)
+        res.end()
       }
     }
   }
-};
+}
 
 // This could also be done using express's mount point, but /ping stops working
 exports.mountQuintypeAt = function (app, mountAt) {
   app.use(function (req, res, next) {
-    const mountPoint = typeof mountAt === "function" ? mountAt(req.hostname) : mountAt;
+    const mountPoint = typeof mountAt === 'function' ? mountAt(req.hostname) : mountAt
 
     if (mountPoint &amp;&amp; req.url.startsWith(mountPoint)) {
-      req.url = req.url.slice(mountPoint.length) || "/";
-      next();
-    } else if (mountPoint &amp;&amp; req.url !== "/ping") {
-      res.status(404).send(`Not Found: Quintype has been mounted at ${mountPoint}`);
+      req.url = req.url.slice(mountPoint.length) || '/'
+      next()
+    } else if (mountPoint &amp;&amp; req.url !== '/ping') {
+      res.status(404).send(`Not Found: Quintype has been mounted at ${mountPoint}`)
     } else {
-      next();
+      next()
     }
-  });
-};
+  })
+}
 
 /**
  * *ampRoutes* handles all the amp page routes using the *[@quintype/amp](https://developers.quintype.com/quintype-node-amp)* library
@@ -786,12 +803,12 @@ exports.mountQuintypeAt = function (app, mountAt) {
  *
  */
 exports.ampRoutes = (app, opts = {}) => {
-  const { ampStoryPageHandler, storyPageInfiniteScrollHandler } = require("./amp/handlers");
+  const { ampStoryPageHandler, storyPageInfiniteScrollHandler } = require('./amp/handlers')
 
-  getWithConfig(app, "/amp/api/v1/amp-infinite-scroll", storyPageInfiniteScrollHandler, opts);
-  getWithConfig(app, "/ampstories/*", ampStoryPageHandler, { ...opts, isVisualStory: true });
-  getWithConfig(app, "/*", ampStoryPageHandler, opts);
-};
+  getWithConfig(app, '/amp/api/v1/amp-infinite-scroll', storyPageInfiniteScrollHandler, opts)
+  getWithConfig(app, '/ampstories/*', ampStoryPageHandler, { ...opts, isVisualStory: true })
+  getWithConfig(app, '/*', ampStoryPageHandler, opts)
+}
 </code></pre>
         </article>
     </section>
