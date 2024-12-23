@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.33.0",
+  "version": "7.34.0-gulfnews-amp-changes.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
