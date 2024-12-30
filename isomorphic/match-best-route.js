@@ -8,7 +8,7 @@
  * @module match-best-route
  */
 
-const { matchPath } = require('react-router')
+const { matchPath } = require("react-router");
 
 /**
  * Route represents a url pattern which is matched by the quintype framework.
@@ -33,32 +33,30 @@ const { matchPath } = require('react-router')
  * @param {Array<module:match-best-route~Route>} routes An array of routes to be matched
  * @returns {Array<module:match-best-route~Route>} Matching Routes
  */
-function matchAllRoutes (path, routes) {
+function matchAllRoutes(path, routes) {
   // Sure there is some construct to do these two lines
-  if (!path.startsWith('/')) {
-    path = `/${path}`
+  if (!path.startsWith("/")) {
+    path = `/${path}`;
   }
-  console.log('all routes------', routes)
-  console.log('path======', path)
+
   // Using foreach instead of filter / map because I don't want to match the same route over and over
-  const matchedRoutes = []
-  routes.forEach(route => {
-    const match = matchPath(path, route)
+  const matchedRoutes = [];
+  routes.forEach((route) => {
+    const match = matchPath(path, route);
     if (match) {
       return matchedRoutes.push({
         pageType: route.pageType,
         params: Object.assign({}, route.params, match.params),
-        match
-      })
+        match,
+      });
     }
-  })
-  console.log("matchedRoutes=======", matchedRoutes);
-  return matchedRoutes
+  });
+  return matchedRoutes;
 }
 
-function matchBestRoute (path, routes) {
-  return matchAllRoutes(path, routes)[0]
+function matchBestRoute(path, routes) {
+  return matchAllRoutes(path, routes)[0];
 }
 
-exports.matchBestRoute = matchBestRoute
-exports.matchAllRoutes = matchAllRoutes
+exports.matchBestRoute = matchBestRoute;
+exports.matchAllRoutes = matchAllRoutes;
