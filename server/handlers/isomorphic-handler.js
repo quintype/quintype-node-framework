@@ -123,8 +123,10 @@ function loadDataForPageType(
     )
   )
     .then((result) => {
-      if (result && result.data && (result.data[ABORT_HANDLER] || result.data.error.message)) {
-        return null;
+      if (result && result.data) {
+        if (result.data[ABORT_HANDLER] || (result.data.error && result.data.error.message)) {
+          return null
+        }
       }
       return result;
     })
