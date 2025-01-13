@@ -29,6 +29,7 @@ const bodyParser = require('body-parser')
 const get = require('lodash/get')
 const { URL } = require('url')
 const prerender = require('@quintype/prerender-node')
+const { v4: uuidv4 } = require('uuid');
 
 /**
  * *upstreamQuintypeRoutes* connects various routes directly to the upstream API server.
@@ -43,7 +44,7 @@ const prerender = require('@quintype/prerender-node')
  * @param {boolean} opts.forwardFavicon Forward favicon requests to the CMS (default false)
  * @param {boolean} opts.isSitemapUrlEnabled To enable /news_sitemap/today and /news_sitemap/yesterday sitemap news url (default /news_sitemap.xml)
  */
-exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes (
+exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   app,
   {
     forwardAmp = false,
@@ -64,7 +65,9 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes (
   })
 
   apiProxy.on('proxyReq', (proxyReq, req, res, options) => {
+    const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
     proxyReq.setHeader('Host', getClient(req.hostname).getHostname())
+    proxyReq.setHeader('qt-trace-id', qtTraceId)
   })
 
   const _sMaxAge = get(config, ['publisher', 'upstreamRoutesSmaxage'], sMaxAge)
@@ -146,12 +149,12 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes (
 }
 
 // istanbul ignore next
-function renderServiceWorkerFn (res, layout, params, callback) {
+function renderServiceWorkerFn(res, layout, params, callback) {
   return res.render(layout, params, callback)
 }
 
 // istanbul ignore next
-function toFunction (value, toRequire) {
+function toFunction(value, toRequire) {
   if (value === true) {
     value = require(toRequire)
   }
@@ -162,20 +165,20 @@ function toFunction (value, toRequire) {
   return () => value
 }
 
-function getDomainSlug (publisherConfig, hostName) {
+function getDomainSlug(publisherConfig, hostName) {
   if (!publisherConfig.domain_mapping) {
     return undefined
   }
   return publisherConfig.domain_mapping[hostName] || null
 }
 
-function withConfigPartial (
+function withConfigPartial(
   getClient,
   logError,
   publisherConfig = require('./publisher-config'),
   configWrapper = config => config
 ) {
-  return function withConfig (f, staticParams) {
+  return function withConfig(f, staticParams) {
     return function (req, res, next) {
       const domainSlug = getDomainSlug(publisherConfig, req.hostname)
       const client = getClient(req.hostname)
@@ -199,7 +202,7 @@ function withConfigPartial (
   }
 }
 
-exports.withError = function withError (handler, logError) {
+exports.withError = function withError(handler, logError) {
   return async (req, res, next, opts) => {
     try {
       await handler(req, res, next, opts)
@@ -211,15 +214,15 @@ exports.withError = function withError (handler, logError) {
   }
 }
 
-function convertToDomain (path) {
+function convertToDomain(path) {
   if (!path) {
     return path
   }
   return new URL(path).origin
 }
 
-function wrapLoadDataWithMultiDomain (publisherConfig, f, configPos) {
-  return async function loadDataWrapped () {
+function wrapLoadDataWithMultiDomain(publisherConfig, f, configPos) {
+  return async function loadDataWrapped() {
     const { domainSlug } = arguments[arguments.length - 1]
     const config = arguments[configPos]
     const primaryHostUrl = convertToDomain(config['sketches-host'])
@@ -257,7 +260,7 @@ function wrapLoadDataWithMultiDomain (publisherConfig, f, configPos) {
  * @param {module:routes~Handler} handler The Handler to run
  * @param {Object} opts Options that will be passed to the handler. These options will be merged with a *config* and *client*
  */
-function getWithConfig (app, route, handler, opts = {}) {
+function getWithConfig(app, route, handler, opts = {}) {
   const configWrapper = opts.configWrapper
   const {
     getClient = require('./api-client').getClient,
@@ -309,7 +312,7 @@ function getWithConfig (app, route, handler, opts = {}) {
  * @param {boolean|function} enableExternalStories If set to true, then for every request an external story api call is made and renders the story-page if the story is found. (default: false)
  * @param {string|function} externalIdPattern This string specifies the external id pattern the in the url. Mention `EXTERNAL_ID` to specify the position of external id in the url. Ex: "/parent-section/child-section/EXTERNAL_ID"
  */
-exports.isomorphicRoutes = function isomorphicRoutes (
+exports.isomorphicRoutes = function isomorphicRoutes(
   app,
   {
     generateRoutes,
@@ -629,7 +632,7 @@ exports.proxyGetRequest = function (app, route, handler, opts = {}) {
 
   getWithConfig(app, route, proxyHandler, opts)
 
-  async function proxyHandler (req, res, next, { config, client }) {
+  async function proxyHandler(req, res, next, { config, client }) {
     try {
       const result = await handler(req.params, { config, client })
       if (typeof result === 'string' && result.startsWith('http')) {
@@ -642,7 +645,7 @@ exports.proxyGetRequest = function (app, route, handler, opts = {}) {
       sendResult(null)
     }
 
-    function sendResult (result) {
+    function sendResult(result) {
       if (result) {
         res.setHeader('Cache-Control', cacheControl)
         res.setHeader('Vary', 'Accept-Encoding')
