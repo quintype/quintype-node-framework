@@ -75,6 +75,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   parseInt(_sMaxAge) > 0 &&
     apiProxy.on('proxyRes', function (proxyRes, req) {
+      proxyRes.headers['qt-trace-id'] = proxyRes.headers['qt-trace-id'];
       const pathName = get(req, ['originalUrl'], '').split('?')[0]
       const checkForExcludeRoutes = excludeRoutes.some(path => {
         const matchFn = match(path, { decode: decodeURIComponent })
@@ -87,6 +88,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     })
   parseInt(_maxAge) > 0 &&
     apiProxy.on('proxyRes', function (proxyRes, req) {
+      proxyRes.headers['qt-trace-id'] = proxyRes.headers['qt-trace-id'];
       const pathName = get(req, ['originalUrl'], '').split('?')[0]
       const checkForExcludeRoutes = excludeRoutes.some(path => {
         const matchFn = match(path, { decode: decodeURIComponent })
@@ -98,7 +100,11 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
       }
     })
 
-  const sketchesProxy = (req, res) => apiProxy.web(req, res)
+  const sketchesProxy = (req, res) => {
+    const qtTraceId = (req && req.headers && req.headers['qt-trace-id']);
+    req.headers['qt-trace-id'] = qtTraceId;
+    apiProxy.web(req, res);
+  };
 
   app.get('/ping', (req, res) => {
     getClient(req.hostname)
