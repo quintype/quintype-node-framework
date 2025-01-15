@@ -67,7 +67,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   apiProxy.on('proxyReq', (proxyReq, req, res, options) => {
     const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
     proxyReq.setHeader('Host', getClient(req.hostname).getHostname())
-    proxyReq.setHeader('qt-trace-id', qtTraceId)
+    proxyReq.setHeader('QT-TRACE-ID', qtTraceId)
   })
 
   const _sMaxAge = get(config, ['publisher', 'upstreamRoutesSmaxage'], sMaxAge)
@@ -75,6 +75,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   parseInt(_sMaxAge) > 0 &&
     apiProxy.on('proxyRes', function (proxyRes, req) {
+      proxyRes.headers['qt-trace-id'] = proxyRes.headers['qt-trace-id'];
       const pathName = get(req, ['originalUrl'], '').split('?')[0]
       const checkForExcludeRoutes = excludeRoutes.some(path => {
         const matchFn = match(path, { decode: decodeURIComponent })
@@ -87,6 +88,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     })
   parseInt(_maxAge) > 0 &&
     apiProxy.on('proxyRes', function (proxyRes, req) {
+      proxyRes.headers['qt-trace-id'] = proxyRes.headers['qt-trace-id'];
       const pathName = get(req, ['originalUrl'], '').split('?')[0]
       const checkForExcludeRoutes = excludeRoutes.some(path => {
         const matchFn = match(path, { decode: decodeURIComponent })
@@ -98,7 +100,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
       }
     })
 
-  const sketchesProxy = (req, res) => apiProxy.web(req, res)
+  const sketchesProxy = (req, res) => apiProxy.web(req, res);
 
   app.get('/ping', (req, res) => {
     getClient(req.hostname)
@@ -627,6 +629,7 @@ exports.getWithConfig = getWithConfig
  * @param opts.cacheControl The cache control header to set on proxied requests (default: *"public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=3600"*)
  */
 exports.proxyGetRequest = function (app, route, handler, opts = {}) {
+
   const { logError = require('./logger').error } = opts
   const { cacheControl = 'public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=3600' } = opts
 
