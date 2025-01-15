@@ -100,7 +100,12 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
       }
     })
 
-  const sketchesProxy = (req, res) => apiProxy.web(req, res);
+  const sketchesProxy = (req, res) => {
+    // Attach QT-TRACE-ID to all the request going to sketches.
+    const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
+    req.headers['qt-trace-id'] = qtTraceId;
+    return apiProxy.web(req, res);
+  };
 
   app.get('/ping', (req, res) => {
     getClient(req.hostname)
