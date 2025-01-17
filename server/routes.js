@@ -66,6 +66,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   apiProxy.on('proxyReq', (proxyReq, req, res, options) => {
     const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
+    console.log("PROXY REQ", req.originalUrl, qtTraceId);
     proxyReq.setHeader('Host', getClient(req.hostname).getHostname())
     proxyReq.setHeader('qt-trace-id', qtTraceId)
   })
@@ -101,6 +102,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   const sketchesProxy = (req, res) => {
     // Attach QT-TRACE-ID to all the request going to sketches.
     const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
+    console.log("SKETCHES PROXY REQ", req.originalUrl, qtTraceId);
     req.headers['qt-trace-id'] = qtTraceId;
     return apiProxy.web(req, res);
   };
