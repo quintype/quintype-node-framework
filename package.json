@@ -59,6 +59,7 @@
     "redux": "^4.1.1",
     "request-promise": "^4.2.6",
     "sleep-promise": "^9.1.0",
+    "uuid": "^11.0.5",
     "winston": "3.3.3"
   },
   "devDependencies": {
