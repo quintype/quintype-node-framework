@@ -66,7 +66,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   apiProxy.on('proxyReq', (proxyReq, req, res, options) => {
     const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
-    console.log("PROXY REQ", req.originalUrl, qtTraceId);
+    console.log("PROXY", req.originalUrl, qtTraceId)
     proxyReq.setHeader('Host', getClient(req.hostname).getHostname())
     proxyReq.setHeader('qt-trace-id', qtTraceId)
   })
@@ -76,6 +76,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   parseInt(_sMaxAge) > 0 &&
     apiProxy.on('proxyRes', function (proxyRes, req) {
+      proxyRes.headers['qt-trace-id'] = get(proxyRes, ['headers', 'qt-trace-id'], '');
       const pathName = get(req, ['originalUrl'], '').split('?')[0]
       const checkForExcludeRoutes = excludeRoutes.some(path => {
         const matchFn = match(path, { decode: decodeURIComponent })
@@ -88,6 +89,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     })
   parseInt(_maxAge) > 0 &&
     apiProxy.on('proxyRes', function (proxyRes, req) {
+      proxyRes.headers['qt-trace-id'] = get(proxyRes, ['headers', 'qt-trace-id'], '');
       const pathName = get(req, ['originalUrl'], '').split('?')[0]
       const checkForExcludeRoutes = excludeRoutes.some(path => {
         const matchFn = match(path, { decode: decodeURIComponent })
@@ -102,8 +104,9 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   const sketchesProxy = (req, res) => {
     // Attach QT-TRACE-ID to all the request going to sketches.
     const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
-    console.log("SKETCHES PROXY REQ", req.originalUrl, qtTraceId);
+    console.log("SKETCHES PROXY", req.originalUrl, qtTraceId)
     req.headers['qt-trace-id'] = qtTraceId;
+    console.log("DEEEEEEE", res.headers)
     return apiProxy.web(req, res);
   };
 
@@ -635,6 +638,8 @@ exports.getWithConfig = getWithConfig
  */
 exports.proxyGetRequest = function (app, route, handler, opts = {}) {
 
+
+
   const { logError = require('./logger').error } = opts
   const { cacheControl = 'public,max-age=15,s-maxage=240,stale-while-revalidate=300,stale-if-error=3600' } = opts
 
@@ -642,6 +647,7 @@ exports.proxyGetRequest = function (app, route, handler, opts = {}) {
 
   async function proxyHandler(req, res, next, { config, client }) {
     try {
+      console.log("CEEEEEEE", req.originalUrl);
       const result = await handler(req.params, { config, client })
       if (typeof result === 'string' && result.startsWith('http')) {
         sendResult(await rp(result, { json: true }))
