@@ -104,7 +104,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   const sketchesProxy = (req, res) => {
     // Attach QT-TRACE-ID to all the request going to sketches.
-    console.log("INSIDE SKETCHES PROXY QT TRACE ID FROM HEADERS", qtTraceId)
+    console.log("INSIDE SKETCHES PROXY QT TRACE ID FROM HEADERS", (req && req.headers && req.headers['qt-trace-id']))
     const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
     console.log("INSIDE SKETCHES PROXY GENERATING QT TRACE ID", qtTraceId)
     req.headers['qt-trace-id'] = qtTraceId;
