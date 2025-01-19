@@ -1,8 +1,8 @@
+import { getClient } from '../api-client';
 const { v4: uuidv4 } = require('uuid');
 
-export const logRequest = (req, res) => {
-  if (!req || !res) return;
 
+export const logRequest = (req, res) => {
   const logger = require("../logger");
   const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
   const { path } = req;
