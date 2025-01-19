@@ -25,9 +25,11 @@ export const logRequest = (req, res) => {
     }
   };
 
-  return logger.info({
+  logger.info({
     level: 'info',
     logged_data: loggedDataAttributes,
     message: `PATH => ${path}`
   });
+
+  return { req, res }
 }

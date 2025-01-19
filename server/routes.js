@@ -97,7 +97,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     })
 
   const sketchesProxy = (req, res) => {
-    logRequest(req, res);
+    const { req, res } = logRequest(req, res);
     return apiProxy.web(req, res);
   };
 
