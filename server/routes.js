@@ -66,7 +66,6 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   apiProxy.on('proxyReq', (proxyReq, req, res, options) => {
     const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
-    console.log("PROXY", req.originalUrl, qtTraceId)
     proxyReq.setHeader('Host', getClient(req.hostname).getHostname())
     proxyReq.setHeader('qt-trace-id', qtTraceId)
   })
@@ -104,9 +103,9 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   const sketchesProxy = (req, res) => {
     // Attach QT-TRACE-ID to all the request going to sketches.
     const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
-    console.log("SKETCHES PROXY", req.originalUrl, qtTraceId)
+    console.log("SKETCHES OUTBOUND REQUEST", getClient(req.hostname).getHostname(), req.originalUrl, qtTraceId)
     req.headers['qt-trace-id'] = qtTraceId;
-    console.log("DEEEEEEE", res.headers)
+
     return apiProxy.web(req, res);
   };
 
@@ -126,6 +125,11 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     '/api/v1/advanced-search',
     '/api/instant-articles.rss'
   ]
+
+  app.use('*/api/*', (req, res, next) => {
+    req.headers['qt-trace-id'] = uuidv4(); // Add a unique trace ID
+    next(); // Pass control to the next middleware
+  });
 
   app.all('/api/*', sketchesProxy)
   app.all('*/api/*', sketchesProxy)
@@ -647,7 +651,6 @@ exports.proxyGetRequest = function (app, route, handler, opts = {}) {
 
   async function proxyHandler(req, res, next, { config, client }) {
     try {
-      console.log("CEEEEEEE", req.originalUrl);
       const result = await handler(req.params, { config, client })
       if (typeof result === 'string' && result.startsWith('http')) {
         sendResult(await rp(result, { json: true }))
