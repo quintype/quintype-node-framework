@@ -76,6 +76,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   parseInt(_sMaxAge) > 0 &&
     apiProxy.on('proxyRes', function (proxyRes, req) {
+      proxyRes.headers['qt-trace-id'] = get(proxyRes, ['headers', 'qt-trace-id'], '')
       const pathName = get(req, ['originalUrl'], '').split('?')[0]
       const checkForExcludeRoutes = excludeRoutes.some(path => {
         const matchFn = match(path, { decode: decodeURIComponent })
@@ -88,6 +89,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     })
   parseInt(_maxAge) > 0 &&
     apiProxy.on('proxyRes', function (proxyRes, req) {
+      proxyRes.headers['qt-trace-id'] = get(proxyRes, ['headers', 'qt-trace-id'], '')
       const pathName = get(req, ['originalUrl'], '').split('?')[0]
       const checkForExcludeRoutes = excludeRoutes.some(path => {
         const matchFn = match(path, { decode: decodeURIComponent })
