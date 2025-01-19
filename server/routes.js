@@ -104,7 +104,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     // Attach QT-TRACE-ID to all the request going to sketches.
     const logger = require("./logger");
     const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
-    const { path, } = req;
+    const { path } = req;
     const { statusCode, method, statusMessage, headers } = res;
     req.headers['qt-trace-id'] = qtTraceId;
 
