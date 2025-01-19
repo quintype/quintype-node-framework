@@ -29,7 +29,7 @@ const bodyParser = require('body-parser')
 const get = require('lodash/get')
 const { URL } = require('url')
 const prerender = require('@quintype/prerender-node')
-const { v4: uuidv4 } = require('uuid');
+const { logRequest } = require('./utils/request')
 
 /**
  * *upstreamQuintypeRoutes* connects various routes directly to the upstream API server.
@@ -65,9 +65,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   })
 
   apiProxy.on('proxyReq', (proxyReq, req, res, options) => {
-    const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
     proxyReq.setHeader('Host', getClient(req.hostname).getHostname())
-    proxyReq.setHeader('qt-trace-id', qtTraceId)
   })
 
   const _sMaxAge = get(config, ['publisher', 'upstreamRoutesSmaxage'], sMaxAge)
@@ -75,7 +73,6 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   parseInt(_sMaxAge) > 0 &&
     apiProxy.on('proxyRes', function (proxyRes, req) {
-      proxyRes.headers['qt-trace-id'] = get(proxyRes, ['headers', 'qt-trace-id'], '');
       const pathName = get(req, ['originalUrl'], '').split('?')[0]
       const checkForExcludeRoutes = excludeRoutes.some(path => {
         const matchFn = match(path, { decode: decodeURIComponent })
@@ -88,7 +85,6 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     })
   parseInt(_maxAge) > 0 &&
     apiProxy.on('proxyRes', function (proxyRes, req) {
-      proxyRes.headers['qt-trace-id'] = get(proxyRes, ['headers', 'qt-trace-id'], '');
       const pathName = get(req, ['originalUrl'], '').split('?')[0]
       const checkForExcludeRoutes = excludeRoutes.some(path => {
         const matchFn = match(path, { decode: decodeURIComponent })
@@ -101,33 +97,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     })
 
   const sketchesProxy = (req, res) => {
-    // Attach QT-TRACE-ID to all the request going to sketches.
-    const logger = require("./logger");
-    const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
-    const { path } = req;
-    const { statusCode, method, statusMessage, headers } = res;
-    req.headers['qt-trace-id'] = qtTraceId;
-
-    const loggedDataAttributes = {
-      request: {
-        host: getClient(req.hostname).getHostname(),
-        path,
-        time: Date.now(),
-        headers: req.headers
-      },
-      response: {
-        statusCode,
-        method,
-        headers,
-        statusMessage
-      }
-    };
-    logger.info({
-      level: 'info',
-      logged_data: loggedDataAttributes,
-      message: `PATH => ${path}`
-    });
-
+    logRequest(req, res);
     return apiProxy.web(req, res);
   };
 
