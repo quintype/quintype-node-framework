@@ -66,6 +66,8 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
   })
 
   apiProxy.on('proxyReq', (proxyReq, req, res, options) => {
+    const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
+    proxyReq.setHeader('qt-trace-id', qtTraceId)
     proxyReq.setHeader('Host', getClient(req.hostname).getHostname())
   })
 
