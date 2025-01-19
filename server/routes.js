@@ -104,14 +104,16 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     // Attach QT-TRACE-ID to all the request going to sketches.
     const logger = require("./logger");
     const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
-    const { path, headers } = req;
+    const { path } = req;
     const { statusCode, method, statusMessage } = res;
+    req.headers['qt-trace-id'] = qtTraceId;
+
     const loggedDataAttributes = {
       request: {
         host: getClient(req.hostname).getHostname(),
         path,
         time: Date.now(),
-        headers
+        headers: req.headers
       },
       response: {
         statusCode,
@@ -125,9 +127,6 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
       logged_data: loggedDataAttributes,
       message: `PATH => ${path}`
     });
-
-    console.log("SKETCHES OUTBOUND REQUEST", getClient(req.hostname).getHostname(), req.originalUrl, qtTraceId)
-    req.headers['qt-trace-id'] = qtTraceId;
 
     return apiProxy.web(req, res);
   };
