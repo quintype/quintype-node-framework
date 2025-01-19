@@ -29,6 +29,8 @@ const bodyParser = require('body-parser')
 const get = require('lodash/get')
 const { URL } = require('url')
 const prerender = require('@quintype/prerender-node')
+const { v4: uuidv4 } = require('uuid');
+const logger = require('./logger')
 const { logRequest } = require('./utils/request')
 
 /**
@@ -97,8 +99,13 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     })
 
   const sketchesProxy = (req, res) => {
-    const { req: modifiedRequest, res: modifiedResponse } = logRequest(req, res);
-    return apiProxy.web(modifiedRequest, modifiedResponse);
+    const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
+    req.headers['qt-trace-id'] = qtTraceId;
+    req.headers['host'] = getClient(req.hostname).getHostname()
+
+    // TO-DO Consider changing this to a middleware when logRequest is extended for other routes.
+    logRequest(req, res);
+    return apiProxy.web(req, res);
   };
 
   app.get('/ping', (req, res) => {
