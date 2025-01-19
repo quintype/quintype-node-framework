@@ -102,7 +102,30 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
 
   const sketchesProxy = (req, res) => {
     // Attach QT-TRACE-ID to all the request going to sketches.
+    const logger = require("./logger");
     const qtTraceId = (req && req.headers && req.headers['qt-trace-id']) || uuidv4();
+    const { path, headers } = req;
+    const { statusCode, method, statusMessage } = res;
+    const loggedDataAttributes = {
+      request: {
+        host: getClient(req.hostname).getHostname(),
+        path,
+        time: Date.now(),
+        headers
+      },
+      response: {
+        statusCode,
+        method,
+        headers,
+        statusMessage
+      }
+    };
+    logger.info({
+      level: 'info',
+      logged_data: loggedDataAttributes,
+      message: `PATH => ${path}`
+    });
+
     console.log("SKETCHES OUTBOUND REQUEST", getClient(req.hostname).getHostname(), req.originalUrl, qtTraceId)
     req.headers['qt-trace-id'] = qtTraceId;
 
@@ -125,11 +148,6 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes(
     '/api/v1/advanced-search',
     '/api/instant-articles.rss'
   ]
-
-  app.use('*/api/*', (req, res, next) => {
-    req.headers['qt-trace-id'] = uuidv4(); // Add a unique trace ID
-    next(); // Pass control to the next middleware
-  });
 
   app.all('/api/*', sketchesProxy)
   app.all('*/api/*', sketchesProxy)
