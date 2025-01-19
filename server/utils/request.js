@@ -1,4 +1,4 @@
-export const logRequest = (req, res) => {
+const logRequest = (req, res) => {
   const logger = require("../logger");
   const { path } = req;
   const { statusCode, method, statusMessage, headers } = res;
@@ -22,3 +22,7 @@ export const logRequest = (req, res) => {
     message: `PATH => ${path}`
   });
 }
+
+module.exports = {
+  logRequest
+};

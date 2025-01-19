@@ -30,7 +30,6 @@ const get = require('lodash/get')
 const { URL } = require('url')
 const prerender = require('@quintype/prerender-node')
 const { v4: uuidv4 } = require('uuid');
-const logger = require('./logger')
 const { logRequest } = require('./utils/request')
 
 /**
