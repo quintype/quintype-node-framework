@@ -51,7 +51,7 @@ function loadDataForIsomorphicRoute(
     const redirectToLowercaseSlugsValue =
       typeof redirectToLowercaseSlugs === "function" ? redirectToLowercaseSlugs(config) : redirectToLowercaseSlugs;
     for (const match of matchAllRoutes(url.pathname, routes)) {
-      const storyPath = (match.pageType === "story-page" && !params.storySlug) ? { storySlug: url.pathname } : {};
+      const storyPath = (match.pageType === "story-page" && !match.params.storySlug) ? { storySlug: url.pathname } : {};
       const params = Object.assign({}, url.query, otherParams, match.params, storyPath);
 
       /* On story pages, if the slug contains any capital letters (latin), we want to
