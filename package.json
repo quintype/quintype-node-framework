@@ -31,6 +31,7 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
+    "@jsdoc/salty": "^0.2.9",
     "@quintype/amp": "^2.20.0",
     "@quintype/backend": "^2.7.2-qttracelogs.6",
     "@quintype/components": "^3.5.0",
@@ -74,7 +75,7 @@
     "babel-preset-es2015-tree-shaking": "^1.0.1",
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.26.0",
-    "better-docs": "^2.3.2",
+    "better-docs": "^2.7.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.3",
