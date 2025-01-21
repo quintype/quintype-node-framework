@@ -51,7 +51,9 @@ function loadDataForIsomorphicRoute(
     const redirectToLowercaseSlugsValue =
       typeof redirectToLowercaseSlugs === "function" ? redirectToLowercaseSlugs(config) : redirectToLowercaseSlugs;
     for (const match of matchAllRoutes(url.pathname, routes)) {
-      const params = Object.assign({}, url.query, otherParams, match.params);
+      const storyPath = (match.pageType === "story-page" && !params.storySlug) ? { storySlug: url.pathname } : {};
+      const params = Object.assign({}, url.query, otherParams, match.params, storyPath);
+
       /* On story pages, if the slug contains any capital letters (latin), we want to
        * redirect the browser to the URL having all lowercase letters. We need to be
        * wary of any asset routes that might make its way here and get wrongly redirected.
