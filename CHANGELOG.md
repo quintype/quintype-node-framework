@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.33.1](https://github.com/quintype/quintype-node-framework/compare/v7.33.0...v7.33.1) (2025-01-20)
+
+
+### Bug Fixes
+
+* **Static routes:** support 404 if no loader ([#452](https://github.com/quintype/quintype-node-framework/issues/452)) ([735b778](https://github.com/quintype/quintype-node-framework/commit/735b77887ae0359b85fde8db1a203f7576244a3b))
+
 ## [7.33.0](https://github.com/quintype/quintype-node-framework/compare/v7.32.0...v7.33.0) (2024-12-10)
 
 
