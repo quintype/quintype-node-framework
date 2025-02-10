@@ -680,8 +680,9 @@ exports.mountQuintypeAt = function (app, mountAt) {
  * To disable amp version for a "specific story", you need to create a story attribute in bold with the slug {disable-amp-for-single-story} and values {true} and {false}. Set its value to "true" in the story which you want to disable amp. Please make sure to name the attributes and values in the exact same way as mentioned
  * attribute slug: "disable-amp-for-single-story" values: "true" , "false". This will redirect '<amp-page-base-path>/:slug' to the non-amp page
  *
+ * To disable the AMP version for a specific story template or section, pass opts.disableAmpUnit as a function that always returns a boolean value. When the function returns true, AMP will be disabled for the specified scenario.
+ * Note: Ensure that disableAmpUnit is always a function and returns a boolean value, as demonstrated below.
  *
- * * To disable amp version for a "specific story template / section", you need to pass opts.disableAmpUnit as a function which always returns a boolean value by checking the story belongs to a particular template / section for which which you want to disable amp. Please make sure the "disableAmpUnit" is always a function and returns boolean value as shown below
  *  Under app/server/app.js
  *
  * ``` const getTemplate = (story) => {
