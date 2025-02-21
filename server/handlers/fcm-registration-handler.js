@@ -1,5 +1,6 @@
 const { get } = require("lodash");
 const request = require("request-promise");
+const admin = require("firebase-admin/app");
 
 exports.registerFCMTopic = async function registerFCM(
   req,
@@ -12,11 +13,24 @@ exports.registerFCMTopic = async function registerFCM(
     res.status(400).send("No Token Found");
     return;
   }
+  admin.initializeApp({
+    credential: admin.credential.applicationDefault(),
+  });
 
-  const serverKey = typeof fcmServerKey === "function" ? await fcmServerKey(config) : fcmServerKey;
+  async function getOAuthToken() {
+    try {
+      const accessToken = await admin.credential.applicationDefault().getAccessToken();
+      console.log("OAuth2 Token:", accessToken.access_token);
+      return accessToken.access_token;
+    } catch (error) {
+      console.error("Error fetching OAuth2 token:", error);
+    }
+  }
 
-  if (!serverKey) {
-    res.status(500).send("Server Key is not available");
+  // const serverKey = typeof fcmServerKey === "function" ? await fcmServerKey(config) : fcmServerKey;
+  const oauthToken = getOAuthToken();
+  if (!oauthToken) {
+    res.status(500).send("oauth token is not available");
     return;
   }
   const url = `https://iid.googleapis.com/iid/v1/${token}/rel/topics/all`;
@@ -25,13 +39,14 @@ exports.registerFCMTopic = async function registerFCM(
       uri: url,
       method: "POST",
       headers: {
-        Authorization: `key=${serverKey}`,
+        Authorization: `Bearer ${accessToken}`,
         "content-type": "application/json",
       },
     });
-    res.status(200).send("Registration Done Suceessfuly");
+    res.status(200).send("Registration Done Successfully");
     return;
   } catch (error) {
+
     res.status(500).send("FCM Subscription Failed");
     return;
   }
