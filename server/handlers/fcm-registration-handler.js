@@ -23,7 +23,7 @@ exports.registerFCMTopic = async function registerFCM(
       console.log("OAuth2 Token:", accessToken.access_token);
       return accessToken.access_token;
     } catch (error) {
-      console.error("Error fetching OAuth2 token:", error);
+      console.log("Error fetching OAuth2 token:", error);
     }
   }
 
@@ -33,6 +33,7 @@ exports.registerFCMTopic = async function registerFCM(
     res.status(500).send("oauth token is not available");
     return;
   }
+  
   const url = `https://iid.googleapis.com/iid/v1/${token}/rel/topics/all`;
   try {
     await request({
@@ -46,7 +47,7 @@ exports.registerFCMTopic = async function registerFCM(
     res.status(200).send("Registration Done Successfully");
     return;
   } catch (error) {
-
+    console.log("fcm registration error:", error);
     res.status(500).send("FCM Subscription Failed");
     return;
   }
