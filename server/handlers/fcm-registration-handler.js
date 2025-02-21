@@ -16,8 +16,9 @@ exports.registerFCMTopic = async function registerFCM(
   admin.initializeApp({
     credential: admin.credential.applicationDefault(),
   });
-
+  console.log("admin--------", admin);
   async function getOAuthToken() {
+    console.log("coming under getoauthtoken-----");
     try {
       const accessToken = await admin.credential.applicationDefault().getAccessToken();
       console.log("OAuth2 Token:", accessToken.access_token);
@@ -29,11 +30,12 @@ exports.registerFCMTopic = async function registerFCM(
 
   // const serverKey = typeof fcmServerKey === "function" ? await fcmServerKey(config) : fcmServerKey;
   const oauthToken = getOAuthToken();
+  console.log("oauthToken==========", oauthToken);
   if (!oauthToken) {
     res.status(500).send("oauth token is not available");
     return;
   }
-  
+
   const url = `https://iid.googleapis.com/iid/v1/${token}/rel/topics/all`;
   try {
     await request({
