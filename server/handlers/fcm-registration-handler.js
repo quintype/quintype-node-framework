@@ -8,14 +8,21 @@ exports.registerFCMTopic = async function registerFCM(
   next,
   { config, client, publisherConfig, fcmServerKey }
 ) {
+  console.log("register fcm token initial-------");
   const token = get(req, ["body", "token"], null);
   if (!token) {
     res.status(400).send("No Token Found");
     return;
   }
-  admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
-  });
+
+  try {
+    admin.initializeApp({
+      credential: admin.credential.applicationDefault(),
+    });
+  } catch (err) {
+    console.log("server fcm app initialization error", err);
+  }
+
   console.log("admin--------", admin);
   async function getOAuthToken() {
     console.log("coming under getoauthtoken-----");
@@ -44,6 +51,7 @@ exports.registerFCMTopic = async function registerFCM(
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "content-type": "application/json",
+        access_token_auth: true,
       },
     });
     res.status(200).send("Registration Done Successfully");
