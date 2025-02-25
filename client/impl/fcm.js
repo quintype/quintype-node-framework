@@ -26,15 +26,14 @@ export function initializeFCM (firebaseConfig, config) {
       const user = auth.currentUser
       console.log("user-------", user);
       if (!user) {
-        console.error('User not signed in')
-        return
+        throw new error('User not signed in');
       }
       const oauthToken = await user.getIdToken()
       console.log("final oauthToken----", oauthToken);
       return { token: token, oauthToken: oauthToken }
       // No need to refresh token https://github.com/firebase/firebase-js-sdk/issues/4132
     })
-    .then(({token, oauthToken}) => {
+    .then(({ token, oauthToken }) => {
       return registerFCMTopic(config, firebaseConfig?.serverKey, token, oauthToken)
     })
     .catch(err => {
