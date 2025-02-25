@@ -34,7 +34,7 @@ exports.registerFCMTopic = async function registerFCM (
     .getAccessToken()
     .then(tokenObj => {
       console.log('OAuth2 Access Token:', tokenObj)
-      if (tokenObj?.access_token) {
+      if (tokenObj && tokenObj.access_token) {
         return tokenObj.access_token
       }
     })
