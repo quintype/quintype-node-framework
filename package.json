@@ -46,6 +46,7 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "firebase": "^9.6.10",
+    "firebase-admin": "^13.1.0",
     "get-youtube-id": "^1.0.1",
     "http-proxy": "^1.18.1",
     "js-yaml": "^4.1.0",
