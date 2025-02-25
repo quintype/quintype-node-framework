@@ -30,7 +30,7 @@ exports.registerFCMTopic = async function registerFCM (
 
   console.log('admin------', admin)
   async function generateAccessToken () {
-    const token = await admin.credential.cert(fcmServiceAccountJson).getAccessToken()
+    const token = await admin.credential.cert(serviceAccount).getAccessToken()
     console.log('OAuth2 Access Token:', token)
     return token
   }
