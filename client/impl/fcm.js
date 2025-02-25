@@ -5,7 +5,7 @@ export function initializeFCM (firebaseConfig, config) {
     import(/* webpackChunkName: "firebase-messaging" */ 'firebase/messaging'),
     import(/* webpackChunkName: "firebase-auth" */ 'firebase/auth')
   ])
-    .then(([firebase, m, a]) => {
+    .then(async ([firebase, m, a]) => {
       const app = firebase.initializeApp({
         messagingSenderId: firebaseConfig.messagingSenderId.toString(),
         projectId: firebaseConfig.projectId,
@@ -14,9 +14,22 @@ export function initializeFCM (firebaseConfig, config) {
         authDomain: firebaseConfig.authDomain,
         appId: firebaseConfig.appId
       })
-      const token = getToken(app, m, firebaseConfig?.vapidKey)
+      const messaging = m.getMessaging(app)
+      const token = firebaseConfig?.vapidKey
+      ? await m.getToken(messaging, {
+          vapidKey: firebaseConfig.vapidKey
+        })
+      : await m.getToken(messaging)
       console.log("final token----", token);
-      const oauthToken = getOAuthToken(a)
+      const auth = a.getAuth() // Ensure Firebase is initialized
+      console.log("auth------", auth);
+      const user = auth.currentUser
+      console.log("user-------", user);
+      if (!user) {
+        console.error('User not signed in')
+        return
+      }
+      const oauthToken = await user.getIdToken()
       console.log("final oauthToken----", oauthToken);
       return { token: token, oauthToken: oauthToken }
       // No need to refresh token https://github.com/firebase/firebase-js-sdk/issues/4132
@@ -27,30 +40,6 @@ export function initializeFCM (firebaseConfig, config) {
     .catch(err => {
       console.error(err)
     })
-}
-
-async function getToken (app, m, vapidKey) {
-  const messaging = m.getMessaging(app)
-  return vapidKey
-    ? m.getToken(messaging, {
-        vapidKey: vapidKey
-      })
-    : m.getToken(messaging)
-}
-
-async function getOAuthToken (a) {
-  const auth = a.getAuth() // Ensure Firebase is initialized
-  const user = auth.currentUser
-  console.log("user-------", user);
-  if (!user) {
-    console.error('User not signed in')
-    return
-  }
-
-  // Get the ID token from Firebase Auth
-  const idToken = await user.getIdToken()
-  console.log("idtoken--------", idToken);
-  return idToken
 }
 
 async function registerFCMTopic (config, fcmServerKey, token, oauthToken) {
