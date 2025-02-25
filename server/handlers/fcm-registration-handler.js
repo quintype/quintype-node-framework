@@ -34,7 +34,9 @@ exports.registerFCMTopic = async function registerFCM (
     .getAccessToken()
     .then(tokenObj => {
       console.log('OAuth2 Access Token:', tokenObj)
-      return tokenObj?.access_token
+      if (tokenObj?.access_token) {
+        return tokenObj.access_token
+      }
     })
     .catch(error => res.status(400).send(`Oauth Token is not available: ${error}`))
 
