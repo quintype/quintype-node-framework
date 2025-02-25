@@ -22,7 +22,6 @@ const { handleManifest, handleAssetLink } = require('./handlers/json-manifest-ha
 const { redirectStory } = require('./handlers/story-redirect')
 const { simpleJsonHandler } = require('./handlers/simple-json-handler')
 const { makePickComponentSync } = require('../isomorphic/impl/make-pick-component-sync')
-const { registerFCMTopic } = require('./handlers/fcm-registration-handler')
 const { triggerWebengageNotifications } = require('./handlers/webengage-notifications')
 const rp = require('request-promise')
 const bodyParser = require('body-parser')
@@ -304,7 +303,6 @@ function getWithConfig (app, route, handler, opts = {}) {
  * @param {boolean|function} shouldEncodeAmpUri If set to true, then for every story-page request the slug will be encoded, in case of a vernacular slug this should be set to false. Receives path as param (default: true)
  * @param {number} sMaxAge Overrides the s-maxage value, the default value is set to 900 seconds. We can set `isomorphicRoutesSmaxage: 900` under `publisher` in publisher.yml config file that comes from BlackKnight or pass sMaxAge as a param.
  * @param {number} maxAge Overrides the max-age value, the default value is set to 15 seconds. We can set `isomorphicRoutesMaxage: 15` under `publisher` in publisher.yml config file that comes from BlackKnight or pass maxAge as a param.
- * @param {(string|function)} fcmServerKey  FCM serverKey is used for registering FCM Topic.
  * @param {string} appLoadingPlaceholder This string gets injected into the app container when the page is loaded via service worker. Can be used to show skeleton layouts, animations or other progress indicators before it is replaced by the page content.
  * @param {boolean|function} enableExternalStories If set to true, then for every request an external story api call is made and renders the story-page if the story is found. (default: false)
  * @param {string|function} externalIdPattern This string specifies the external id pattern the in the url. Mention `EXTERNAL_ID` to specify the position of external id in the url. Ex: "/parent-section/child-section/EXTERNAL_ID"
@@ -352,7 +350,6 @@ exports.isomorphicRoutes = function isomorphicRoutes (
     sMaxAge = 900,
     maxAge = 15,
     appLoadingPlaceholder = '',
-    fcmServerKey = '',
     webengageConfig = {},
     externalIdPattern = '',
     enableExternalStories = false,
@@ -468,8 +465,6 @@ exports.isomorphicRoutes = function isomorphicRoutes (
       networkOnly: true
     })
   )
-
-  app.post('/register-fcm-topic', bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }))
 
   if (webengageConfig.enableWebengage) {
     app.post(
