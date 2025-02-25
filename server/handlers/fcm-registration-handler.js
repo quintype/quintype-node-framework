@@ -1,7 +1,15 @@
 const { get } = require('lodash')
 const request = require('request-promise')
 const admin = require('firebase-admin')
-const serviceAccount = require('https://github.com/ReenaSingh07/fcm-service-account/blob/main/pbahead.json')
+
+async function getServiceAccount () {
+  console.log('getserviceaccount----------')
+  const response = await request({
+    uri: 'https://github.com/ReenaSingh07/fcm-service-account/blob/main/pbahead.json'
+  })
+  const serviceAccount = await response.json()
+  return serviceAccount
+}
 
 exports.registerFCMTopic = async function registerFCM (
   req,
@@ -14,7 +22,9 @@ exports.registerFCMTopic = async function registerFCM (
     res.status(400).send('No Token Found')
     return
   }
-
+  
+  const serviceAccount = await getServiceAccount()
+  console.log('service account----', serviceAccount)
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
   })
