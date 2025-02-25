@@ -8,6 +8,7 @@ exports.registerFCMTopic = async function registerFCM (
   next,
   { config, client, publisherConfig, fcmServerKey, fcmServiceAccountJson }
 ) {
+  console.log('token======', token)
   const token = get(req, ['body', 'token'], null)
   if (!token) {
     res.status(400).send('No Token Found')
@@ -46,7 +47,8 @@ exports.registerFCMTopic = async function registerFCM (
     method: 'POST',
     headers: {
       Authorization: `Bearer ${oauthToken}`,
-      'content-type': 'application/json'
+      'content-type': 'application/json',
+      access_token_auth: true
     }
   })
     .then(() => res.status(200).send('Registration Done Successfully'))
