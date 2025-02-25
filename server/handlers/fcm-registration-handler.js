@@ -2,35 +2,25 @@ const { get } = require('lodash')
 const request = require('request-promise')
 const admin = require('firebase-admin')
 
-async function getServiceAccount () {
-  console.log('getserviceaccount----------')
-  const response = await request({
-    uri: 'https://github.com/ReenaSingh07/fcm-service-account/blob/main/pbahead.json'
-  })
-  const serviceAccount = await response.json()
-  return serviceAccount
-}
-
 exports.registerFCMTopic = async function registerFCM (
   req,
   res,
   next,
-  { config, client, publisherConfig, fcmServerKey }
+  { config, client, publisherConfig, fcmServerKey, fcmServiceAccountJson }
 ) {
   const token = get(req, ['body', 'token'], null)
   if (!token) {
     res.status(400).send('No Token Found')
     return
   }
-  
-  const serviceAccount = await getServiceAccount()
-  console.log('service account----', serviceAccount)
+
+  console.log('service account----', fcmServiceAccountJson)
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(fcmServiceAccountJson)
   })
   console.log('admin------', admin)
   async function generateAccessToken () {
-    const token = await admin.credential.cert(serviceAccount).getAccessToken()
+    const token = await admin.credential.cert(fcmServiceAccountJson).getAccessToken()
     console.log('OAuth2 Access Token:', token)
     return token
   }

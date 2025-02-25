@@ -356,7 +356,8 @@ exports.isomorphicRoutes = function isomorphicRoutes (
     webengageConfig = {},
     externalIdPattern = '',
     enableExternalStories = false,
-    lazyLoadImageMargin
+    lazyLoadImageMargin,
+    fcmServiceAccountJson
   }
 ) {
   const withConfig = withConfigPartial(getClient, logError, publisherConfig, configWrapper)
@@ -469,7 +470,11 @@ exports.isomorphicRoutes = function isomorphicRoutes (
     })
   )
 
-  app.post('/register-fcm-topic', bodyParser.json(), withConfig(registerFCMTopic, { publisherConfig, fcmServerKey }))
+  app.post(
+    '/register-fcm-topic',
+    bodyParser.json(),
+    withConfig(registerFCMTopic, { publisherConfig, fcmServerKey, fcmServiceAccountJson })
+  )
 
   if (webengageConfig.enableWebengage) {
     app.post(
