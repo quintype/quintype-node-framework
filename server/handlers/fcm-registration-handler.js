@@ -14,10 +14,20 @@ exports.registerFCMTopic = async function registerFCM (
     return
   }
 
-  console.log('service account----', fcmServiceAccountJson)
+  const serviceAccount = await fcmServiceAccountJson
+    .then(serviceAccount => {
+      console.log('service account----fdsdf', serviceAccount)
+      return serviceAccount
+    })
+    .catch(error => {
+      res.status(400).send(`No Service Account Json: ${error}`)
+      return
+    })
+
   admin.initializeApp({
-    credential: admin.credential.cert(fcmServiceAccountJson)
+    credential: admin.credential.cert(serviceAccount)
   })
+
   console.log('admin------', admin)
   async function generateAccessToken () {
     const token = await admin.credential.cert(fcmServiceAccountJson).getAccessToken()
