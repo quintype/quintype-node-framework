@@ -29,33 +29,24 @@ exports.registerFCMTopic = async function registerFCM (
   })
 
   console.log('admin------', admin)
-  async function generateAccessToken () {
-    const token = await admin.credential.cert(serviceAccount).getAccessToken()
-    console.log('OAuth2 Access Token:', token)
-    return token
-  }
-
-  const oauthToken = generateAccessToken()
-
-  if (!oauthToken) {
-    res.status(500).send('Oauth Token is not available')
-    return
-  }
+  const oauthToken = await admin.credential
+    .cert(serviceAccount)
+    .getAccessToken()
+    .then(tokenObj => {
+      console.log('OAuth2 Access Token:', tokenObj)
+      return tokenObj?.access_token
+    })
+    .catch(error => res.status(400).send(`Oauth Token is not available: ${error}`))
 
   const url = `https://iid.googleapis.com/iid/v1/${token}/rel/topics/all`
-  try {
-    await request({
-      uri: url,
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${oauthToken}`,
-        'content-type': 'application/json'
-      }
-    })
-    res.status(200).send('Registration Done Suceessfuly')
-    return
-  } catch (error) {
-    res.status(500).send('FCM Subscription Failed', error)
-    return
-  }
+  await request({
+    uri: url,
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${oauthToken}`,
+      'content-type': 'application/json'
+    }
+  })
+    .then(() => res.status(200).send('Registration Done Successfully'))
+    .catch(error => res.status(500).send(`FCM Subscription Failed: ${error}`))
 }
