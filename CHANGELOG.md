@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.33.5](https://github.com/quintype/quintype-node-framework/compare/v7.33.4...v7.33.5) (2025-02-13)
+
+### [7.33.4](https://github.com/quintype/quintype-node-framework/compare/v7.33.3...v7.33.4) (2025-02-13)
+
+### [7.33.3](https://github.com/quintype/quintype-node-framework/compare/v7.33.2...v7.33.3) (2025-02-13)
+
+### [7.33.2](https://github.com/quintype/quintype-node-framework/compare/v7.33.1...v7.33.2) (2025-02-13)
+
 ### [7.33.1](https://github.com/quintype/quintype-node-framework/compare/v7.33.0...v7.33.1) (2025-01-20)
 
 

@@ -1,10 +1,10 @@
 {
   "name": "@quintype/framework",
-  "version": "7.33.2-fix-story-route.0",
+  "version": "7.33.5",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
-    "node": "^16.0.0",
+    "node": "^20.0.0",
     "npm": "^8.5.0"
   },
   "scripts": {
@@ -31,6 +31,8 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "2.8.3",
+    "@grpc/grpc-js": "^1.12.5",
+    "@jsdoc/salty": "^0.2.9",
     "@quintype/amp": "^2.20.0",
     "@quintype/backend": "^2.7.0",
     "@quintype/components": "^3.5.0",
@@ -45,7 +47,6 @@
     "express": "^4.17.1",
     "firebase": "^9.6.10",
     "get-youtube-id": "^1.0.1",
-    "grpc": "^1.21.1",
     "http-proxy": "^1.18.1",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
@@ -65,7 +66,7 @@
     "@babel/eslint-parser": "^7.15.7",
     "@loadable/component": "^5.15.0",
     "@loadable/server": "^5.15.1",
-    "@quintype/build": "^4.0.0",
+    "@quintype/build": "^4.0.1",
     "babel-plugin-quintype-assets": "^1.1.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -73,7 +74,7 @@
     "babel-preset-es2015-tree-shaking": "^1.0.1",
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.26.0",
-    "better-docs": "^2.3.2",
+    "better-docs": "^2.7.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.3",
@@ -120,5 +121,8 @@
       "npx eslint --fix",
       "git add"
     ]
+  },
+  "overrides": {
+    "grpc": "@grpc/grpc-js"
   }
 }
