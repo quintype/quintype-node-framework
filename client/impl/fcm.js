@@ -13,8 +13,14 @@ export function initializeFCM (firebaseConfig) {
         authDomain: firebaseConfig.authDomain,
         appId: firebaseConfig.appId
       })
-      m.getMessaging(app)
-      return
+      const messaging = m.getMessaging(app)
+      m.onMessage(messaging, ({ notification }) => {
+        console.log('========notification', messaging, notification)
+        new Notification(notification.title, {
+          body: notification.body,
+          icon: notification.icon
+        })
+      })
       // No need to refresh token https://github.com/firebase/firebase-js-sdk/issues/4132
     })
     .catch(err => {
