@@ -1,35 +1,24 @@
-export function initializeFCM(firebaseConfig) {
+export function initializeFCM (firebaseConfig) {
   Promise.all([
-    import(/* webpackChunkName: "firebase-app" */ "firebase/app"),
-    import(/* webpackChunkName: "firebase-messaging" */ "firebase/messaging"),
+    import(/* webpackChunkName: "firebase-app" */ 'firebase/app'),
+    import(/* webpackChunkName: "firebase-messaging" */ 'firebase/messaging')
   ])
     .then(([firebase, m]) => {
+      console.log('m-----------', m)
       const app = firebase.initializeApp({
         messagingSenderId: firebaseConfig.messagingSenderId.toString(),
         projectId: firebaseConfig.projectId,
         apiKey: firebaseConfig.apiKey,
         storageBucket: firebaseConfig.storageBucket,
         authDomain: firebaseConfig.authDomain,
-        appId: firebaseConfig.appId,
-      });
-      const messaging = m.getMessaging(app);
-      return m.getToken(messaging);
+        appId: firebaseConfig.appId
+      })
+      m.getMessaging(app)
+      return
       // No need to refresh token https://github.com/firebase/firebase-js-sdk/issues/4132
     })
-    .then((token) => {
-      return registerFCMTopic(token);
+    .catch(err => {
+      console.log('fcm initialization error---------', err)
+      console.error(err)
     })
-    .catch((err) => {
-      console.error(err);
-    });
-}
-
-function registerFCMTopic(token) {
-  return fetch("/register-fcm-topic", {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ token: token }),
-  });
 }
