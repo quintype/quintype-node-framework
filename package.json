@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.33.6-fcm-fix-2.2",
+  "version": "7.33.6-fcm-fix-2.3",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
