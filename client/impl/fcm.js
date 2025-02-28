@@ -16,7 +16,7 @@ export function initializeFCM (firebaseConfig) {
       const messaging = m.getMessaging(app)
 
       // No need to refresh token https://github.com/firebase/firebase-js-sdk/issues/4132
-      requestPermission(m, firebaseConfig)
+      requestPermission(m, firebaseConfig, messaging)
     })
     .catch(err => {
       console.log('fcm initialization error---------', err)
@@ -24,13 +24,13 @@ export function initializeFCM (firebaseConfig) {
     })
 }
 
-async function requestPermission (m, firebaseConfig) {
+async function requestPermission (m, firebaseConfig, messaging) {
   console.log('request oermission------')
   //requesting permission using Notification API
   const permission = await Notification.requestPermission()
 
   if (permission === 'granted') {
-    const token = await getToken(messaging, {
+    const token = await m.getToken(messaging, {
       vapidKey: firebaseConfig.vapidKey
     })
 
