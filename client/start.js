@@ -307,6 +307,7 @@ export function startApp(renderApplication, reducers, opts) {
         const mssgSenderId = fcm.messagingSenderId;
         const projectId = fcm.projectId;
         const apiKey = fcm.apiKey;
+        console.log("fcm start app")
         if (mssgSenderId && projectId && apiKey) initializeFCM(fcm);
       }
     }
