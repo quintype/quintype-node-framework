@@ -17,6 +17,14 @@ export function initializeFCM (firebaseConfig) {
 
       // No need to refresh token https://github.com/firebase/firebase-js-sdk/issues/4132
       requestPermission(m, firebaseConfig, messaging)
+
+      m.onMessage(messaging, ({ notification }) => {
+        console.log('========notification', messaging, notification)
+        new Notification(notification.title, {
+          body: notification.body,
+          icon: notification.icon
+        })
+      })
     })
     .catch(err => {
       console.log('fcm initialization error---------', err)
@@ -36,13 +44,6 @@ async function requestPermission (m, firebaseConfig, messaging) {
 
     //We can send token to server
     console.log('Token generated : ', token)
-    m.onMessage(messaging, ({ notification }) => {
-      console.log('========notification', messaging, notification)
-      new Notification(notification.title, {
-        body: notification.body,
-        icon: notification.icon
-      })
-    })
   } else if (permission === 'denied') {
     //notifications are blocked
     alert('You denied for the notification')
