@@ -3,8 +3,8 @@ export function initializeFCM (firebaseConfig) {
     import(/* webpackChunkName: "firebase-app" */ 'firebase/app'),
     import(/* webpackChunkName: "firebase-messaging" */ 'firebase/messaging')
   ])
-    .then(([firebase, m]) => {
-      console.log('m-----------', m)
+    .then(async ([firebase, m]) => {
+      console.log('firebaseConfig=====', firebaseConfig)
       const app = firebase.initializeApp({
         messagingSenderId: firebaseConfig.messagingSenderId.toString(),
         projectId: firebaseConfig.projectId,
@@ -14,12 +14,14 @@ export function initializeFCM (firebaseConfig) {
         appId: firebaseConfig.appId
       })
       const messaging = m.getMessaging(app)
-
-      // No need to refresh token https://github.com/firebase/firebase-js-sdk/issues/4132
-      requestPermission(m, firebaseConfig, messaging)
-
+      console.log('messaging----', messaging)
+      await requestPermission(m, firebaseConfig, messaging)
+      return { m, messaging }
+    })
+    .then(({ m, messaging }) => {
+      console.log('abc---------', abc)
       m.onMessage(messaging, ({ notification }) => {
-        console.log('========notification', messaging, notification)
+        console.log('notificaation-----', notification)
         new Notification(notification.title, {
           body: notification.body,
           icon: notification.icon
@@ -27,25 +29,30 @@ export function initializeFCM (firebaseConfig) {
       })
     })
     .catch(err => {
-      console.log('fcm initialization error---------', err)
-      console.error(err)
+      console.error(`FCM subscription failed ${err}`)
     })
 }
 
 async function requestPermission (m, firebaseConfig, messaging) {
-  console.log('request oermission------')
-  //requesting permission using Notification API
   const permission = await Notification.requestPermission()
-
+  console.log('permission------', permission)
   if (permission === 'granted') {
-    const token = await m.getToken(messaging, {
+    const token = m.getToken(messaging, {
       vapidKey: firebaseConfig.vapidKey
     })
-
-    //We can send token to server
-    console.log('Token generated : ', token)
+    return registerFCMTopic(token)
   } else if (permission === 'denied') {
-    //notifications are blocked
-    alert('You denied for the notification')
+    console.log('notifications are denied')
+    return
   }
+}
+
+function registerFCMTopic (token) {
+  return fetch('/register-fcm-topic', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ token: token })
+  })
 }

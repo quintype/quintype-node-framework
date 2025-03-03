@@ -1,38 +1,32 @@
-const { get } = require("lodash");
-const request = require("request-promise");
+const { get } = require('lodash')
+const request = require('request-promise')
+const { initializeApp } = require('firebase/app')
+const { getMessaging } = require('firebase/messaging')
 
-exports.registerFCMTopic = async function registerFCM(
+exports.registerFCMTopic = async function registerFCM (
   req,
   res,
   next,
   { config, client, publisherConfig, fcmServerKey }
 ) {
-  const token = get(req, ["body", "token"], null);
+  console.log('fcm server')
+  const token = get(req, ['body', 'token'], null)
   if (!token) {
-    res.status(400).send("No Token Found");
-    return;
+    res.status(400).send('No Token Found')
+    return
   }
 
-  const serverKey = typeof fcmServerKey === "function" ? await fcmServerKey(config) : fcmServerKey;
-
-  if (!serverKey) {
-    res.status(500).send("Server Key is not available");
-    return;
+  const firebaseConfig = {
+    apiKey: 'AIzaSyDh-FPToRoj1b_XvL6hWnZ84jlb_AaWG1U',
+    authDomain: 'quintypeqa-d3e3f.firebaseapp.com',
+    projectId: 'quintypeqa-d3e3f',
+    storageBucket: 'quintypeqa-d3e3f.firebasestorage.app',
+    messagingSenderId: '919899876354',
+    appId: '1:919899876354:web:2ac17705ee7fc8364f4b1b',
+    measurementId: 'G-V72DFHSJVX'
   }
-  const url = `https://iid.googleapis.com/iid/v1/${token}/rel/topics/all`;
-  try {
-    await request({
-      uri: url,
-      method: "POST",
-      headers: {
-        Authorization: `key=${serverKey}`,
-        "content-type": "application/json",
-      },
-    });
-    res.status(200).send("Registration Done Suceessfuly");
-    return;
-  } catch (error) {
-    res.status(500).send("FCM Subscription Failed");
-    return;
-  }
-};
+  const app = initializeApp(firebaseConfig)
+  console.log('initialze app')
+  const messaging = getMessaging(app)
+  console.log('firebaseMessaging==========', messaging)
+}
