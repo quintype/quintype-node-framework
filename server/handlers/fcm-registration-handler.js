@@ -27,6 +27,11 @@ exports.registerFCMTopic = async function registerFCM (
   }
   const app = initializeApp(firebaseConfig)
   console.log('initialze app')
-  const messaging = getMessaging(app)
-  console.log('firebaseMessaging==========', messaging)
+  getMessaging().subscribeToTopic(token, "all")
+  .then((response) => {
+    console.log("successfully subscribe topic", response)
+  })
+  .catch((error) => {
+    console.log('Error subscribing to topic:', error);
+  });
 }
