@@ -1,7 +1,7 @@
-export function initializeFCM(firebaseConfig) {
+export function initializeFCM (firebaseConfig) {
   Promise.all([
-    import(/* webpackChunkName: "firebase-app" */ "firebase/app"),
-    import(/* webpackChunkName: "firebase-messaging" */ "firebase/messaging"),
+    import(/* webpackChunkName: "firebase-app" */ 'firebase/app'),
+    import(/* webpackChunkName: "firebase-messaging" */ 'firebase/messaging')
   ])
     .then(([firebase, m]) => {
       const app = firebase.initializeApp({
@@ -10,26 +10,30 @@ export function initializeFCM(firebaseConfig) {
         apiKey: firebaseConfig.apiKey,
         storageBucket: firebaseConfig.storageBucket,
         authDomain: firebaseConfig.authDomain,
-        appId: firebaseConfig.appId,
-      });
-      const messaging = m.getMessaging(app);
-      return m.getToken(messaging);
-      // No need to refresh token https://github.com/firebase/firebase-js-sdk/issues/4132
+        appId: firebaseConfig.appId
+      })
+      const messaging = m.getMessaging(app)
+      requestPermission(m, firebaseConfig, messaging)
+      m.onMessage(messaging, ({ notification }) => {
+        new Notification(notification.title, {
+          body: notification.body,
+          icon: notification.icon
+        })
+      })
     })
-    .then((token) => {
-      return registerFCMTopic(token);
+    .catch(err => {
+      console.error(`FCM subscription failed ${err}`)
     })
-    .catch((err) => {
-      console.error(err);
-    });
 }
 
-function registerFCMTopic(token) {
-  return fetch("/register-fcm-topic", {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ token: token }),
-  });
+async function requestPermission (m, firebaseConfig, messaging) {
+  const permission = await Notification.requestPermission()
+
+  if (permission === 'granted') {
+    const token = await m.getToken(messaging, {
+      vapidKey: firebaseConfig.vapidKey
+    })
+  } else if (permission === 'denied') {
+    console.log('notifications are denied')
+  }
 }
