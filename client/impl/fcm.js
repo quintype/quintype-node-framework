@@ -14,14 +14,9 @@ export function initializeFCM (firebaseConfig) {
         appId: firebaseConfig.appId
       })
       const messaging = m.getMessaging(app)
-      console.log('messaging----', messaging)
       await requestPermission(m, firebaseConfig, messaging)
-      return { m, messaging }
-    })
-    .then(({ m, messaging }) => {
-      console.log('abc---------', abc)
       m.onMessage(messaging, ({ notification }) => {
-        console.log('notificaation-----', notification)
+        console.log('notificaation----- client', notification)
         new Notification(notification.title, {
           body: notification.body,
           icon: notification.icon
