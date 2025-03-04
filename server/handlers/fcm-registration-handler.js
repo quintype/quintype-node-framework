@@ -22,7 +22,7 @@ exports.registerFCMTopic = async function registerFCM (
 
   console.log("admin-----", admin)
   try {
-    const res = await admin.messaging().subscribeToTopic(token, "all");
+    const data = await admin.messaging().subscribeToTopic(token, "all");
     console.log(`Successfully subscribed to topic----: ${data}`);
     res.status(200).send(`Registration Done Successfully ${data}`);
     return;
