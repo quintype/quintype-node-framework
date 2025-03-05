@@ -171,7 +171,7 @@ startApp(renderApplication,
 ```js
 isomorphicRoutes(app, {
   ...
-  fcmServerKey: (config) => <ServerKey> || fcmServerKey: <ServerKey> {(function|string)}
+  fcmServiceCreds: (config) => <ServiceCreds> || fcmServiceCreds: <ServiceCreds> {(function|object)}
   ...
 });
 

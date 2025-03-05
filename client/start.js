@@ -17,7 +17,6 @@ import { IsomorphicComponent } from "../isomorphic/component";
 import { makePickComponentSync } from "../isomorphic/impl/make-pick-component-sync";
 import { createQtStore } from "../store/create-store";
 import { registerPageView, registerStoryShare, setMemberId, startAnalytics } from "./analytics";
-import { initializeFCM } from "./impl/fcm";
 import {
   checkForServiceWorkerUpdates,
   registerServiceWorker,
@@ -300,17 +299,6 @@ export function startApp(renderApplication, reducers, opts) {
     }
 
     store.dispatch({ type: NAVIGATE_TO_PAGE, page, currentPath: path });
-
-    // if (opts.firebaseConfig) {
-    //   const fcm = typeof opts.firebaseConfig === "function" ? opts.firebaseConfig(page) : opts.firebaseConfig;
-    //   if (fcm) {
-    //     const mssgSenderId = fcm.messagingSenderId;
-    //     const projectId = fcm.projectId;
-    //     const apiKey = fcm.apiKey;
-    //     console.log("fcm start app")
-    //     if (mssgSenderId && projectId && apiKey) initializeFCM(fcm);
-    //   }
-    // }
 
     const { config: { "theme-attributes": pageThemeAttributes = {} } = {} } = page;
     const version = pageThemeAttributes["cache-burst"] || app.getAppVersion();
