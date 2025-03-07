@@ -1,5 +1,6 @@
 const { get } = require('lodash')
 const admin = require('firebase-admin')
+const logger = require('../logger')
 
 exports.registerFCMTopic = async function registerFCM (
   req,
@@ -22,10 +23,27 @@ exports.registerFCMTopic = async function registerFCM (
 
   try {
     await admin.messaging().subscribeToTopic(token, 'all')
-    res.status(200).send("Registration Done Successfully")
+    res.status(200).send('Topic Registered Successfully')
+    logger.info("Topic Registered Successfully")
     return
   } catch (error) {
     res.status(500).send(`FCM Subscription Failed: ${error}`)
+    logger.error({
+      level: 'error',
+      logged_data: {
+        request: {
+          host: '',
+          path: '/register-fcm-topic',
+          time: Date.now(),
+          method: 'post'
+        },
+        response: {
+          statusCode: 500,
+          message: error
+        }
+      },
+      message: `PATH => /register-fcm-topic`
+    })
     return
   }
 }
