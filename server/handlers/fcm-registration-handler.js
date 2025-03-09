@@ -24,7 +24,6 @@ exports.registerFCMTopic = async function registerFCM (
   try {
     await admin.messaging().subscribeToTopic(token, 'all')
     res.status(200).send('Topic Registered Successfully')
-    logger.info("Topic Registered Successfully")
     return
   } catch (error) {
     res.status(500).send(`FCM Subscription Failed: ${error}`)
