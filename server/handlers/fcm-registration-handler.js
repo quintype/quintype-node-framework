@@ -8,7 +8,7 @@ exports.registerFCMTopic = async function registerFCM (
   next,
   { config, client, publisherConfig, fcmServiceCreds }
 ) {
-  console.log('fcm server')
+
   const token = get(req, ['body', 'token'], null)
   if (!token) {
     res.status(400).send('No Token Found')
@@ -27,22 +27,7 @@ exports.registerFCMTopic = async function registerFCM (
     return
   } catch (error) {
     res.status(500).send(`FCM Subscription Failed: ${error}`)
-    logger.error({
-      level: 'error',
-      logged_data: {
-        request: {
-          host: '',
-          path: '/register-fcm-topic',
-          time: Date.now(),
-          method: 'post'
-        },
-        response: {
-          statusCode: 500,
-          message: error
-        }
-      },
-      message: `PATH => /register-fcm-topic`
-    })
+    logger.error(`Fcm register to topic error: ${error}`)
     return
   }
 }
