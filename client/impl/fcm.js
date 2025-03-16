@@ -19,7 +19,7 @@ export function initializeFCM(firebaseConfig) {
       return registerFCMTopic(token);
     })
     .catch((err) => {
-      console.error(err);
+      console.error(`Fcm initialization error: ${err}`);
     });
 }
 

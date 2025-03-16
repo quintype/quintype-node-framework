@@ -26,8 +26,9 @@ exports.registerFCMTopic = async function registerFCM (
     res.status(200).send('Topic Registered Successfully')
     return
   } catch (error) {
+    const publisherId = get(config, ["config" , "publisher-id"], "");
     res.status(500).send(`FCM Subscription Failed: ${error}`)
-    logger.error(`Fcm register to topic error: ${error}`)
+    logger.error(`Fcm register to topic error for publisher ${publisherId}: ${error}`);
     return
   }
 }
