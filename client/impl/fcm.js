@@ -13,14 +13,13 @@ export function initializeFCM(firebaseConfig) {
         appId: firebaseConfig.appId,
       });
       const messaging = m.getMessaging(app);
-      return m.getToken(messaging);
-      // No need to refresh token https://github.com/firebase/firebase-js-sdk/issues/4132
+      return m.getToken(messaging, { vapidKey: firebaseConfig.vapidKey });
     })
     .then((token) => {
       return registerFCMTopic(token);
     })
     .catch((err) => {
-      console.error(err);
+      console.error(`Fcm initialization error: ${err}`);
     });
 }
 
