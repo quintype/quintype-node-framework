@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.33.6-jw-player.1",
+  "version": "7.33.6-jw-player.2",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
