@@ -590,7 +590,7 @@ attribute slug: &quot;disable-amp-for-single-story&quot; values: &quot;true&quot
         
         <span class="code-name">
             
-                isomorphicRoutes<span class="signature">(app, opts, redirectToLowercaseSlugs, shouldEncodeAmpUri, sMaxAge, maxAge, fcmServerKey, appLoadingPlaceholder, enableExternalStories, externalIdPattern)</span><span class="type-signature"></span>
+                isomorphicRoutes<span class="signature">(app, opts, redirectToLowercaseSlugs, shouldEncodeAmpUri, sMaxAge, maxAge, fcmServiceCreds, appLoadingPlaceholder, enableExternalStories, externalIdPattern)</span><span class="type-signature"></span>
             
         </span>
     </h4>
@@ -1359,13 +1359,13 @@ It accepts all the pieces needed, and implements all the plumbing to make these 
             
 <tr class="deep-level-0">
   
-      <td class="name"><code>fcmServerKey</code></td>
+      <td class="name"><code>fcmServiceCreds</code></td>
   
 
   <td class="type">
   
       
-<code class="param-type">string</code>
+<code class="param-type">object</code>
 |
 
 <code class="param-type">function</code>
@@ -1378,7 +1378,7 @@ It accepts all the pieces needed, and implements all the plumbing to make these 
 
   
 
-  <td class="description last"><p>FCM serverKey is used for registering FCM Topic.</p></td>
+  <td class="description last"><p>FCM service creds is used for registering FCM Topic.</p></td>
 </tr>
 
 
