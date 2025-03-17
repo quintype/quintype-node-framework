@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.33.6](https://github.com/quintype/quintype-node-framework/compare/v7.33.5...v7.33.6) (2025-03-17)
+
+
+### Bug Fixes
+
+* **FCM:** remove deprecated server key & use firebase admin to register to topic ([#458](https://github.com/quintype/quintype-node-framework/issues/458)) ([b179dd4](https://github.com/quintype/quintype-node-framework/commit/b179dd4594e94cf5639b020b1991a061c6c11105))
+
 ### [7.33.5](https://github.com/quintype/quintype-node-framework/compare/v7.33.4...v7.33.5) (2025-02-13)
 
 ### [7.33.4](https://github.com/quintype/quintype-node-framework/compare/v7.33.3...v7.33.4) (2025-02-13)

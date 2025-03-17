@@ -1,38 +1,34 @@
-const { get } = require("lodash");
-const request = require("request-promise");
+const { get } = require('lodash')
+const admin = require('firebase-admin')
+const logger = require('../logger')
 
-exports.registerFCMTopic = async function registerFCM(
+exports.registerFCMTopic = async function registerFCM (
   req,
   res,
   next,
-  { config, client, publisherConfig, fcmServerKey }
+  { config, client, publisherConfig, fcmServiceCreds }
 ) {
-  const token = get(req, ["body", "token"], null);
+
+  const token = get(req, ['body', 'token'], null)
   if (!token) {
-    res.status(400).send("No Token Found");
-    return;
+    res.status(400).send('No Token Found')
+    return
   }
 
-  const serverKey = typeof fcmServerKey === "function" ? await fcmServerKey(config) : fcmServerKey;
+  const serviceAccount = typeof fcmServiceCreds === 'function' ? await fcmServiceCreds(config) : fcmServiceCreds
 
-  if (!serverKey) {
-    res.status(500).send("Server Key is not available");
-    return;
+  if (!admin.apps.length) {
+    admin.initializeApp({ credential: admin.credential.cert(serviceAccount) })
   }
-  const url = `https://iid.googleapis.com/iid/v1/${token}/rel/topics/all`;
+
   try {
-    await request({
-      uri: url,
-      method: "POST",
-      headers: {
-        Authorization: `key=${serverKey}`,
-        "content-type": "application/json",
-      },
-    });
-    res.status(200).send("Registration Done Suceessfuly");
-    return;
+    await admin.messaging().subscribeToTopic(token, 'all')
+    res.status(200).send('Topic Registered Successfully')
+    return
   } catch (error) {
-    res.status(500).send("FCM Subscription Failed");
-    return;
+    const publisherId = get(config, ["config" , "publisher-id"], "");
+    res.status(500).send(`FCM Subscription Failed: ${error}`)
+    logger.error(`Fcm register to topic error for publisher ${publisherId}: ${error}`);
+    return
   }
-};
+}
