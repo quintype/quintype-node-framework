@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.34.0](https://github.com/quintype/quintype-node-framework/compare/v7.33.6...v7.34.0) (2025-03-19)
+
+
+### Features
+
+* support JW player ([#459](https://github.com/quintype/quintype-node-framework/issues/459)) ([ce325df](https://github.com/quintype/quintype-node-framework/commit/ce325dfea69d4dc806b2b767c43d782dd096099e))
+
 ### [7.33.6](https://github.com/quintype/quintype-node-framework/compare/v7.33.5...v7.33.6) (2025-03-17)
 
 
