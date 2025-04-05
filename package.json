@@ -31,7 +31,7 @@
   "homepage": "https://github.com/quintype/quintype-node-framework#readme",
   "dependencies": {
     "@ampproject/toolbox-optimizer": "^2.4.0",
-    "@quintype/amp": "2.21.0-also-in-package-story-element.0",
+    "@quintype/amp": "^2.21.0-also-in-package-story-element.0",
     "@quintype/backend": "^1.25.3",
     "@quintype/components": "^3.5.0",
     "@quintype/prerender-node": "^3.2.26",
@@ -59,6 +59,7 @@
     "redux": "^4.1.1",
     "request-promise": "^4.2.2",
     "sleep-promise": "^9.1.0",
+    "taffydb": "^2.7.3",
     "winston": "3.3.3"
   },
   "devDependencies": {
