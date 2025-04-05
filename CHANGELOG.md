@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.34.0-amp-chart-beat-changes.1](https://github.com/quintype/quintype-node-framework/compare/v7.33.2-amp-chart-beat-changes.2...v7.34.0-amp-chart-beat-changes.1) (2025-04-05)
+
+
+### Features
+
+* add support to instagram reels embed in amp ([d24b175](https://github.com/quintype/quintype-node-framework/commit/d24b17528ae3ccb8cbf20ff7da3b3c71f9df7f92))
+* add support to instagram reels embed in amp ([a3212a7](https://github.com/quintype/quintype-node-framework/commit/a3212a7d814332b64d5c665b7d5a45e7883db2d6))
+
 ### [7.33.1](https://github.com/quintype/quintype-node-framework/compare/v7.33.0...v7.33.1) (2025-01-20)
 
 
