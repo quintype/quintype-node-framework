@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.34.1](https://github.com/quintype/quintype-node-framework/compare/v7.34.0...v7.34.1) (2025-05-13)
+
+
+### Bug Fixes
+
+* Preload visual hero image ([#461](https://github.com/quintype/quintype-node-framework/issues/461)) ([ebcd07b](https://github.com/quintype/quintype-node-framework/commit/ebcd07b68bcca0e57cc69f82bff8c3a471246601))
+
 ## [7.34.0](https://github.com/quintype/quintype-node-framework/compare/v7.33.6...v7.34.0) (2025-03-19)
 
 
