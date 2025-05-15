@@ -16,7 +16,7 @@ import { Provider } from "react-redux";
 import { IsomorphicComponent } from "../isomorphic/component";
 import { makePickComponentSync } from "../isomorphic/impl/make-pick-component-sync";
 import { createQtStore } from "../store/create-store";
-import { registerPageView, registerStoryShare, setMemberId, startAnalytics } from "./analytics";
+import { registerPageView } from "./analytics";
 import { initializeFCM } from "./impl/fcm";
 import {
   checkForServiceWorkerUpdates,
@@ -40,9 +40,8 @@ export const app = {
   maybeNavigateTo,
   maybeSetUrl,
   registerPageView,
-  registerStoryShare,
-  setMemberId,
 };
+
 
 function getRouteDataAndPath(path, mountAt) {
   const relativePath = path.startsWith(mountAt) ? path.slice(mountAt.length) : path;
@@ -248,7 +247,7 @@ function getJsonContent(id) {
   if (element) return JSON.parse(element.textContent);
 }
 
-const performance = window.performance || { mark: () => {}, measure: () => {} };
+const performance = window.performance || { mark: () => { }, measure: () => { } };
 function runWithTiming(name, f) {
   performance.mark(`${name}Start`);
   f();
@@ -278,9 +277,6 @@ export function startApp(renderApplication, reducers, opts) {
   const dataPromise = staticData
     ? Promise.resolve(staticData.qt)
     : getRouteData(path, { existingFetch: global.initialFetch });
-
-  startAnalytics();
-
   const store = createQtStore(
     reducers,
     (staticData && staticData.qt) || global.initialPage || getJsonContent("initial-page") || {},
