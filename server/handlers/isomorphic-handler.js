@@ -204,6 +204,7 @@ function createStoreFromResult(url, result, opts = {}) {
     primaryHostUrl: result.primaryHostUrl,
     isBotRequest: isBotRequest,
     lazyLoadImageMargin: opts.lazyLoadImageMargin,
+    localeModule: _.get(opts, ['localeModule'])
   };
   return createBasicStore(result, qt, opts);
 }
@@ -471,7 +472,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
 ) {
   const url = urlLib.parse(req.url, true);
 
-  function writeResponse(result) {
+  function writeResponse(result, opts) {
     const statusCode = result.httpStatusCode || 200;
 
     if (statusCode == 301 && result.data && result.data.location) {
@@ -491,6 +492,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     const store = createStoreFromResult(url, result, {
       disableIsomorphicComponent: statusCode != 200,
       lazyLoadImageMargin,
+      localeModule: _.get(opts, ['localeModule'])
     });
 
     if (lightPages) {
@@ -553,19 +555,54 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
       logError(e);
       return { httpStatusCode: 500, pageType: "error" };
     })
-    .then((result) => {
+    .then(async (result) => {
       if (!result) {
         return next();
       }
-      return new Promise((resolve) => resolve(writeResponse(result)))
-        .catch((e) => {
-          logError(e);
-          res.status(500);
-          res.send(e.message);
-        })
-        .finally(() => res.end());
-    });
+      return getStoreOpts(config).then((opts) => {
+        return new Promise((resolve) => resolve(writeResponse(result, opts)))
+          .catch((e) => {
+            logError(e);
+            res.status(500);
+            res.send(e.message);
+          })
+          .finally(() => res.end());
+      });
+    })
 };
+
+async function getStoreOpts(config) {
+  const opts = {};
+  const enableTimeTranslation = _.get(config, ['pbConfig', 'general', 'enableTimeTranslation'], false);
+  if (!enableTimeTranslation) {
+    return Promise.resolve(opts);
+  }
+  const languageCode = _.get(config, ['language', 'ietf-code']);
+  try {
+    let localeModule;
+    switch (languageCode) {
+      case 'hi':
+        localeModule = require('date-fns/locale/hi');
+        break;
+      case 'ta':
+        localeModule = require('date-fns/locale/ta');
+        break;
+      case 'de':
+        localeModule = require('date-fns/locale/de');
+        break;
+      default:
+        localeModule = require('date-fns/locale/en-US');
+        break;
+    }
+    opts.localeModule = localeModule.default || localeModule;
+    return Promise.resolve(opts);
+  } catch (err) {
+    console.warn(`Falling back to en-US due to error loading locale: ${languageCode}`, err);
+    const fallbackLocale = require('date-fns/locale/en-US');
+    opts.localeModule = fallbackLocale.default || fallbackLocale;
+    return Promise.resolve(opts);
+  }
+}
 
 exports.handleStaticRoute = function handleStaticRoute(
   req,
