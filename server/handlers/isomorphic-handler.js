@@ -572,26 +572,36 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
 };
 
 async function getStoreOpts(config) {
-  const enableTimeTranslation = _.get(config, ['pbConfig', 'general', 'enableTimeTranslation'], false);
-  const languageCode = _.get(config, ['language', 'ietf-code']);
   const opts = {};
-
+  const enableTimeTranslation = _.get(config, ['pbConfig', 'general', 'enableTimeTranslation'], false);
   if (!enableTimeTranslation) {
     return Promise.resolve(opts);
   }
-
-  return import(`date-fns/locale/${languageCode}/index.js`)
-    .then((localeModule) => {
-      opts.localeModule = localeModule.default;
-      return opts;
-    })
-    .catch(async (err) => {
-      console.warn(`log--Falling back to en-US for locale: ${languageCode}`, err);
-      return import("date-fns/locale/en-US/index.js").then((fallbackLocale) => {
-        opts.localeModule = fallbackLocale.default;
-        return opts;
-      });
-    });
+  const languageCode = _.get(config, ['language', 'ietf-code']);
+  try {
+    let localeModule;
+    switch (languageCode) {
+      case 'hi':
+        localeModule = require('date-fns/locale/hi');
+        break;
+      case 'ta':
+        localeModule = require('date-fns/locale/ta');
+        break;
+      case 'de':
+        localeModule = require('date-fns/locale/de');
+        break;
+      default:
+        localeModule = require('date-fns/locale/en-US');
+        break;
+    }
+    opts.localeModule = localeModule.default || localeModule;
+    return Promise.resolve(opts);
+  } catch (err) {
+    console.warn(`Falling back to en-US due to error loading locale: ${languageCode}`, err);
+    const fallbackLocale = require('date-fns/locale/en-US');
+    opts.localeModule = fallbackLocale.default || fallbackLocale;
+    return Promise.resolve(opts);
+  }
 }
 
 exports.handleStaticRoute = function handleStaticRoute(
