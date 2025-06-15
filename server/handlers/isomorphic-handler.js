@@ -492,7 +492,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     const store = createStoreFromResult(url, result, {
       disableIsomorphicComponent: statusCode != 200,
       lazyLoadImageMargin,
-      localeModule: opts?.localeModule
+      localeModule: _.get(opts, ['localeModule'])
     });
 
     if (lightPages) {
