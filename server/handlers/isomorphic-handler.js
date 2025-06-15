@@ -204,6 +204,7 @@ function createStoreFromResult(url, result, opts = {}) {
     primaryHostUrl: result.primaryHostUrl,
     isBotRequest: isBotRequest,
     lazyLoadImageMargin: opts.lazyLoadImageMargin,
+    localeModule: opts?.localeModule
   };
   return createBasicStore(result, qt, opts);
 }
@@ -471,7 +472,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
 ) {
   const url = urlLib.parse(req.url, true);
 
-  function writeResponse(result) {
+  function writeResponse(result, opts) {
     const statusCode = result.httpStatusCode || 200;
 
     if (statusCode == 301 && result.data && result.data.location) {
@@ -491,6 +492,7 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
     const store = createStoreFromResult(url, result, {
       disableIsomorphicComponent: statusCode != 200,
       lazyLoadImageMargin,
+      localeModule: opts?.localeModule
     });
 
     if (lightPages) {
@@ -553,11 +555,12 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
       logError(e);
       return { httpStatusCode: 500, pageType: "error" };
     })
-    .then((result) => {
+    .then(async (result) => {
       if (!result) {
         return next();
       }
-      return new Promise((resolve) => resolve(writeResponse(result)))
+      const opts = await getStoreOpts(config);
+      return new Promise((resolve) => resolve(writeResponse(result, opts)))
         .catch((e) => {
           logError(e);
           res.status(500);
@@ -566,6 +569,26 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
         .finally(() => res.end());
     });
 };
+
+async function getStoreOpts(config) {
+  const enableTimeTranslation = _.get(config, ['pbConfig', 'general', 'enableTimeTranslation'], false)
+  const languageCode = _.get(config, ['language', 'ietf-code']);
+  const opts = {}
+  if (enableTimeTranslation) {
+    try {
+      const localeModule = await import(
+        /* webpackChunkName: "date-fns-locale-[request]" */
+        `date-fns/locale/${languageCode}/index.js`
+      );
+      opts.localeModule = await localeModule?.default;
+    } catch (err) {
+      console.warn(`log--Falling back to en-US for locale: ${languageCode}`, err);
+      const fallbackLocale = await import("date-fns/locale/en-US/index.js");
+      opts.localeModule = await fallbackLocale?.default;
+    }
+  }
+  return opts
+}
 
 exports.handleStaticRoute = function handleStaticRoute(
   req,
