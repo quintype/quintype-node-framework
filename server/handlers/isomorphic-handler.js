@@ -204,7 +204,7 @@ function createStoreFromResult(url, result, opts = {}) {
     primaryHostUrl: result.primaryHostUrl,
     isBotRequest: isBotRequest,
     lazyLoadImageMargin: opts.lazyLoadImageMargin,
-    localeModule: opts?.localeModule
+    localeModule: _.get(opts, ['localeModule'])
   };
   return createBasicStore(result, qt, opts);
 }
