@@ -559,35 +559,39 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
       if (!result) {
         return next();
       }
-      const opts = await getStoreOpts(config);
-      return new Promise((resolve) => resolve(writeResponse(result, opts)))
-        .catch((e) => {
-          logError(e);
-          res.status(500);
-          res.send(e.message);
-        })
-        .finally(() => res.end());
-    });
+      return getStoreOpts(config).then((opts) => {
+        return new Promise((resolve) => resolve(writeResponse(result, opts)))
+          .catch((e) => {
+            logError(e);
+            res.status(500);
+            res.send(e.message);
+          })
+          .finally(() => res.end());
+      });
+    })
 };
 
 async function getStoreOpts(config) {
-  const enableTimeTranslation = _.get(config, ['pbConfig', 'general', 'enableTimeTranslation'], false)
+  const enableTimeTranslation = _.get(config, ['pbConfig', 'general', 'enableTimeTranslation'], false);
   const languageCode = _.get(config, ['language', 'ietf-code']);
-  const opts = {}
-  if (enableTimeTranslation) {
-    try {
-      const localeModule = await import(
-        /* webpackChunkName: "date-fns-locale-[request]" */
-        `date-fns/locale/${languageCode}/index.js`
-      );
-      opts.localeModule = await localeModule?.default;
-    } catch (err) {
-      console.warn(`log--Falling back to en-US for locale: ${languageCode}`, err);
-      const fallbackLocale = await import("date-fns/locale/en-US/index.js");
-      opts.localeModule = await fallbackLocale?.default;
-    }
+  const opts = {};
+
+  if (!enableTimeTranslation) {
+    return Promise.resolve(opts);
   }
-  return opts
+
+  return import(`date-fns/locale/${languageCode}/index.js`)
+    .then((localeModule) => {
+      opts.localeModule = localeModule.default;
+      return opts;
+    })
+    .catch(async (err) => {
+      console.warn(`log--Falling back to en-US for locale: ${languageCode}`, err);
+      return import("date-fns/locale/en-US/index.js").then((fallbackLocale) => {
+        opts.localeModule = fallbackLocale.default;
+        return opts;
+      });
+    });
 }
 
 exports.handleStaticRoute = function handleStaticRoute(
