@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.34.2](https://github.com/quintype/quintype-node-framework/compare/v7.34.1...v7.34.2) (2025-06-25)
+
+
+### Bug Fixes
+
+* amp hero image for migrated stories ([#465](https://github.com/quintype/quintype-node-framework/issues/465)) ([5ee45a0](https://github.com/quintype/quintype-node-framework/commit/5ee45a0c5577e431eab3512aaadd2858c50d05b6))
+
 ### [7.34.1](https://github.com/quintype/quintype-node-framework/compare/v7.34.0...v7.34.1) (2025-05-13)
 
 
