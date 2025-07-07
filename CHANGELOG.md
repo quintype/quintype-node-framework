@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.34.3](https://github.com/quintype/quintype-node-framework/compare/v7.34.2...v7.34.3) (2025-07-07)
+
+
+### Bug Fixes
+
+* **jsembed:** fallback support for non-iframe elements ([#466](https://github.com/quintype/quintype-node-framework/issues/466)) ([42aab83](https://github.com/quintype/quintype-node-framework/commit/42aab83cd73acb893bad209d365a4fc728c32c48))
+
 ### [7.34.2](https://github.com/quintype/quintype-node-framework/compare/v7.34.1...v7.34.2) (2025-06-25)
 
 
