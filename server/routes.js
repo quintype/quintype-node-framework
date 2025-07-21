@@ -680,6 +680,27 @@ exports.mountQuintypeAt = function (app, mountAt) {
  * To disable amp version for a specific story, you need to create a story attribute in bold with the slug {disable-amp-for-single-story} and values {true} and {false}. Set its value to "true" in the story which you want to disable amp. Please make sure to name the attributes and values in the exact same way as mentioned
  * attribute slug: "disable-amp-for-single-story" values: "true" , "false". This will redirect '<amp-page-base-path>/:slug' to the non-amp page
  *
+ * To disable the AMP version for a specific story template or section, pass opts.disableAmpUnit as a function that always returns a boolean value. When the function returns true, AMP will be disabled for the specified scenario.
+ * Note: Ensure that disableAmpUnit is always a function and returns a boolean value, as demonstrated below.
+ *
+ *  Under app/server/app.js
+ *
+ * ``` const getTemplate = (story) => {
+ *       return story.["story-template"] === "template-name";
+ *       };
+ *
+ *   ....
+ *
+ *  ampRoutes(app, {
+ *    seo: generateSeo,
+ *     disableAmpUnit: (story) => getTemplate(story),
+ *     featureConfig: {
+ *     .....
+ *     }
+ *     ...
+ *    .....
+ * })```
+ *
  * @param {Express} app Express app to add the routes to
  * @param {Object} opts Options object used to configure amp. Passing this is optional
  * @param {Object} opts.templates An object that's used to pass custom templates. Each key corresponds to the template name and corresponding value is the template
