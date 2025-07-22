@@ -144,6 +144,10 @@ async function ampStoryPageHandler(
       });
       merge(mergedAdditionalConfig, additionalConfig, fetchedAdditionalConfig);
     }
+    // the query appending happens in the worker, this is needed for any publisher who needs ad-free in amp story
+    if(req?.query?.subscriber === "true") {
+      merge(mergedAdditionalConfig, { subscriber: true })
+    }
     const optimizeAmpHtml = get(domainSpecificOpts, ["featureConfig", "optimizeAmpHtml"], true);
     const ampHtml = ampifyStory({
       story,
