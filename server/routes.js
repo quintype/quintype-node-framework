@@ -117,6 +117,7 @@ exports.upstreamQuintypeRoutes = function upstreamQuintypeRoutes (
   app.all('/api/*', sketchesProxy)
   app.all('*/api/*', sketchesProxy)
   app.all('/login', sketchesProxy)
+  // Qlitics is deprecated - this route will be removed in a future version
   app.all('/qlitics.js', sketchesProxy)
   app.all('/auth.form', sketchesProxy)
   app.all('/auth.callback', sketchesProxy)

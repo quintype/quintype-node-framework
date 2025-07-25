@@ -13,7 +13,14 @@
  */
 
 import get from "lodash/get";
-import { runWhenIdle } from "./impl/run-when-idle";
+
+// Qlitics deprecation warning
+const QLITICS_DEPRECATION_WARNING = `
+🚨 QLITICS DEPRECATION WARNING 🚨
+Qlitics analytics has been deprecated and will be removed in a future version.
+Please migrate to Google Analytics (GA4) or other analytics solutions.
+For migration guidance, contact the development team.
+`;
 
 /**
  * Load qlitics.js. This should be done automatically for you
@@ -21,21 +28,22 @@ import { runWhenIdle } from "./impl/run-when-idle";
  */
 // istanbul ignore next
 export function startAnalytics({ mountAt = global.qtMountAt || "" } = {}) {
-  global.qlitics =
-    global.qlitics ||
-    function () {
-      (qlitics.q = qlitics.q || []).push(arguments);
-    };
-  global.qlitics("init");
+  // Check if qlitics is already initialized to avoid multiple warnings
+  if (!global.qlitics) {
+    console.warn(QLITICS_DEPRECATION_WARNING);
 
-  runWhenIdle(function () {
-    const s = document.createElement("script");
-    s.type = "text/javascript";
-    s.async = true;
-    s.src = `${mountAt}/qlitics.js`;
-    const x = document.getElementsByTagName("script")[0];
-    x.parentNode.insertBefore(s, x);
-  });
+    // Create a no-op qlitics function to prevent errors
+    global.qlitics = function () {
+      // Silently ignore all qlitics calls to prevent breaking existing code
+      // This ensures backward compatibility while deprecating the service
+    };
+
+    // Initialize the no-op function
+    global.qlitics("init");
+  }
+
+  // Note: We're no longer loading the actual qlitics.js script
+  // This prevents any external dependencies while maintaining API compatibility
 }
 
 function pageTypeToQliticsPageType(pageType) {
@@ -60,9 +68,13 @@ function pageTypeToQliticsPageType(pageType) {
  * @returns {void}
  */
 export function registerStoryView(storyContentId) {
-  global.qlitics("track", "story-view", {
-    "story-content-id": storyContentId,
-  });
+  // Qlitics is deprecated - this function now does nothing
+  // Consider migrating to GA4 or other analytics solutions
+  if (global.qlitics && typeof global.qlitics === 'function') {
+    global.qlitics("track", "story-view", {
+      "story-content-id": storyContentId,
+    });
+  }
 }
 
 /**
@@ -72,9 +84,13 @@ export function registerStoryView(storyContentId) {
  * @returns {void}
  */
 export function registerPageView(page, newPath) {
-  global.qlitics("track", "page-view", {
-    "page-type": pageTypeToQliticsPageType(page.pageType),
-  });
+  // Qlitics is deprecated - only track in GA now
+  if (global.qlitics && typeof global.qlitics === 'function') {
+    global.qlitics("track", "page-view", {
+      "page-type": pageTypeToQliticsPageType(page.pageType),
+    });
+  }
+
   if (page.pageType == "story-page") {
     registerStoryView(get(page.data, ["story", "id"]));
   }
@@ -95,7 +111,10 @@ export function registerPageView(page, newPath) {
  * @returns {void}
  */
 export function setMemberId(memberId) {
-  global.qlitics("set", "member-id", memberId);
+  // Qlitics is deprecated - this function now does nothing
+  if (global.qlitics && typeof global.qlitics === 'function') {
+    global.qlitics("set", "member-id", memberId);
+  }
 }
 
 /**
@@ -106,9 +125,12 @@ export function setMemberId(memberId) {
  * @returns {void}
  */
 export function registerStoryShare(storyContentId, socialMediaType, storyUrl) {
-  global.qlitics("track", "story-share", {
-    "story-content-id": storyContentId,
-    "social-media-type": socialMediaType,
-    url: storyUrl,
-  });
+  // Qlitics is deprecated - this function now does nothing
+  if (global.qlitics && typeof global.qlitics === 'function') {
+    global.qlitics("track", "story-share", {
+      "story-content-id": storyContentId,
+      "social-media-type": socialMediaType,
+      url: storyUrl,
+    });
+  }
 }
