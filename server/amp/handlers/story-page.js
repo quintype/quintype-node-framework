@@ -68,6 +68,8 @@ async function ampStoryPageHandler(
 
       return res.redirect(301, redirectUrl);
     }
+    const enableAmpAccess = get(opts, ["enableAmpAccess"], false);
+    const isAmpAccessEnabled = typeof enableAmpAccess === "function" && opts.enableAmpAccess(story);
 
     const domainSpecificOpts = getDomainSpecificOpts(opts, domainSlug);
     const url = urlLib.parse(req.url, true);
@@ -143,6 +145,9 @@ async function ampStoryPageHandler(
         publisherConfig: additionalConfig,
       });
       merge(mergedAdditionalConfig, additionalConfig, fetchedAdditionalConfig);
+    }
+    if (isAmpAccessEnabled) {
+      merge(additionalConfig, { isAmpAccessEnabled: isAmpAccessEnabled });
     }
     const optimizeAmpHtml = get(domainSpecificOpts, ["featureConfig", "optimizeAmpHtml"], true);
     const ampHtml = ampifyStory({
