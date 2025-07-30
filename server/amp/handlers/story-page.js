@@ -68,6 +68,8 @@ async function ampStoryPageHandler(
 
       return res.redirect(301, redirectUrl);
     }
+    const enableAmpAccess = get(opts, ["enableAmpAccess"], false);
+    const isAmpAccessEnabled = typeof enableAmpAccess === "function" && opts.enableAmpAccess(story);
 
     const domainSpecificOpts = getDomainSpecificOpts(opts, domainSlug);
     const url = urlLib.parse(req.url, true);
@@ -146,7 +148,10 @@ async function ampStoryPageHandler(
     }
     // the query appending happens in the worker, this is needed for any publisher who needs ad-free in amp story
     if(req && req.query && req.query.subscriber === "true") {
-      merge(additionalConfig, { subscriber: true })
+      merge(additionalConfig, { subscriber: true });
+    }
+    if (isAmpAccessEnabled) {
+      merge(additionalConfig, { isAmpAccessEnabled: isAmpAccessEnabled });
     }
     const optimizeAmpHtml = get(domainSpecificOpts, ["featureConfig", "optimizeAmpHtml"], true);
     const ampHtml = ampifyStory({
