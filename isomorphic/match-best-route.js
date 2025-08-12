@@ -8,7 +8,7 @@
  * @module match-best-route
  */
 
-const { matchPath } = require("react-router-dom");
+const { match: makeMatcher } = require("path-to-regexp");
 
 /**
  * Route represents a url pattern which is matched by the quintype framework.
@@ -42,12 +42,13 @@ function matchAllRoutes(path, routes) {
   // Using foreach instead of filter / map because I don't want to match the same route over and over
   const matchedRoutes = [];
   routes.forEach((route) => {
-    const match = matchPath(path, route);
-    if (match) {
+    const matcher = makeMatcher(route.path, { end: !!route.exact });
+    const result = matcher(path);
+    if (result) {
       return matchedRoutes.push({
         pageType: route.pageType,
-        params: Object.assign({}, route.params, match.params),
-        match,
+        params: Object.assign({}, route.params, result.params),
+        match: result,
       });
     }
   });
