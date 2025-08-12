@@ -11,7 +11,7 @@ import { BreakingNews, CLIENT_SIDE_RENDERED, NAVIGATE_TO_PAGE, PAGE_LOADING } fr
 import { createBrowserHistory } from "history";
 import get from "lodash/get";
 import React from "react";
-import { createRoot, hydrateRoot } from "react-dom/client";
+import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { IsomorphicComponent } from "../isomorphic/component";
 import { makePickComponentSync } from "../isomorphic/impl/make-pick-component-sync";
@@ -201,15 +201,9 @@ export function renderComponent(clazz, container, store, props = {}, callback) {
   }
 
   if (props.hydrate) {
-    const root = hydrateRoot(containerEle, component);
-    if (callback) callback();
-    return root;
+    return ReactDOM.hydrate(component, containerEle, callback);
   }
-
-  const root = createRoot(containerEle);
-  root.render(component);
-  if (callback) callback();
-  return root;
+  return ReactDOM.render(component, containerEle, callback);
 }
 
 /**

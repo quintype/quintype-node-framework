@@ -23,20 +23,6 @@ exports.renderReduxComponent = function renderReduxComponent(Component, store, p
 };
 
 /**
- * Render the given component using React 19's streaming API
- * @param {Component} Component The Component to render
- * @param {Redux} store The store to render
- * @param {Object} props The props to pass to the component
- * @param {Object} options Options for renderToPipeableStream
- */
-exports.renderReduxComponentStream = function renderReduxComponentStream(Component, store, props, options = {}) {
-  return ReactDOMServer.renderToPipeableStream(
-    React.createElement(Provider, { store }, React.createElement(Component, props)),
-    options
-  );
-};
-
-/**
  * This namespace a helper method for SSR using @loadable/component
  * ```javascript
  * import { ChunkExtractor } from "@loadable/server";
