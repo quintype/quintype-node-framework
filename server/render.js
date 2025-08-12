@@ -18,17 +18,21 @@ const { Provider } = require("react-redux");
  * @param {Redux} store The store to render
  * @param {Object} props The props to pass to the component
  */
-exports.renderReduxComponent = function renderReduxComponent(
-  Component,
-  store,
-  props
-) {
-  return ReactDOMServer.renderToString(
-    React.createElement(
-      Provider,
-      { store },
-      React.createElement(Component, props)
-    )
+exports.renderReduxComponent = function renderReduxComponent(Component, store, props) {
+  return ReactDOMServer.renderToString(React.createElement(Provider, { store }, React.createElement(Component, props)));
+};
+
+/**
+ * Render the given component using React 19's streaming API
+ * @param {Component} Component The Component to render
+ * @param {Redux} store The store to render
+ * @param {Object} props The props to pass to the component
+ * @param {Object} options Options for renderToPipeableStream
+ */
+exports.renderReduxComponentStream = function renderReduxComponentStream(Component, store, props, options = {}) {
+  return ReactDOMServer.renderToPipeableStream(
+    React.createElement(Provider, { store }, React.createElement(Component, props)),
+    options
   );
 };
 
@@ -52,17 +56,10 @@ exports.renderReduxComponent = function renderReduxComponent(
  * @param {extractor} props Instance of ChunkExtractor from loadable
  * @param {Object} props The props to pass to the component
  */
-exports.renderLoadableReduxComponent = function renderLoadableReduxComponent(
-  Component,
-  store,
-  extractor,
-  props
-) {
+exports.renderLoadableReduxComponent = function renderLoadableReduxComponent(Component, store, extractor, props) {
   const children = React.createElement(Component, props);
   // Wrap your component using "collectChunks"
-  const component = extractor.collectChunks(
-    React.createElement(Provider, { store }, children)
-  );
+  const component = extractor.collectChunks(React.createElement(Provider, { store }, children));
   // Render your Component
   return ReactDOMServer.renderToString(component);
 };

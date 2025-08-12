@@ -8,7 +8,7 @@
  * @module match-best-route
  */
 
-const { matchPath } = require("react-router");
+const { matchPath } = require("react-router-dom");
 
 /**
  * Route represents a url pattern which is matched by the quintype framework.

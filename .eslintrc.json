@@ -3,13 +3,20 @@
     "standard",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
-    "prettier/react",
     "prettier/standard"
   ],
   "plugins": ["react", "standard"],
   "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "requireConfigFile": false
+    "requireConfigFile": false,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   },
   "rules": {
     "import/no-unresolved": "off",
