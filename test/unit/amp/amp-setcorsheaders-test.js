@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 /* eslint-disable consistent-return */
-import supertest from "supertest";
-import { setCorsHeaders } from "../../../server/amp/helpers";
+const supertest = require("supertest");
+const { setCorsHeaders } = require("../../../server/amp/helpers");
 
 const express = require("express");
 const assert = require("assert");

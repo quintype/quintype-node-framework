@@ -1,4 +1,4 @@
-import { NAVIGATE_TO_PAGE, SERVICE_WORKER_UPDATED } from "@quintype/components";
+const { NAVIGATE_TO_PAGE, SERVICE_WORKER_UPDATED } = require("@quintype/components");
 
 const assert = require("assert");
 
