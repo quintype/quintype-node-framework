@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.34.5-react-upgrade-v19.1",
+  "version": "7.34.5-react-upgrade-v19.2",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
