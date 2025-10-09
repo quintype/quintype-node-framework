@@ -5,7 +5,7 @@
   "main": "index.js",
   "engines": {
     "node": "^20.0.0",
-    "npm": "^8.5.0"
+    "npm": "^10.0.0"
   },
   "scripts": {
     "prepublishOnly": "npm test && ./bin-dev-scripts/standard-version-release.sh",
@@ -54,9 +54,9 @@
     "mocha-snapshots": "^4.2.0",
     "morgan": "^1.10.0",
     "path-to-regexp": "^6.2.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-redux": "^9.1.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-redux": "^9.2.0",
     "react-router": "^5.2.1",
     "redux": "^4.1.1",
     "request-promise": "^4.2.6",
