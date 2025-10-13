@@ -49,10 +49,13 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
       res.setHeader("Vary", "Accept-Encoding");
 
       // Cloudflare Headers
-      res.setHeader("Cache-Tag", _(cacheKeys).uniq().join(","));
+      // res.setHeader("Cache-Tag", _(cacheKeys).uniq().join(","));
 
       // Akamai Headers
-      cdnProviderVal === "akamai" && res.setHeader("Edge-Cache-Tag", _(cacheKeys).uniq().join(","));
+      res.setHeader("Edge-Cache-Tag", _(cacheKeys).uniq().join(","));
+
+      // Cloudfront Headers
+      res.setHeader("Amz-Cache-Tag", _(cacheKeys).uniq().join(","));
 
       res.setHeader("Surrogate-Key", _(cacheKeys).uniq().join(" "));
       res.setHeader(
