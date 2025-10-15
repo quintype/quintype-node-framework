@@ -50,6 +50,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
 
       // Cloudflare Headers
       res.setHeader("Cache-Tag", _(cacheKeys).uniq().join(","));
+      res.setHeader("Edge-Cache-Tag", _(cacheKeys).uniq().join(","));
 
       // Akamai Headers
       cdnProviderVal === "akamai" && res.setHeader("Edge-Cache-Tag", _(cacheKeys).uniq().join(","));
