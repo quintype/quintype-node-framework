@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.34.5",
+  "version": "7.34.6-fix-duplicate-tag.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
