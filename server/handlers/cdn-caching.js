@@ -52,7 +52,10 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
       res.setHeader("Cache-Tag", _(cacheKeys).uniq().join(","));
 
       // Akamai Headers
-      cdnProviderVal === "akamai" && res.setHeader("Edge-Cache-Tag", _(cacheKeys).uniq().join(","));
+      res.setHeader("Edge-Cache-Tag", _(cacheKeys).uniq().join(","));
+
+      // Cloudfront Headers
+      res.setHeader("amzn-cache-tag", _(cacheKeys).uniq().join(","));
 
       res.setHeader("Surrogate-Key", _(cacheKeys).uniq().join(" "));
       res.setHeader(
