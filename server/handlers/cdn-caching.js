@@ -55,7 +55,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
       res.setHeader("Edge-Cache-Tag", _(cacheKeys).uniq().join(","));
 
       // Cloudfront Headers
-      res.setHeader("Amz-Cache-Tag", _(cacheKeys).uniq().join(","));
+      res.setHeader("amzn-cache-tag", _(cacheKeys).uniq().join(","));
 
       res.setHeader("Surrogate-Key", _(cacheKeys).uniq().join(" "));
       res.setHeader(
