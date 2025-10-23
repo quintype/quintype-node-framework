@@ -1,3 +1,4 @@
+
 /**
  * This module contains functions for starting JS on the browser side
  * ```javascript
