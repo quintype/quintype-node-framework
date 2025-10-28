@@ -486,9 +486,11 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
       return res.redirect(301, result.data.location);
     }
 
-    if (statusCode == 500) {
-      console.log("RESULT 111 =============>>>", statusCode);
-      return res.sendStatus(500);
+    // For server errors (>=500),send statuss
+    if (statusCode >= 500) {
+      res.status(statusCode);
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      return res.sendStatus(statusCode);
     }
 
     const seoInstance = getSeoInstance(seo, config, result.pageType);
