@@ -200,7 +200,7 @@ describe("Isomorphic Handler", function () {
     supertest(app)
       .get("/")
       .expect("Content-Type", /html/)
-      .expect("Cache-Control", "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400")
+      .expect("Cache-Control", "public,max-age=15,s-maxage=120,stale-while-revalidate=120,stale-if-error=120")
       .expect("Vary", "Accept-Encoding")
       .expect("Surrogate-Key", "foo bar")
       .expect("Cache-Tag", "foo,bar")
@@ -503,7 +503,7 @@ describe("Isomorphic Handler", function () {
         .then((res) => {
           const cacheControl = res.header["cache-control"];
           const cacheTag = res.header["cache-tag"];
-          assert.equal(cacheControl, "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=120,stale-while-revalidate=120,stale-if-error=120");
           assert.equal(cacheTag, "c/1/abcdefgh");
         })
         .then(done);
@@ -631,7 +631,7 @@ describe("Isomorphic Handler", function () {
           const cacheControl = res.header["cache-control"];
           const edgeCacheTag = res.header["edge-cache-tag"];
           const contentSecurityPolicy = res.header["content-security-policy"];
-          assert.equal(cacheControl, "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=120,stale-while-revalidate=120,stale-if-error=120");
           assert.equal(edgeCacheTag, "c/1/abcdefgh");
           assert.equal(
             contentSecurityPolicy,
@@ -670,7 +670,7 @@ describe("Isomorphic Handler", function () {
           const cacheControl = res.header["cache-control"];
           const edgeCacheTag = res.header["edge-cache-tag"];
           const contentSecurityPolicy = res.header["content-security-policy"];
-          assert.equal(cacheControl, "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=120,stale-while-revalidate=120,stale-if-error=120");
           assert.equal(edgeCacheTag, "c/1/abcdefgh");
           assert.equal(
             contentSecurityPolicy,
@@ -706,10 +706,7 @@ describe("Isomorphic Handler", function () {
         .expect(200)
         .then((res) => {
           const cacheControl = res.header["cache-control"];
-          assert.equal(
-            cacheControl,
-            "public,max-age=15,s-maxage=1800,stale-while-revalidate=1000,stale-if-error=14400"
-          );
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=120,stale-while-revalidate=120,stale-if-error=120");
         })
         .then(done);
     });
@@ -730,7 +727,7 @@ describe("Isomorphic Handler", function () {
         .expect(200)
         .then((res) => {
           const cacheControl = res.header["cache-control"];
-          assert.equal(cacheControl, "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400");
+          assert.equal(cacheControl, "public,max-age=15,s-maxage=120,stale-while-revalidate=120,stale-if-error=120");
         })
         .then(done);
     });
