@@ -488,8 +488,6 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
 
     // For server errors (>=500),send statuss
     if (statusCode >= 500) {
-      res.status(statusCode);
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
       return res.sendStatus(statusCode);
     }
 

@@ -42,7 +42,7 @@ exports.addCacheHeadersToResult = function addCacheHeadersToResult({
       } else {
         res.setHeader(
           "Cache-Control",
-          `public,max-age=${maxAge},s-maxage=${sMaxAge},stale-while-revalidate=1000,stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`
+          `public,max-age=${maxAge},s-maxage=${sMaxAge},stale-while-revalidate=120,stale-if-error=${STALE_IF_ERROR_CACHE_DURATION}`
         );
       }
 
