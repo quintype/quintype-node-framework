@@ -486,7 +486,6 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
       return res.redirect(301, result.data.location);
     }
 
-    // For server errors (>=500),send statuss
     if (statusCode >= 500) {
       return res.sendStatus(statusCode);
     }
