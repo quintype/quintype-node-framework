@@ -125,7 +125,7 @@ function loadDataForPageType(
     .then((result) => {
       if (result && result.data) {
         if (result.data[ABORT_HANDLER] || (result.data.error && result.data.error.message)) {
-          return null
+          return null;
         }
       }
       return result;
@@ -485,6 +485,11 @@ exports.handleIsomorphicRoute = function handleIsomorphicRoute(
       });
       return res.redirect(301, result.data.location);
     }
+
+    if (statusCode >= 500) {
+      return res.sendStatus(statusCode);
+    }
+
     const seoInstance = getSeoInstance(seo, config, result.pageType);
     const seoTags = seoInstance && seoInstance.getMetaTags(config, result.pageType || match.pageType, result, { url });
 

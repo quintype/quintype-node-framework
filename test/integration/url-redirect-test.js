@@ -508,10 +508,7 @@ describe("Redirect Routes Handler", function () {
         redirectUrls,
       }
     );
-    supertest(app)
-      .get("/moved-permanently-1")
-      .expect("Location", "/permanent-location-1")
-      .expect(301, done);
+    supertest(app).get("/moved-permanently-1").expect("Location", "/permanent-location-1").expect(301, done);
   });
 
   it("Redirects all the urls with status code to 302 if redirectUrls is present", function (done) {
@@ -528,10 +525,7 @@ describe("Redirect Routes Handler", function () {
         ],
       }
     );
-    supertest(app)
-      .get("/moved-temporarily-1")
-      .expect("Location", "/temporarily-location-1")
-      .expect(302, done);
+    supertest(app).get("/moved-temporarily-1").expect("Location", "/temporarily-location-1").expect(302, done);
   });
 
   it("Renders homepage when redirect urls are present", function (done) {
@@ -555,10 +549,7 @@ describe("Redirect Routes Handler", function () {
       .expect(200)
       .then((res) => {
         const response = JSON.parse(res.text);
-        assert.equal(
-          '<div data-page-type="home-page">foobar</div>',
-          response.content
-        );
+        assert.equal('<div data-page-type="home-page">foobar</div>', response.content);
         assert.equal("foobar", response.store.qt.data.text);
         assert.equal("127.0.0.1", response.store.qt.data.host);
         assert.equal("home-page", response.store.qt.pageType);
@@ -572,10 +563,7 @@ describe("Redirect Routes Handler", function () {
       [{ pageType: "story-page", path: "/*" }],
       { redirectUrls: getRedirectUrl }
     );
-    supertest(app)
-      .get("/moved-permanently-1")
-      .expect("Location", "/permanent-location-1")
-      .expect(301, done);
+    supertest(app).get("/moved-permanently-1").expect("Location", "/permanent-location-1").expect(301, done);
   });
 
   it("Should handle Route Parameters redirects properly", function (done) {
@@ -584,10 +572,7 @@ describe("Redirect Routes Handler", function () {
       [{ pageType: "story-page", path: "/*" }],
       { redirectUrls: getRedirectUrl }
     );
-    supertest(app)
-      .get("/india/news/some-slug")
-      .expect("Location", "/india/some-slug")
-      .expect(301, done);
+    supertest(app).get("/india/news/some-slug").expect("Location", "/india/some-slug").expect(301, done);
   });
 
   it("Should handle multiple Route Parameters redirects properly", function (done) {
@@ -596,10 +581,7 @@ describe("Redirect Routes Handler", function () {
       [{ pageType: "story-page", path: "/*" }],
       { redirectUrls: getRedirectUrl }
     );
-    supertest(app)
-      .get("/india/foo/some-slug/slug")
-      .expect("Location", "/india/some-slug")
-      .expect(302, done);
+    supertest(app).get("/india/foo/some-slug/slug").expect("Location", "/india/some-slug").expect(302, done);
   });
 
   it("Should handle interchanging route parameter redirects properly", function (done) {
@@ -608,10 +590,7 @@ describe("Redirect Routes Handler", function () {
       [{ pageType: "story-page", path: "/*" }],
       { redirectUrls: getRedirectUrl }
     );
-    supertest(app)
-      .get("/foo/something/bar")
-      .expect("Location", "/bar/something/foo")
-      .expect(301, done);
+    supertest(app).get("/foo/something/bar").expect("Location", "/bar/something/foo").expect(301, done);
   });
 
   it("Should handle external redirects", function (done) {
@@ -620,10 +599,7 @@ describe("Redirect Routes Handler", function () {
       [{ pageType: "story-page", path: "/*" }],
       { redirectUrls: getRedirectUrl }
     );
-    supertest(app)
-      .get("/something/new")
-      .expect("Location", "https://www.google.com/something")
-      .expect(301, done);
+    supertest(app).get("/something/new").expect("Location", "https://www.google.com/something").expect(301, done);
   });
 
   it("Should handle external redirects with params", function (done) {
@@ -632,10 +608,7 @@ describe("Redirect Routes Handler", function () {
       [{ pageType: "story-page", path: "/*" }],
       { redirectUrls: getRedirectUrl }
     );
-    supertest(app)
-      .get("/something/new1")
-      .expect("Location", "https://www.google.com/new1")
-      .expect(301, done);
+    supertest(app).get("/something/new1").expect("Location", "https://www.google.com/new1").expect(301, done);
   });
 
   it("Should not crash if redirectUrls is not present", function (done) {
@@ -646,10 +619,7 @@ describe("Redirect Routes Handler", function () {
     supertest(app)
       .get("/moved-temporarily-1")
       .expect("Location", "/temporarily-location-1")
-      .expect(
-        "Cache-Control",
-        "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400"
-      )
+      .expect("Cache-Control", "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400")
       .expect("Vary", /Accept\-Encoding/)
       .expect("Surrogate-Key", "sp/42/102")
       .expect("Cache-Tag", "sp/42/102")
