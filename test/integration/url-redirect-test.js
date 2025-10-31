@@ -619,7 +619,7 @@ describe("Redirect Routes Handler", function () {
     supertest(app)
       .get("/moved-temporarily-1")
       .expect("Location", "/temporarily-location-1")
-      .expect("Cache-Control", "public,max-age=15,s-maxage=120,stale-while-revalidate=120,stale-if-error=120")
+      .expect("Cache-Control", "public,max-age=15,s-maxage=900,stale-while-revalidate=1000,stale-if-error=14400")
       .expect("Vary", /Accept\-Encoding/)
       .expect("Surrogate-Key", "sp/42/102")
       .expect("Cache-Tag", "sp/42/102")
