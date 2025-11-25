@@ -125,7 +125,7 @@ function loadDataForPageType(
     .then((result) => {
       if (result && result.data) {
         if (result.data[ABORT_HANDLER] || (result.data.error && result.data.error.message)) {
-          return null
+          return null;
         }
       }
       return result;
@@ -195,6 +195,8 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
 
 function createStoreFromResult(url, result, opts = {}) {
   const isBotRequest = _.get(url, "query.botrequest", false);
+  const nothirdparty = _.get(url, "query.nothirdparty", false);
+  console.log("log--nothirdparty", nothirdparty);
   const qt = {
     pageType: result.pageType || opts.defaultPageType,
     subPageType: result.subPageType,
@@ -204,6 +206,7 @@ function createStoreFromResult(url, result, opts = {}) {
     primaryHostUrl: result.primaryHostUrl,
     isBotRequest: isBotRequest,
     lazyLoadImageMargin: opts.lazyLoadImageMargin,
+    removeThirdPartyScripts: nothirdparty,
   };
   return createBasicStore(result, qt, opts);
 }
