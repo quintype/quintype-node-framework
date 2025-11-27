@@ -196,7 +196,6 @@ exports.handleIsomorphicShell = async function handleIsomorphicShell(
 function createStoreFromResult(url, result, opts = {}) {
   const isBotRequest = _.get(url, "query.botrequest", false);
   const nothirdparty = _.get(url, "query.nothirdparty", false);
-  console.log("log--nothirdparty", nothirdparty);
   const qt = {
     pageType: result.pageType || opts.defaultPageType,
     subPageType: result.subPageType,
