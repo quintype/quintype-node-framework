@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.34.9",
+  "version": "7.34.10-fcm-static-page-issue.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
