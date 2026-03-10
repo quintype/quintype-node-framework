@@ -3,6 +3,8 @@ const ejs = require("ejs");
 const fs = require("fs");
 const path = require("path");
 const set = require("lodash/set");
+const unset = require("lodash/unset");
+const cloneDeep = require("lodash/cloneDeep");
 
 const staticPageTemplateStr = fs.readFileSync(path.join(__dirname, "../views/static-page.ejs"), { encoding: "utf-8" });
 const staticPageTemplate = ejs.compile(staticPageTemplateStr);
@@ -21,13 +23,20 @@ function renderStaticPageContent(store, content) {
 function writeStaticPageResponse(res, url, page, result, { config, renderLayout, seo }) {
   const hideHeader = !page.metadata.header;
   const hideFooter = !page.metadata.footer;
+
+  const resultObj = cloneDeep(result);
+
+  ["serverKey", "serviceCreds"].forEach(key =>
+    unset(resultObj, ["config","pagebuilder-config", "general", "notifications", "fcm", key])
+  ); // unset of serverkey & serviceCreds
+
   const qt = {
     pageType: page.type,
     // remove content from data to avoid the script tag inside json breaking the page
     data: Object.assign({}, page, result.data, { content: "" }),
     currentPath: `${url.pathname}${url.search || ""}`,
   };
-  const store = createBasicStore(result, qt, {
+  const store = createBasicStore(resultObj, qt, {
     disableIsomorphicComponent: true,
   });
 
