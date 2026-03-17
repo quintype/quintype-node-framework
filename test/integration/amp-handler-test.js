@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable func-names */
-import supertest from "supertest";
-import { ampRoutes } from "../../server/routes";
+const supertest = require("supertest");
+const { ampRoutes } = require("../../server/routes");
 
 const assert = require("assert");
 const express = require("express");
