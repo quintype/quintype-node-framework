@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.34.14](https://github.com/quintype/quintype-node-framework/compare/v7.34.13...v7.34.14) (2026-04-13)
+
+
+### Bug Fixes
+
+* **Web story:** alignment when the content is less ([#480](https://github.com/quintype/quintype-node-framework/issues/480)) ([04ab6f6](https://github.com/quintype/quintype-node-framework/commit/04ab6f6de5b2ee89ca972d74f9f45b9d109182b7))
+
 ### [7.34.13](https://github.com/quintype/quintype-node-framework/compare/v7.34.12...v7.34.13) (2026-03-25)
 
 ### [7.34.12](https://github.com/quintype/quintype-node-framework/compare/v7.34.11...v7.34.12) (2026-03-25)
