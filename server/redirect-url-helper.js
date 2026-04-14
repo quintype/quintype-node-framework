@@ -24,7 +24,7 @@ const safeCompile = pattern => {
   try {
     return compile(pattern, { encode: encodeURIComponent })
   } catch (err) {
-    
+     logError(err)
     console.error('Invalid destination pattern:', pattern, err.message)
     return null
   }
@@ -75,6 +75,7 @@ function processRedirects (req, res, next, sourceUrlArray, urls) {
         return true
       }
     } catch (err) {
+      logError(err)
       console.log(`Redirection error on ${req.hostname}${req.path}:-----`, err)
       if (res.headersSent) {
         handled = true
