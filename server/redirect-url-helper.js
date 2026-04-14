@@ -14,8 +14,7 @@ const safeMatch = pattern => {
   try {
     return match(pattern, { decode: decodeURIComponent })
   } catch (err) {
-    logError(err)
-    console.error('Invalid source pattern:', pattern, err.message)
+    console.log(`Invalid source pattern:${pattern} error:${err}`)
     return null
   }
 }
@@ -24,12 +23,10 @@ const safeCompile = pattern => {
   try {
     return compile(pattern, { encode: encodeURIComponent })
   } catch (err) {
-     logError(err)
-    console.error('Invalid destination pattern:', pattern, err.message)
+    console.log(`Invalid destination pattern:${pattern} error:${err}`)
     return null
   }
 }
-
 function processRedirects (req, res, next, sourceUrlArray, urls) {
   const query = url.parse(req.url, true) || {}
   const search = query.search || ''
@@ -56,6 +53,8 @@ function processRedirects (req, res, next, sourceUrlArray, urls) {
 
       const extractedDestinationUrl = safeCompile(destinationUrl ? destinationUrl.pathname : destinationPath)
 
+      if (!extractedDestinationUrl) return false
+
       const dynamicKeys = extractedSourceUrl(req.path)
       const compiledPath = dynamicKeys && extractedDestinationUrl(dynamicKeys.params)
       if (compiledPath && !res.headersSent) {
@@ -76,7 +75,7 @@ function processRedirects (req, res, next, sourceUrlArray, urls) {
       }
     } catch (err) {
       logError(err)
-      console.log(`Redirection error on ${req.hostname}${req.path}:-----`, err)
+      console.log(`Redirection error on ${req.hostname}${req.path}:`, err)
       if (res.headersSent) {
         handled = true
         return true
