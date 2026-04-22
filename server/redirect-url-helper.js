@@ -10,55 +10,78 @@ function isUrl (url) {
   }
 }
 
+const safeMatch = pattern => {
+  try {
+    return match(pattern, { decode: decodeURIComponent })
+  } catch (err) {
+    console.log(`Invalid source pattern:${pattern} error:${err}`)
+    return null
+  }
+}
+
+const safeCompile = pattern => {
+  try {
+    return compile(pattern, { encode: encodeURIComponent })
+  } catch (err) {
+    console.log(`Invalid destination pattern:${pattern} error:${err}`)
+    return null
+  }
+}
 function processRedirects (req, res, next, sourceUrlArray, urls) {
   const query = url.parse(req.url, true) || {}
   const search = query.search || ''
-
+  let handled = false
   sourceUrlArray.some(sourceUrl => {
+    if (handled || res.headersSent) return true
+    const urlConfig = urls[sourceUrl]
+    if (!urlConfig) return false
+
     try {
-      const statusCode = parseInt(urls[sourceUrl].statusCode, 10)
-      if (statusCode === 410) {
+      const statusCode = parseInt(urlConfig.statusCode, 10)
+      if (statusCode === 410 && !res.headersSent) {
         res.sendStatus(410)
+        handled = true
         return true
       }
-      if (urls[sourceUrl]) {
-        const destinationPath = urls[sourceUrl].destinationUrl
-        const extractedSourceUrl = match(sourceUrl, {
-          decode: decodeURIComponent
-        })
-        const destinationUrl = isUrl(destinationPath)
-        if (extractedSourceUrl) {
-          let extractedDestinationUrl
-          if (destinationUrl) {
-            extractedDestinationUrl = compile(destinationUrl.pathname, {
-              encode: encodeURIComponent
-            })
-          } else {
-            extractedDestinationUrl = compile(destinationPath, {
-              encode: encodeURIComponent
-            })
-          }
-          const dynamicKeys = extractedSourceUrl(req.path)
-          const compiledPath = dynamicKeys && extractedDestinationUrl(dynamicKeys.params)
-          if (compiledPath) {
-            const validStatusCodes = { 301: 'max-age=604800', 302: 'max-age=86400' }
-            const cacheValue = validStatusCodes[statusCode]
-            if (cacheValue) {
-              res.set('cache-control', `public,${cacheValue}`)
-            }
-            res.redirect(
-              statusCode,
-              destinationUrl
-                ? `${destinationUrl.protocol}//${destinationUrl.hostname}${compiledPath}${search}`
-                : `${compiledPath}${search}`
-            )
-            return true
-          }
+
+      const extractedSourceUrl = safeMatch(sourceUrl)
+
+      if (!extractedSourceUrl) return false
+
+      const destinationPath = urlConfig.destinationUrl
+      const destinationUrl = isUrl(destinationPath)
+
+      const extractedDestinationUrl = safeCompile(destinationUrl ? destinationUrl.pathname : destinationPath)
+
+      if (!extractedDestinationUrl) return false
+
+      const dynamicKeys = extractedSourceUrl(req.path)
+      const compiledPath = dynamicKeys && extractedDestinationUrl(dynamicKeys.params)
+      if (compiledPath && !res.headersSent) {
+        const validStatusCodes = { 301: 'max-age=604800', 302: 'max-age=86400' }
+        const cacheValue = validStatusCodes[statusCode]
+        if (cacheValue) {
+          res.set('cache-control', `public,${cacheValue}`)
         }
+
+        res.redirect(
+          statusCode,
+          destinationUrl
+            ? `${destinationUrl.protocol}//${destinationUrl.hostname}${compiledPath}${search}`
+            : `${compiledPath}${search}`
+        )
+        handled = true
+        return true
       }
     } catch (err) {
-      console.log(`Redirection error on ${req.host}-----`, err)
+      logError(err)
+      console.log(`Redirection error on ${req.hostname}${req.path}:`, err)
+      if (res.headersSent) {
+        handled = true
+        return true
+      }
     }
+    return false
   })
 }
 
