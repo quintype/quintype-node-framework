@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.35.0](https://github.com/quintype/quintype-node-framework/compare/v7.34.14...v7.35.0) (2026-04-22)
+
+
+### Features
+
+* add response safety checks to redirect URL helper ([#481](https://github.com/quintype/quintype-node-framework/issues/481)) ([1d936e4](https://github.com/quintype/quintype-node-framework/commit/1d936e40ce16ae147840e6dd9f695c670495b5f1))
+
 ### [7.34.14](https://github.com/quintype/quintype-node-framework/compare/v7.34.13...v7.34.14) (2026-04-13)
 
 
