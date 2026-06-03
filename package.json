@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.35.2-webpage-sitenavigation-schema.4",
+  "version": "7.36.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
