@@ -23,6 +23,7 @@ import {
   registerServiceWorker,
   setupServiceWorkerUpdates,
 } from "./impl/load-service-worker";
+import atob from "atob";
 
 require("../assetify/client")();
 
@@ -245,7 +246,18 @@ export function renderBreakingNews(container, store, view, props) {
 
 function getJsonContent(id) {
   const element = global.document.getElementById(id);
-  if (element) return JSON.parse(element.textContent);
+  if (element) {
+    const content = element.textContent;
+    try {
+      if (atob(content)) {
+        return JSON.parse(atob(content));
+      }
+    } catch {
+      console.log('Looks like the content is not encrypted. Parsing regular content.');
+    }
+
+    return JSON.parse(content);
+  }
 }
 
 const performance = window.performance || { mark: () => {}, measure: () => {} };
