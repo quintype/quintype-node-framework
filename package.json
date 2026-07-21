@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.37.3",
+  "version": "7.37.4-story-author-seo-fw.1",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
@@ -37,7 +37,7 @@
     "@quintype/backend": "^2.7.0",
     "@quintype/components": "^3.5.0",
     "@quintype/prerender-node": "^3.2.26",
-    "@quintype/seo": "^1.53.0",
+    "@quintype/seo": "^1.53.1",
     "atob": "^2.1.2",
     "babel-plugin-react-css-modules": "^5.2.6",
     "chalk": "^4.1.2",
