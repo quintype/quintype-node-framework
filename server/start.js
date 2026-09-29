@@ -89,6 +89,7 @@ async function startWorker(appThunk, opts) {
     process.on("SIGHUP", () => {});
 
     if (hostToApiInterval) {
+      console.log("Setting up host to API mapping host with interval ----->: ", hostToApiInterval);
       setIntervalIndex = setInterval(() => {
         mappingHost();
       }, hostToApiInterval);

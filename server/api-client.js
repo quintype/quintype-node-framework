@@ -33,6 +33,7 @@ const cachedSecondaryClients = {};
 const xHostAPIToken = config["x_host_mapping_token"];
 const hostInternalDomain = config["x_host_internal_domain"];
 const enableSketchesHostResolution = config["x_enable_sketches_host_resolution"];
+console.log("LOGS 1 => config Obj:  ", { enableSketchesHostResolution, xHostAPIToken, hostInternalDomain });
 
 async function mappingHost() {
   if (enableSketchesHostResolution && xHostAPIToken && hostInternalDomain) {
@@ -44,6 +45,8 @@ async function mappingHost() {
     }
     config.host_to_api_host = { ...hostMapping, ...config["host_to_api_host"] };
   }
+  console.log("Logs 222 => Updated host_to_api_host mapping: ", { hostToApiHost: config.host_to_api_host });
+
 }
 
 function getClient(hostname) {
