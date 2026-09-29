@@ -38,14 +38,17 @@ console.log("LOGS 1 => config Obj:  ", { enableSketchesHostResolution, xHostAPIT
 async function mappingHost() {
   if (enableSketchesHostResolution && xHostAPIToken && hostInternalDomain) {
     const hostMapping = {};
+    console.log("LOGS 222 => mappingHost INSIDE  ", {  xHostAPIToken });
+
     const sketchesHostMapping = await defaultClient.getHostToAPIMappingCache(xHostAPIToken);
+    console.log("LOGS 333 => mappingHost INSIDE  ", {  sketchesHostMapping });
 
     for (const [key, value] of Object.entries(sketchesHostMapping)) {
       hostMapping[key] = `http://${value}${hostInternalDomain}`;
     }
     config.host_to_api_host = { ...hostMapping, ...config["host_to_api_host"] };
   }
-  console.log("Logs 222 => Updated host_to_api_host mapping: ", { hostToApiHost: config.host_to_api_host });
+  console.log("Logs 444 => Updated host_to_api_host mapping: ", { hostToApiHost: config.host_to_api_host });
 
 }
 
