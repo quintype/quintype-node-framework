@@ -1,6 +1,6 @@
 {
   "name": "@quintype/framework",
-  "version": "7.37.6",
+  "version": "7.37.7-add-json-ld-id-attribution.0",
   "description": "Libraries to help build Quintype Node.js apps",
   "main": "index.js",
   "engines": {
